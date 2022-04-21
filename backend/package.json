@@ -1,0 +1,39 @@
+{
+	"name": "backend",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"dev": "ts-node-dev --no-notify --respawn --transpile-only src/server",
+		"start": "node dist/server",
+		"clean": "rm -rf dist",
+		"build": "pnpm -s run clean && pnpm -s run generate && tsc",
+		"generate": "pnpm -s run generate:prisma && pnpm -s run generate:nexus",
+		"generate:prisma": "prisma generate",
+		"generate:nexus": "ts-node --transpile-only src/schema"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@types/cors": "^2.8.12",
+		"@types/express": "^4.17.13",
+		"@types/node": "^17.0.24",
+		"prisma": "^3.12.0",
+		"ts-node": "^10.7.0",
+		"ts-node-dev": "^1.1.8",
+		"typescript": "^4.6.3"
+	},
+	"dependencies": {
+		"@prisma/client": "^3.12.0",
+		"cors": "^2.8.5",
+		"express": "^4.17.3",
+		"express-graphql": "^0.12.0",
+		"graphql": "^15.8.0",
+		"graphql-scalars": "^1.17.0",
+		"nexus": "^1.3.0"
+	},
+	"prisma": {
+		"seed": "ts-node prisma/seed.ts"
+	}
+}
