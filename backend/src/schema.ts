@@ -28,16 +28,19 @@ const Query = objectType({
 	},
 });
 
-// add userType as field
-
 const User = objectType({
 	name: "User",
 	definition(t) {
 		t.field(gqlTypes.User.id);
+		t.field("userType", {
+			type: UserType,
+		});
 		t.field(gqlTypes.User.username);
 		t.field(gqlTypes.User.password);
 	},
 });
+
+const UserType = enumType(gqlTypes.UserType);
 
 export const schema = makeSchema({
 	types: [Query, User],

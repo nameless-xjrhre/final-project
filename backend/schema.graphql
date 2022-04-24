@@ -9,5 +9,11 @@ type Query {
 type User {
   id: Int!
   password: String!
+  userType: UserType
   username: String!
+}
+
+enum UserType {
+  ADMIN
+  USER
 }
