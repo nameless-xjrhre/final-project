@@ -6,25 +6,137 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
+
+// A user has id, user type, username, and password
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+  id       Int      @id @default(autoincrement())
+  userType UserType @default(USER) @map("user_type")
+  username String   @unique
+  password String
+
+  @@map("users")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  viewCount Int      @default(0)
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  Int?
+// A patient has first name, last name, sex, date of birth,
+// contact number and an address
+
+model Patient {
+  id          Int      @id @default(autoincrement())
+  firstName   String   @map("first_name")
+  lastName    String   @map("last_name")
+  sex         Sex
+  dateOfBirth DateTime @map("date_of_birth")
+  contactNum  String   @map("contact_num")
+  address     String
+
+  hospitalBills  HospitalBill[]
+  appointments   Appointment[]
+  medicalRecords MedicalRecord[]
+
+  @@map("patients")
+}
+
+// A patient as many hospital bills
+// A hospital bill has one patient, date, amount, and status
+
+model HospitalBill {
+  id        Int        @id @default(autoincrement())
+  patientId Int        @map("patient_id")
+  date      DateTime
+  amount    Int
+  status    BillStatus @default(UNPAID)
+  patient   Patient    @relation(fields: [patientId], references: [id])
+
+  @@map("hospital_bills")
+}
+
+// A patient has many medical records
+// A medical recordhas an id, patient_id, date, diagnosis, and prescription
+
+model MedicalRecord {
+  id           Int      @id @default(autoincrement())
+  patientId    Int      @map("patient_id")
+  date         DateTime
+  diagnosis    String
+  prescription String
+  patient      Patient  @relation(fields: [patientId], references: [id])
+
+  @@map("medical_records")
+}
+
+// A patient has multiple appointments
+// An appointment has an id, patient_id, med_staff_id, date,
+// visit_type(enum), and status(enum)
+
+model Appointment {
+  id         Int               @id @default(autoincrement())
+  patientId  Int               @map("patient_id")
+  medStaffId Int               @map("med_staff_id")
+  date       DateTime
+  visitType  VisitType         @map("visit_type")
+  status     AppointmentStatus
+  medStaff   MedicalStaff      @relation(fields: [medStaffId], references: [id])
+  patient    Patient           @relation(fields: [patientId], references: [id])
+
+  @@map("appointments")
+}
+
+// A medical staff has an id, first name,
+// last name, contact number, and address
+
+model MedicalStaff {
+  id           Int           @id @default(autoincrement())
+  firstName    String        @map("first_name")
+  lastName     String        @map("last_name")
+  contactNum   String        @map("contact_num")
+  address      String
+  appointments Appointment[]
+  Schedule     Schedule[]
+
+  @@map("medical_staffs")
+}
+
+// A medical staff has multiple schedules
+// A schedule has an id, med_staff_id, start_time, and end_time
+
+model Schedule {
+  id         Int          @id @default(autoincrement())
+  medStaffId Int          @map("med_staff_id")
+  startTime  DateTime
+  endTime    DateTime
+  medStaff   MedicalStaff @relation(fields: [medStaffId], references: [id])
+
+  @@map("schedules")
+}
+
+enum UserType {
+  ADMIN
+  USER
+}
+
+enum BillStatus {
+  PAID
+  UNPAID
+}
+
+enum Sex {
+  MALE
+  FEMALE
+}
+
+enum VisitType {
+  ROUTINE
+  FOLLOWUP
+  URGENT
+}
+
+enum AppointmentStatus {
+  PENDING
+  CANCELED
+  EXPIRED
+  DONE
 }
