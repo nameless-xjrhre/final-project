@@ -8,6 +8,7 @@ specifiers:
   '@graphql-codegen/typescript': ^2.4.8
   '@graphql-codegen/typescript-operations': ^2.3.5
   '@graphql-codegen/typescript-urql': ^3.5.7
+  '@mui/icons-material': ^5.6.2
   '@mui/material': ^5.6.2
   '@types/react': ^18.0.0
   '@types/react-dom': ^18.0.0
@@ -28,6 +29,7 @@ dependencies:
   '@graphql-codegen/typescript': 2.4.8_graphql@15.8.0
   '@graphql-codegen/typescript-operations': 2.3.5_graphql@15.8.0
   '@graphql-codegen/typescript-urql': 3.5.7_da67d404f3066ae1f4f52fef03e657e4
+  '@mui/icons-material': 5.6.2_a1d018feff6ea3add25c415ec48a1e69
   '@mui/material': 5.6.2_a0317eed51172d8b4fa757831d46bbfe
   graphql: 15.8.0
   graphql-tag: 2.12.6_graphql@15.8.0
@@ -1322,6 +1324,23 @@ packages:
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
       react-is: 17.0.2
+    dev: false
+
+  /@mui/icons-material/5.6.2_a1d018feff6ea3add25c415ec48a1e69:
+    resolution: {integrity: sha512-9QdI7axKuBAyaGz4mtdi7Uy1j73/thqFmEuxpJHxNC7O8ADEK1Da3t2veK2tgmsXsUlAHcAG63gg+GvWWeQNqQ==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      '@mui/material': ^5.0.0
+      '@types/react': ^17.0.0 || ^18.0.0
+      react: ^17.0.0 || ^18.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.17.9
+      '@mui/material': 5.6.2_a0317eed51172d8b4fa757831d46bbfe
+      '@types/react': 18.0.5
+      react: 18.0.0
     dev: false
 
   /@mui/material/5.6.2_a0317eed51172d8b4fa757831d46bbfe:
