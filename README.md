@@ -6,7 +6,7 @@ _Prerequisites: [Node.js](https://nodejs.org/en/)_
 
 1. Install pnpm using `npm install -g pnpm@next-7`
 2. Run `pnpm install`
-3. On another terminal, `cd frontend && pnpm install` 
+3. On another terminal, `cd frontend && pnpm install`
 4. On another terminal, `cd backend && pnpm install`
 
 On the backend directory, add a `.env` file with the following format:
