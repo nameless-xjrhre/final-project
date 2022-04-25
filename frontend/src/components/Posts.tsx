@@ -1,12 +1,17 @@
 import { usePostsQuery } from '../graphql/generated'
 
-export const Posts = () => {
+export function Posts() {
   const [result] = usePostsQuery()
   if (result.fetching) {
     return <div>Loading...</div>
   }
   if (result.error) {
-    return <div>Error: {result.error.message}</div>
+    return (
+      <div>
+        Error:
+        {result.error.message}
+      </div>
+    )
   }
 
   return (

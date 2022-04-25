@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
 import { createClient, Provider } from 'urql'
+import App from './App'
 import './index.css'
 
 const client = createClient({
