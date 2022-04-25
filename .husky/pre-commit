@@ -1,5 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-pnpm run lint:frontend
-pnpx lint-staged
+npm run lint:frontend
+npx lint-staged
