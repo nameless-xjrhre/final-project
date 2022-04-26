@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createClient, Provider } from 'urql'
+import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 
 const client = createClient({
@@ -10,7 +11,9 @@ const client = createClient({
 ReactDOM.render(
   <React.StrictMode>
     <Provider value={client}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),
