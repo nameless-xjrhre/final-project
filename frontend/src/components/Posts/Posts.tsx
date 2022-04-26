@@ -1,4 +1,4 @@
-import { usePostsQuery } from '../graphql/generated'
+import { usePostsQuery } from '../../graphql/generated'
 
 export function Posts() {
   const [result] = usePostsQuery()
