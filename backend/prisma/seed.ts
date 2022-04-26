@@ -1,31 +1,31 @@
-import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaClient, Prisma } from '@prisma/client'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 const userData: Prisma.UserCreateInput[] = [
-	{
-		userType: "ADMIN",
-		username: "eulermacaroni",
-		password: "123",
-	},
-];
+  {
+    userType: 'ADMIN',
+    username: 'eulermacaroni',
+    password: '123',
+  },
+]
 
 async function main() {
-	console.log(`Start seeding ...`);
-	for (const u of userData) {
-		const user = await prisma.user.create({
-			data: u,
-		});
-		console.log(`Created user with id: ${user.id}`);
-	}
-	console.log(`Seeding finished.`);
+  console.log(`Start seeding ...`)
+  for (const u of userData) {
+    const user = await prisma.user.create({
+      data: u,
+    })
+    console.log(`Created user with id: ${user.id}`)
+  }
+  console.log(`Seeding finished.`)
 }
 
 main()
-	.catch((e) => {
-		console.error(e);
-		process.exit(1);
-	})
-	.finally(async () => {
-		await prisma.$disconnect();
-	});
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })
