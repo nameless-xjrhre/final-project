@@ -1,3 +1,1 @@
-import PatientPage from './PatientPage'
-
-export default PatientPage
+export { default } from './PatientPage'

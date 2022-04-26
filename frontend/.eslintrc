@@ -32,6 +32,8 @@
     "react/function-component-definition": "off",
     "react/no-unescaped-entities": "off",
     "react/require-default-props": "off",
-    "import/export": "off"
+    "import/export": "off",
+    "no-restricted-exports": "off",
+    "react/prop-types": "off"
   }
 }
