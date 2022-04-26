@@ -23,3 +23,14 @@ The `DATABASE_URL` is the url for your postgreSQL database
 To accesss the frontend client, visit http://localhost:3000 on the browser.
 
 Similarly, to access the backend server, visit http://localhost:4000/graphql.
+
+
+Members:
+
+Daduya, 
+Dieron, 
+Estaniel, 
+Lajo, 
+Laporno, 
+Linuago, 
+Rabino
