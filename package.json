@@ -8,7 +8,10 @@
     "backend": "cd backend && npm run dev",
     "dev": "concurrently \"npm run frontend\" \"npm run backend\"",
     "prepare": "husky install",
-    "lint:frontend": "cd frontend && npm run lint"
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:backend": "cd backend && npm run lint",
+    "test:frontend": "cd frontend && npm run test",
+    "test:backend": "cd backend && npm run test"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

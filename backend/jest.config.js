@@ -1,7 +1,10 @@
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
-  clearMocks: true,
   preset: 'ts-jest',
+  globals: {
+    'ts-jest': {
+      diagnostics: { warnOnly: true },
+    },
+  },
   testEnvironment: 'node',
-  setupFilesAfterEnv: ['<rootDir>/singleton.ts'],
 }

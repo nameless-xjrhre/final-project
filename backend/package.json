@@ -16,17 +16,6 @@
     "generate:nexus": "ts-node --transpile-only src/schema",
     "test": "jest"
   },
-  "jest": {
-    "preset": "ts-jest",
-    "globals": {
-      "ts-jest": {
-        "diagnostics": {
-          "warnOnly": true
-        }
-      }
-    },
-    "testEnvironment": "node"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",

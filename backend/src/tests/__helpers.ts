@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 // tests/__helpers.ts
 import { PrismaClient } from '@prisma/client'
 import { execSync } from 'child_process'
@@ -5,11 +6,10 @@ import getPort, { makeRange } from 'get-port'
 import { GraphQLClient } from 'graphql-request'
 import { join } from 'path'
 import { Database } from 'sqlite3'
-import express from 'express'
 import { Server } from 'http'
+import server from '../server'
 
 const db = new PrismaClient()
-const server = express()
 
 type TestContext = {
   client: GraphQLClient
@@ -17,7 +17,7 @@ type TestContext = {
 }
 
 export function createTestContext(): TestContext {
-  const ctx = {} as TestContext
+  let ctx = {} as TestContext
   const graphqlCtx = graphqlTestContext()
   const prismaCtx = prismaTestContext()
   beforeEach(async () => {
@@ -39,22 +39,30 @@ function graphqlTestContext() {
   let serverInstance: null | Server = null
   return {
     async before() {
-      const port = await getPort({ port: makeRange(4000, 6000) })
+      const port = await getPort({ port: makeRange(2000, 6000) })
       serverInstance = await server.listen({ port })
       // Close the Prisma Client connection when the Apollo Server is closed
       serverInstance.on('close', async () => {
         db.$disconnect()
       })
 
-      return new GraphQLClient(`http://localhost:${port}`)
+      return new GraphQLClient(`http://localhost:${port}/graphql`)
     },
     async after() {
       serverInstance?.close()
     },
   }
 }
+
 function prismaTestContext() {
-  const prismaBinary = join(__dirname, '..', 'node_modules', '.bin', 'prisma')
+  const prismaBinary = join(
+    __dirname,
+    '..',
+    '..',
+    'node_modules',
+    '.bin',
+    'prisma',
+  )
   let prismaClient: null | PrismaClient = null
   return {
     async before() {
