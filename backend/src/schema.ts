@@ -1,13 +1,9 @@
 import {
-  intArg,
   makeSchema,
-  nonNull,
   objectType,
-  stringArg,
-  inputObjectType,
-  arg,
   asNexusMethod,
   enumType,
+  stringArg,
 } from 'nexus'
 
 import * as gqlTypes from 'nexus-prisma'
@@ -21,12 +17,32 @@ const Query = objectType({
   definition(t) {
     t.nonNull.list.nonNull.field('users', {
       type: 'User',
-      resolve: (_parent, _args, context) => {
-        return context.prisma.user.findMany()
-      },
+      resolve: (_parent, _args, context) => context.prisma.user.findMany(),
     })
   },
 })
+
+const Mutation = objectType({
+  name: 'Mutation',
+  definition(t) {
+    t.nonNull.field('createUser', {
+      type: 'User',
+      args: {
+        username: stringArg(),
+        password: stringArg(),
+      },
+      resolve: (_parent, args, context) =>
+        context.prisma.user.create({
+          data: {
+            username: args.username || '',
+            password: args.password || '',
+          },
+        }),
+    })
+  },
+})
+
+const UserType = enumType(gqlTypes.UserType)
 
 const User = objectType({
   name: 'User',
@@ -40,13 +56,11 @@ const User = objectType({
   },
 })
 
-const UserType = enumType(gqlTypes.UserType)
-
 export const schema = makeSchema({
-  types: [Query, User],
+  types: [Query, Mutation, User],
   outputs: {
-    schema: __dirname + '/../schema.graphql',
-    typegen: __dirname + '/generated/nexus.ts',
+    schema: `${__dirname}/../schema.graphql`,
+    typegen: `${__dirname}/generated/nexus.ts`,
   },
   contextType: {
     module: require.resolve('./context'),
