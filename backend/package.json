@@ -18,7 +18,7 @@
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
     "test:integration": "npm run migrate:test && dotenv -e .env.test jest -i",
-    "test": "dotenv -e .env.test jest -i"
+    "test:unit": "jest -i -c jest.unit.config.js"
   },
   "keywords": [],
   "author": "",
@@ -39,6 +39,7 @@
     "get-port": "^5.1.1",
     "graphql-request": "^4.2.0",
     "jest": "^27.5.1",
+    "jest-mock-extended": "^2.0.4",
     "prisma": "^3.12.0",
     "sqlite3": "^5.0.5",
     "ts-jest": "^27.1.4",

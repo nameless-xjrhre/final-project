@@ -1,5 +1,5 @@
-import { context } from '../context'
-import { createTestContext } from './__helpers'
+import { context } from '../../context'
+import { createTestContext } from '../__helpers'
 
 const { prisma } = context
 

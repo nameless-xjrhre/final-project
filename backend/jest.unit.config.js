@@ -7,5 +7,5 @@ module.exports = {
     },
   },
   testEnvironment: 'node',
-  testPathIgnorePatterns: ['src/tests/unit'],
+  testPathIgnorePatterns: ['src/tests/integration'],
 }
