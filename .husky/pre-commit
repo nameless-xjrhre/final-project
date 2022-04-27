@@ -1,6 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npm run lint:frontend
-npm run lint:backend
 npx lint-staged
