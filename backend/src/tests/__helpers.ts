@@ -5,7 +5,6 @@ import { execSync } from 'child_process'
 import getPort, { makeRange } from 'get-port'
 import { GraphQLClient } from 'graphql-request'
 import { join } from 'path'
-import { Database } from 'sqlite3'
 import { Server } from 'http'
 import server from '../server'
 
@@ -73,11 +72,8 @@ function prismaTestContext() {
       return prismaClient
     },
     async after() {
-      // Drop the schema after the tests have completed
-      const client = new Database(':memory:')
-      await client.close()
-      // Release the Prisma Client connection
-      await prismaClient?.$disconnect()
+      // Turn off database
+      prismaClient?.$disconnect()
     },
   }
 }
