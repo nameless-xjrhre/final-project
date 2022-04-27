@@ -5,6 +5,7 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
+import PatientForm from '../PatientForm'
 
 // Generate Order Data
 function createData(
@@ -105,6 +106,7 @@ export default function PatientsList() {
       <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
         See more orders
       </Link>
+      <PatientForm />
     </>
   )
 }
