@@ -5,7 +5,7 @@ const { prisma } = context
 
 const ctx = createTestContext()
 it('creates a user', async () => {
-  await ctx.client.request(
+  const createUser = await ctx.client.request(
     `
       mutation($username: String!, $password: String!) {
         createUser(username: $username, password: $password) {
@@ -22,13 +22,16 @@ it('creates a user', async () => {
     },
   )
 
-  const user = await prisma.user.findFirst({
-    where: {
-      username: 'user1',
-    },
-  })
-
-  expect(user).toBeDefined()
+  expect(createUser).toMatchInlineSnapshot(`
+    Object {
+      "createUser": Object {
+        "id": 1,
+        "password": "password1",
+        "userType": "USER",
+        "username": "user1",
+      },
+    }
+  `)
 })
 
 afterAll(async () => {

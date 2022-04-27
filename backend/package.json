@@ -10,11 +10,15 @@
     "build": "npm -s run clean && npm -s run generate && tsc",
     "lint": "eslint --fix --ext .ts,.tsx,.js,.jsx src",
     "migrate": "prisma migrate dev",
+    "migrate:test": "dotenv -e .env.test -- npx prisma migrate dev --name postgres-init",
     "studio": "prisma studio",
     "generate": "npm -s run generate:prisma && npm -s run generate:nexus",
     "generate:prisma": "prisma generate",
     "generate:nexus": "ts-node --transpile-only src/schema",
-    "test": "jest"
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "test:integration": "npm run migrate:test && dotenv -e .env.test jest -i",
+    "test": "dotenv -e .env.test jest -i"
   },
   "keywords": [],
   "author": "",
