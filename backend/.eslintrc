@@ -18,6 +18,7 @@
     "no-use-before-define": "off",
     "no-undef": "off",
     "no-restricted-syntax": "off",
-    "no-await-in-loop": "off"
+    "no-await-in-loop": "off",
+    "no-restricted-exports": "off"
   }
 }
