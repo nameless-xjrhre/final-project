@@ -18,7 +18,8 @@
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
     "test:integration": "npm run migrate:test && dotenv -e .env.test jest -i",
-    "test:unit": "jest -i -c jest.unit.config.js"
+    "test:unit": "jest -i -c jest.unit.config.js",
+    "test-unit:watch": "npm run test:unit -- --watchAll"
   },
   "keywords": [],
   "author": "",

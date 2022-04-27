@@ -2,3 +2,4 @@
 frontend/dist
 backend/dist
 coverage
+*/.graphql
