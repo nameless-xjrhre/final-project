@@ -5,35 +5,18 @@ import MuiDrawer from '@mui/material/Drawer'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import List from '@mui/material/List'
-import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
-import Link from '@mui/material/Link'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 
 import Sidebar from '../../components/Sidebar'
 import Header from '../../components/Header'
 import PatientsList from '../../components/PatientList'
 
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}.
-    </Typography>
-  )
-}
+import './PatientPage.css'
 
 const drawerWidth: number = 240
 
@@ -73,7 +56,7 @@ function DashboardContent() {
 
   return (
     <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', boxShadow: 3 }}>
         <CssBaseline />
         <Drawer variant="permanent" open={open}>
           <Toolbar
@@ -105,12 +88,18 @@ function DashboardContent() {
             <Grid container spacing={3}>
               {/* Recent Orders */}
               <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                <Paper
+                  sx={{
+                    p: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    boxShadow: 3,
+                  }}
+                >
                   <PatientsList />
                 </Paper>
               </Grid>
             </Grid>
-            <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>
       </Box>
