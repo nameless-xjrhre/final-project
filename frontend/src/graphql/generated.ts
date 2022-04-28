@@ -1,6 +1,5 @@
 import gql from 'graphql-tag'
 import * as Urql from 'urql'
-
 export type Maybe<T> = T | null
 export type InputMaybe<T> = Maybe<T>
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -26,128 +25,91 @@ export type Scalars = {
 
 export type Mutation = {
   __typename?: 'Mutation'
-  createDraft?: Maybe<Post>
-  deletePost?: Maybe<Post>
-  incrementPostViewCount?: Maybe<Post>
-  signupUser: User
-  togglePublishPost?: Maybe<Post>
+  createPatient: Patient
+  createUser: User
 }
 
-export type MutationCreateDraftArgs = {
-  authorEmail: Scalars['String']
-  data: PostCreateInput
+export type MutationCreatePatientArgs = {
+  address?: InputMaybe<Scalars['String']>
+  contactNum?: InputMaybe<Scalars['String']>
+  dateOfBirth: Scalars['DateTime']
+  firstName?: InputMaybe<Scalars['String']>
+  lastName?: InputMaybe<Scalars['String']>
+  sex: Sex
 }
 
-export type MutationDeletePostArgs = {
+export type MutationCreateUserArgs = {
+  password?: InputMaybe<Scalars['String']>
+  username?: InputMaybe<Scalars['String']>
+}
+
+export type Patient = {
+  __typename?: 'Patient'
+  address: Scalars['String']
+  contactNum: Scalars['String']
+  dateOfBirth: Scalars['DateTime']
+  firstName: Scalars['String']
+  fullName?: Maybe<Scalars['String']>
   id: Scalars['Int']
-}
-
-export type MutationIncrementPostViewCountArgs = {
-  id: Scalars['Int']
-}
-
-export type MutationSignupUserArgs = {
-  data: UserCreateInput
-}
-
-export type MutationTogglePublishPostArgs = {
-  id: Scalars['Int']
-}
-
-export type Post = {
-  __typename?: 'Post'
-  author?: Maybe<User>
-  content?: Maybe<Scalars['String']>
-  createdAt: Scalars['DateTime']
-  id: Scalars['Int']
-  published: Scalars['Boolean']
-  title: Scalars['String']
-  updatedAt: Scalars['DateTime']
-  viewCount: Scalars['Int']
-}
-
-export type PostCreateInput = {
-  content?: InputMaybe<Scalars['String']>
-  title: Scalars['String']
-}
-
-export type PostOrderByUpdatedAtInput = {
-  updatedAt: SortOrder
+  lastName: Scalars['String']
+  sex?: Maybe<Sex>
 }
 
 export type Query = {
   __typename?: 'Query'
-  allUsers: Array<User>
-  draftsByUser?: Maybe<Array<Maybe<Post>>>
-  feed: Array<Post>
-  postById?: Maybe<Post>
+  patients: Array<Patient>
+  users: Array<User>
 }
 
-export type QueryDraftsByUserArgs = {
-  userUniqueInput: UserUniqueInput
-}
-
-export type QueryFeedArgs = {
-  orderBy?: InputMaybe<PostOrderByUpdatedAtInput>
-  searchString?: InputMaybe<Scalars['String']>
-  skip?: InputMaybe<Scalars['Int']>
-  take?: InputMaybe<Scalars['Int']>
-}
-
-export type QueryPostByIdArgs = {
-  id?: InputMaybe<Scalars['Int']>
-}
-
-export enum SortOrder {
-  Asc = 'asc',
-  Desc = 'desc',
+export enum Sex {
+  Female = 'FEMALE',
+  Male = 'MALE',
 }
 
 export type User = {
   __typename?: 'User'
-  email: Scalars['String']
   id: Scalars['Int']
-  name?: Maybe<Scalars['String']>
-  posts: Array<Post>
+  password: Scalars['String']
+  userType?: Maybe<UserType>
+  username: Scalars['String']
 }
 
-export type UserCreateInput = {
-  email: Scalars['String']
-  name?: InputMaybe<Scalars['String']>
-  posts?: InputMaybe<Array<PostCreateInput>>
+export enum UserType {
+  Admin = 'ADMIN',
+  User = 'USER',
 }
 
-export type UserUniqueInput = {
-  email?: InputMaybe<Scalars['String']>
-  id?: InputMaybe<Scalars['Int']>
-}
+export type PatientQueryQueryVariables = Exact<{ [key: string]: never }>
 
-export type PostsQueryVariables = Exact<{ [key: string]: never }>
-
-export type PostsQuery = {
+export type PatientQueryQuery = {
   __typename?: 'Query'
-  feed: Array<{
-    __typename?: 'Post'
+  patients: Array<{
+    __typename?: 'Patient'
     id: number
-    title: string
-    content?: string | null
-    published: boolean
+    fullName?: string | null
+    sex?: Sex | null
+    contactNum: string
+    dateOfBirth: any
   }>
 }
 
-export const PostsDocument = gql`
-  query posts {
-    feed {
+export const PatientQueryDocument = gql`
+  query patientQuery {
+    patients {
       id
-      title
-      content
-      published
+      fullName
+      sex
+      contactNum
+      dateOfBirth
     }
   }
 `
 
-export function usePostsQuery(
-  options?: Omit<Urql.UseQueryArgs<PostsQueryVariables>, 'query'>,
+export function usePatientQueryQuery(
+  options?: Omit<Urql.UseQueryArgs<PatientQueryQueryVariables>, 'query'>,
 ) {
-  return Urql.useQuery<PostsQuery>({ query: PostsDocument, ...options })
+  return Urql.useQuery<PatientQueryQuery>({
+    query: PatientQueryDocument,
+    ...options,
+  })
 }

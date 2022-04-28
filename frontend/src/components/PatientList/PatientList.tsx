@@ -5,76 +5,42 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
+import { useQuery, gql } from 'urql'
 import PatientForm from '../PatientForm'
 
-// Generate Order Data
-function createData(
-  lastVisit: string,
-  name: string,
-  gender: string,
-  contactNum: string,
-  visitType: string,
-  doctor: string,
-) {
-  return {
-    lastVisit,
-    name,
-    gender,
-    contactNum,
-    visitType,
-    doctor,
-  }
+interface Patient {
+  patients: {
+    id: number
+    fullName: string
+    sex: string
+    contactNum: string
+  }[]
 }
 
-const rows = [
-  // createData example
-  createData(
-    '01/04/22',
-    'Ronald Richards',
-    'Male',
-    '0123456789',
-    'Doctor Visit',
-    'Dr. Theresa Web',
-  ),
-  createData(
-    '01/04/22',
-    'Ronald Richards',
-    'Male',
-    '0123456789',
-    'Doctor Visit',
-    'Dr. Theresa Web',
-  ),
-  createData(
-    '01/04/22',
-    'Ronald Richards',
-    'Male',
-    '0123456789',
-    'Doctor Visit',
-    'Dr. Theresa Web',
-  ),
-  createData(
-    '01/04/22',
-    'Ronald Richards',
-    'Male',
-    '0123456789',
-    'Doctor Visit',
-    'Dr. Theresa Web',
-  ),
-  createData(
-    '01/04/22',
-    'Ronald Richards',
-    'Male',
-    '0123456789',
-    'Doctor Visit',
-    'Dr. Theresa Web',
-  ),
-]
+const patientQueryDocument = gql`
+  query patientQuery {
+    patients {
+      id
+      fullName
+      sex
+      contactNum
+      dateOfBirth
+    }
+  }
+`
 
 function preventDefault(event: React.MouseEvent) {
   event.preventDefault()
 }
 
 export default function PatientsList() {
+  const [patients] = useQuery<Patient>({
+    query: patientQueryDocument,
+  })
+
+  const { data, fetching, error } = patients
+  if (fetching) return <p>Loading...</p>
+  if (error) return <p>Oh no... {error.message}</p>
   return (
     <>
       <Table size="small">
@@ -90,17 +56,18 @@ export default function PatientsList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell>{row.lastVisit}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.gender}</TableCell>
-              <TableCell>{row.contactNum}</TableCell>
-              <TableCell>{row.visitType}</TableCell>
-              <TableCell>{row.doctor}</TableCell>
-              <TableCell align="right">Details</TableCell>
-            </TableRow>
-          ))}
+          {data &&
+            data.patients.map((patient) => (
+              <TableRow key={patient.id}>
+                <TableCell>May 9</TableCell>
+                <TableCell>{patient.fullName}</TableCell>
+                <TableCell>{patient.sex}</TableCell>
+                <TableCell>{patient.contactNum}</TableCell>
+                <TableCell>Check Up</TableCell>
+                <TableCell>Dr. Ralph</TableCell>
+                <TableCell align="right">Details</TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
       <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>

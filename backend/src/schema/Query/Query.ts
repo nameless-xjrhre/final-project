@@ -7,6 +7,10 @@ const Query = objectType({
       type: 'User',
       resolve: (_parent, _args, context) => context.prisma.user.findMany(),
     })
+    t.nonNull.list.nonNull.field('patients', {
+      type: 'Patient',
+      resolve: (_parent, _args, context) => context.prisma.patient.findMany(),
+    })
   },
 })
 

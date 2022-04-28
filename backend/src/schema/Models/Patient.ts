@@ -15,6 +15,10 @@ const Patient = objectType({
     t.field(gqlTypes.Patient.dateOfBirth)
     t.field(gqlTypes.Patient.contactNum)
     t.field(gqlTypes.Patient.address)
+    t.field('fullName', {
+      type: 'String',
+      resolve: (parent) => `${parent.firstName} ${parent.lastName}`,
+    })
     // t.nonNull.list.nonNull.field('hospitalBills', {
     //   type: 'HospitalBill',
     //   resolve: (parent, _args, context) =>
