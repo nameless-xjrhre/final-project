@@ -7,7 +7,6 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import { TablePagination } from '@mui/material'
 import { useQuery, gql } from 'urql'
-import PatientForm from '../PatientForm'
 
 interface Patient {
   patients: {
@@ -107,7 +106,6 @@ export default function PatientsList() {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-      <PatientForm />
     </>
   )
 }

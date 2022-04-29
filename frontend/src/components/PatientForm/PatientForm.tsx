@@ -21,7 +21,8 @@ import {
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import AccessibleIcon from '@mui/icons-material/Accessible'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faWheelchair } from '@fortawesome/free-solid-svg-icons'
 import AddIcon from '@mui/icons-material/Add'
 import CloseIcon from '@mui/icons-material/Close'
 
@@ -80,7 +81,7 @@ export default function PatientForm() {
           background: '#336CFB',
         }}
       >
-        <AccessibleIcon fontSize="large" />
+        <FontAwesomeIcon icon={faWheelchair} fontSize={28} />
         <AddIcon sx={{ marginTop: -2, marginLeft: -2 }} />
       </Fab>
       <ThemeProvider theme={theme}>
