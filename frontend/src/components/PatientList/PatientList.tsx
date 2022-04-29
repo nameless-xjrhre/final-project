@@ -80,9 +80,9 @@ export default function PatientsList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {new Array(5).fill(0).map(() => (
+          {Array.from({ length: 5 }).map(() => (
             <TableRow>
-              {new Array(7).fill(0).map(() => (
+              {Array.from({ length: 7 }).map(() => (
                 <StyledTableCell>
                   <Skeleton variant="text" />
                 </StyledTableCell>

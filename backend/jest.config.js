@@ -8,4 +8,5 @@ module.exports = {
   },
   testEnvironment: 'node',
   testPathIgnorePatterns: ['src/tests/unit', 'src/schema'],
+  testTimeout: 30000,
 }
