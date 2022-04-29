@@ -17,7 +17,8 @@
     "generate:nexus": "ts-node --transpile-only src/schema",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
-    "test:integration": "npm run migrate:test && dotenv -e .env.test jest -i",
+    "test:integration": "dotenv -e .env.test jest -i",
+    "test-migrate:integration": "npm run migrate:test && dotenv -e .env.test jest -i",
     "test:unit": "jest -i -c jest.unit.config.js",
     "test-unit:watch": "npm run test:unit -- --watchAll"
   },
