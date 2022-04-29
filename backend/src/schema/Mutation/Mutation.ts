@@ -1,4 +1,5 @@
 import { objectType, stringArg, nonNull, arg } from 'nexus'
+import { createUser } from './resolvers'
 
 const Mutation = objectType({
   name: 'Mutation',
@@ -10,12 +11,13 @@ const Mutation = objectType({
         password: stringArg(),
       },
       resolve: (_parent, args, context) =>
-        context.prisma.user.create({
-          data: {
+        createUser(
+          {
             username: args.username || '',
             password: args.password || '',
           },
-        }),
+          context,
+        ),
     })
     t.nonNull.field('createPatient', {
       type: 'Patient',

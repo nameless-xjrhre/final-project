@@ -6,6 +6,9 @@ module.exports = {
       diagnostics: { warnOnly: true },
     },
   },
+  transform: {
+    '^.+\\.(t|j)sx?$': ['@swc/jest'],
+  },
   testEnvironment: 'node',
   testPathIgnorePatterns: ['src/tests/unit', 'src/schema'],
   testTimeout: 30000,
