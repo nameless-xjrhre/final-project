@@ -5,6 +5,7 @@ import TableBody from '@mui/material/TableBody'
 import TableCell, { tableCellClasses } from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
+import Skeleton from '@mui/material/Skeleton'
 import { TablePagination } from '@mui/material'
 import { useQuery, gql } from 'urql'
 
@@ -64,7 +65,33 @@ export default function PatientsList() {
   }
 
   const { data, fetching, error } = patients
-  if (fetching) return <p>Loading...</p>
+  if (fetching)
+    return (
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <StyledTableCell>Last Visited</StyledTableCell>
+            <StyledTableCell>Name</StyledTableCell>
+            <StyledTableCell>Gender</StyledTableCell>
+            <StyledTableCell>Contact Number</StyledTableCell>
+            <StyledTableCell>Visit Type</StyledTableCell>
+            <StyledTableCell>Doctor</StyledTableCell>
+            <StyledTableCell align="right" />
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {new Array(5).fill(0).map(() => (
+            <TableRow>
+              {new Array(7).fill(0).map(() => (
+                <StyledTableCell>
+                  <Skeleton variant="text" />
+                </StyledTableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    )
   if (error) return <p>Oh no... {error.message}</p>
   return (
     <>
