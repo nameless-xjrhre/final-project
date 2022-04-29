@@ -3,42 +3,45 @@ import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import ListSubheader from '@mui/material/ListSubheader'
-import DashboardIcon from '@mui/icons-material/Dashboard'
-import PeopleIcon from '@mui/icons-material/People'
 import AssignmentIcon from '@mui/icons-material/Assignment'
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
-import AccessibleIcon from '@mui/icons-material/Accessible'
-import CreditCardIcon from '@mui/icons-material/CreditCard'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faColumns,
+  faStethoscope,
+  faUserDoctor,
+  faCreditCard,
+  faWheelchair,
+} from '@fortawesome/free-solid-svg-icons'
 
 export const mainListItems = (
   <>
     <ListItemButton>
       <ListItemIcon>
-        <DashboardIcon />
+        <FontAwesomeIcon icon={faColumns} />
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
-        <CalendarMonthIcon />
+        <FontAwesomeIcon icon={faStethoscope} />
       </ListItemIcon>
       <ListItemText primary="Appointments" />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
-        <PeopleIcon />
+        <FontAwesomeIcon icon={faUserDoctor} />
       </ListItemIcon>
       <ListItemText primary="Doctors" />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
-        <AccessibleIcon />
+        <FontAwesomeIcon icon={faWheelchair} />
       </ListItemIcon>
       <ListItemText primary="Patients" />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
-        <CreditCardIcon />
+        <FontAwesomeIcon icon={faCreditCard} />
       </ListItemIcon>
       <ListItemText primary="Payments" />
     </ListItemButton>

@@ -15,6 +15,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import Sidebar from '../../components/Sidebar'
 import Header from '../../components/Header'
 import PatientsList from '../../components/PatientList'
+import PatientForm from '../../components/PatientForm'
 
 import './PatientPage.css'
 
@@ -97,6 +98,7 @@ function DashboardContent() {
                   }}
                 >
                   <PatientsList />
+                  <PatientForm />
                 </Paper>
               </Grid>
             </Grid>
