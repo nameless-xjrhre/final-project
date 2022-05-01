@@ -7,6 +7,6 @@ module.exports = {
     },
   },
   testEnvironment: 'node',
-  testPathIgnorePatterns: ['src/tests/integration'],
+  testPathIgnorePatterns: ['src/tests/integration', 'dist'],
   testTimeout: 30000,
 }
