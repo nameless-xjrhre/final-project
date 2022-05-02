@@ -15,6 +15,7 @@ interface Patient {
     fullName: string
     sex: string
     contactNum: string
+    dateOfBirth: Date
   }[]
 }
 
@@ -111,11 +112,11 @@ export default function PatientsList() {
           {data &&
             data.patients.map((patient) => (
               <TableRow key={patient.id}>
-                <StyledTableCell>May 9</StyledTableCell>
-                <StyledTableCell>{patient.fullName}</StyledTableCell>
                 <StyledTableCell>
-                  {patient.sex.toLocaleLowerCase()}
+                  {patient.dateOfBirth.toLocaleString()}
                 </StyledTableCell>
+                <StyledTableCell>{patient.fullName}</StyledTableCell>
+                <StyledTableCell>{patient.sex.toString()}</StyledTableCell>
                 <StyledTableCell>{patient.contactNum}</StyledTableCell>
                 <StyledTableCell>Check Up</StyledTableCell>
                 <StyledTableCell>Dr. Ralph</StyledTableCell>
