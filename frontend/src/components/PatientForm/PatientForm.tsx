@@ -1,31 +1,23 @@
 import * as React from 'react'
 import {
-  Fab,
   Modal,
   Box,
   Typography,
   Button,
-  FormControl,
   IconButton,
-  TextField,
-  TextFieldProps,
   Divider,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  FormLabel,
   Grid,
   createTheme,
   ThemeProvider,
 } from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faWheelchair } from '@fortawesome/free-solid-svg-icons'
-import AddIcon from '@mui/icons-material/Add'
 import CloseIcon from '@mui/icons-material/Close'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { string, object, mixed } from 'yup'
 import { useMutation, gql } from 'urql'
+import { FormInputText, FormInputRadio, FormInputDate } from './FormInputFields'
 import { MutationCreatePatientArgs, Sex } from '../../graphql/generated'
 
 const style = {
@@ -76,6 +68,7 @@ interface Patient {
     address: string
   }[]
 }
+
 const CreatePatient = gql`
   mutation CreatePatient(
     $firstName: String!
@@ -103,146 +96,134 @@ const CreatePatient = gql`
     }
   }
 `
+interface PatientFormProps {
+  // eslint-disable-next-line no-unused-vars
+  handleClose: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  open: boolean
+}
 
-export default function PatientForm() {
-  const [open, setOpen] = React.useState(false)
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
-  const [dateOfBirth, setDateOfBirth] = React.useState<Date | null>(new Date())
+export default function PatientForm({ handleClose, open }: PatientFormProps) {
   const [, createPatient] = useMutation<Patient>(CreatePatient)
-  const [firstName, setFirstName] = React.useState('')
-  const [lastName, setLastName] = React.useState('')
-  const [gender, setGender] = React.useState('')
-  const [contactNum, setContactNum] = React.useState('')
-  const [address, setAddress] = React.useState('')
 
-  const submitCreatePatient = (e: any) => {
-    e.preventDefault()
-    const sex = gender === 'male' ? Sex.Male : Sex.Female
+  const patientSchema = object().shape({
+    firstName: string().required('Enter your first name.'),
+    lastName: string().required('Enter your last name.'),
+    sex: mixed().oneOf([Sex.Male, Sex.Female]).required('Choose your gender.'),
+    dateOfBirth: string().nullable().required('Select date of birth.'),
+    contactNum: string()
+      .required('Enter your contact number.')
+      .matches(/^(09|\+639)\d{9}$/, 'Please enter a valid contact number.'),
+    address: string().required('Enter your address.'),
+  })
+
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(patientSchema),
+  })
+
+  const submitCreatePatient = handleSubmit((data) => {
     const input: MutationCreatePatientArgs = {
-      firstName,
-      lastName,
-      sex,
-      dateOfBirth,
-      contactNum,
-      address,
+      ...data,
+      dateOfBirth: new Date(data.dateOfBirth),
+      sex: data.sex,
     }
-    createPatient(input).then((result) => {
-      console.log(result)
-    })
-  }
+    createPatient(input).then((result) => console.log(result))
+  })
 
   return (
-    <>
-      <Fab
-        onClick={handleOpen}
-        color="primary"
-        sx={{
-          right: 30,
-          bottom: 30,
-          position: 'absolute',
-          background: '#336CFB',
-        }}
-      >
-        <FontAwesomeIcon icon={faWheelchair} fontSize={28} />
-        <AddIcon sx={{ marginTop: -2, marginLeft: -2 }} />
-      </Fab>
-      <ThemeProvider theme={theme}>
-        <Modal open={open}>
-          <Box sx={style}>
-            <Grid container>
-              <Typography variant="h6" color="GrayText">
-                Add Patient
-              </Typography>
-              <IconButton aria-label="close" onClick={handleClose}>
-                <CloseIcon />
-              </IconButton>
-            </Grid>
-            <Divider />
-            <Typography variant="body2" color="GrayText" mt={2} mb={-1}>
-              Personal Information
-            </Typography>
-            <Grid container>
-              <TextField
-                id="first-name"
-                label="First Name"
-                InputProps={{ style: { fontSize: 12 } }}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-              <FormControl sx={{ width: 255 }}>
-                <FormLabel id="gender">Gender</FormLabel>
-                <RadioGroup row onChange={(e) => setGender(e.target.value)}>
-                  <FormControlLabel
-                    value="male"
-                    control={<Radio />}
-                    label="Male"
-                  />
-                  <FormControlLabel
-                    value="female"
-                    control={<Radio />}
-                    label="Female"
-                  />
-                </RadioGroup>
-              </FormControl>
-            </Grid>
-            <Grid container mt={-2} mb={1}>
-              <TextField
-                id="last-name"
-                label="Last Name"
-                InputProps={{ style: { fontSize: 12 } }}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                  disableFuture
-                  label="Date of Birth"
-                  openTo="year"
-                  views={['year', 'month', 'day']}
-                  value={dateOfBirth}
-                  onChange={(newValue: React.SetStateAction<Date | null>) => {
-                    setDateOfBirth(newValue)
-                  }}
-                  renderInput={(params: TextFieldProps) => (
-                    <TextField
-                      InputLabelProps={{ style: { fontSize: 14 } }}
-                      {...params}
-                    />
-                  )}
-                />
-              </LocalizationProvider>
-            </Grid>
-            <Typography variant="body2" mb={1} color="GrayText">
-              Contact Information
-            </Typography>
-            <Grid container mt={-2} mb={3}>
-              <TextField
-                id="contact-num"
-                label="Contact Number"
-                placeholder="09xxxxxxxxx"
-                InputProps={{ inputMode: 'numeric', style: { fontSize: 12 } }}
-                onChange={(e) => setContactNum(e.target.value)}
-              />
-              <TextField
-                id="address"
-                label="Address"
-                InputProps={{ inputMode: 'text', style: { fontSize: 12 } }}
-                onChange={(e) => setAddress(e.target.value)}
-              />
-            </Grid>
-            <Button
-              variant="contained"
-              sx={{
-                background: '#336CFB',
-                display: 'block',
-                marginLeft: 'auto',
-              }}
-              onClick={submitCreatePatient}
-            >
+    <ThemeProvider theme={theme}>
+      <Modal open={open}>
+        <Box sx={style}>
+          <Grid container>
+            <Typography variant="h6" color="GrayText">
               Add Patient
-            </Button>
-          </Box>
-        </Modal>
-      </ThemeProvider>
-    </>
+            </Typography>
+            <IconButton
+              aria-label="close"
+              onClick={(e) => {
+                handleClose(e)
+                reset()
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Grid>
+          <Divider />
+          <Typography variant="body2" color="GrayText" mt={2} mb={-1}>
+            Personal Information
+          </Typography>
+          <Grid container>
+            <FormInputText
+              id="first-name"
+              name="firstName"
+              label="First Name"
+              register={register}
+              errors={errors}
+            />
+            <FormInputRadio
+              id="gender"
+              name="sex"
+              label="Gender"
+              register={register}
+              errors={errors}
+            />
+          </Grid>
+          <Grid container mt={-2} mb={1}>
+            <FormInputText
+              id="last-name"
+              name="lastName"
+              label="Last Name"
+              register={register}
+              errors={errors}
+            />
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <FormInputDate
+                id="date-of-birth"
+                name="dateOfBirth"
+                label="Date of Birth"
+                control={control}
+                register={register}
+                errors={errors}
+              />
+            </LocalizationProvider>
+          </Grid>
+          <Typography variant="body2" mb={1} color="GrayText">
+            Contact Information
+          </Typography>
+          <Grid container mt={-2} mb={3}>
+            <FormInputText
+              id="contact-num"
+              name="contactNum"
+              label="Contact Number"
+              register={register}
+              errors={errors}
+            />
+            <FormInputText
+              id="address"
+              name="address"
+              label="Address"
+              register={register}
+              errors={errors}
+            />
+          </Grid>
+          <Button
+            variant="contained"
+            sx={{
+              background: '#336CFB',
+              display: 'block',
+              marginLeft: 'auto',
+            }}
+            onClick={submitCreatePatient}
+          >
+            Add Patient
+          </Button>
+        </Box>
+      </Modal>
+    </ThemeProvider>
   )
 }
