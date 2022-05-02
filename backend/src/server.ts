@@ -14,6 +14,12 @@ app.use(
     schema,
     context,
     graphiql: true,
+    customFormatErrorFn: (error) => ({
+      message: error.message,
+      locations: error.locations,
+      path: error.path,
+      errors: error.originalError?.message.split(','),
+    }),
   }),
 )
 
