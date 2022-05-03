@@ -19,18 +19,17 @@ const Patient = objectType({
       type: 'String',
       resolve: (parent) => `${parent.firstName} ${parent.lastName}`,
     })
-    // t.nonNull.list.nonNull.field('hospitalBills', {
-    //   type: 'HospitalBill',
-    //   resolve: (parent, _args, context) =>
-    //     context.prisma.patient.findMany({
-    //       where: {
-    //         id: parent.id,
-    //       },
-    //       include: {
-    //         hospitalBills: true,
-    //       },
-    //     }),
-    // })
+    t.nonNull.list.nonNull.field('hospitalBills', {
+      type: 'HospitalBill',
+      resolve: (parent, _args, context) =>
+        context.prisma.hospitalBill.findMany({
+          where: {
+            patient: {
+              id: parent.id,
+            },
+          },
+        }),
+    })
   },
 })
 

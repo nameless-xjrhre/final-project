@@ -11,7 +11,8 @@
     "lint:frontend": "cd frontend && npm run lint",
     "lint:backend": "cd backend && npm run lint",
     "test:frontend": "cd frontend && npm run test",
-    "test:backend": "cd backend && npm run test"
+    "test:backend": "cd backend && npm run test",
+    "test-unit:backend": "cd backend && npm run test:unit"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
