@@ -16,7 +16,7 @@ import Sidebar from '../../components/Sidebar'
 import Header from '../../components/Header'
 import PatientsList from '../../components/PatientList'
 import PatientForm from '../../components/PatientForm'
-
+import AddPatientBtn from '../../components/PatientForm/AddPatientBtn'
 import './PatientPage.css'
 
 const drawerWidth: number = 240
@@ -50,6 +50,9 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme()
 
 function DashboardContent() {
+  const [addPatientBtn, setAddPatientBtn] = React.useState(false)
+  const handleOpen = () => setAddPatientBtn(true)
+  const handleClose = () => setAddPatientBtn(false)
   const [open, setOpen] = React.useState(true)
   const toggleDrawer = () => {
     setOpen(!open)
@@ -98,7 +101,13 @@ function DashboardContent() {
                   }}
                 >
                   <PatientsList />
-                  <PatientForm />
+                  <AddPatientBtn handleOpen={handleOpen} />
+                  {addPatientBtn && (
+                    <PatientForm
+                      handleClose={handleClose}
+                      open={addPatientBtn}
+                    />
+                  )}
                 </Paper>
               </Grid>
             </Grid>
