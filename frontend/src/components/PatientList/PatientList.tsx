@@ -6,9 +6,11 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Skeleton from '@mui/material/Skeleton'
-import { TablePagination } from '@mui/material'
+import { Button, Pagination, TablePagination } from '@mui/material'
 import { useQuery, gql } from 'urql'
-
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 interface Patient {
   patients: {
     id: number
@@ -46,6 +48,15 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }))
 
 export default function PatientsList() {
+  const [drop, SetDropDown] = React.useState<null | HTMLElement>(null)
+  const open = Boolean(drop)
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    SetDropDown(event.currentTarget)
+  }
+  const handleClose = () => {
+    SetDropDown(null)
+  }
+
   const [patients] = useQuery<Patient>({
     query: patientQueryDocument,
   })
@@ -119,20 +130,36 @@ export default function PatientsList() {
                 <StyledTableCell>{patient.contactNum}</StyledTableCell>
                 <StyledTableCell>Check Up</StyledTableCell>
                 <StyledTableCell>Dr. Ralph</StyledTableCell>
-                <StyledTableCell>Details</StyledTableCell>
+                <StyledTableCell>
+                  <Button
+                    id="basic-button"
+                    aria-controls={open ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={handleClick}
+                    style={{ color: '#808080' }}
+                  >
+                    <MoreVertIcon />
+                  </Button>{' '}
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={drop}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                      'aria-labelledby': 'basic-button',
+                    }}
+                  >
+                    <MenuItem onClick={handleClose}>Edit</MenuItem>
+                    <MenuItem onClick={handleClose}>View Details</MenuItem>
+                    <MenuItem onClick={handleClose}>Delete</MenuItem>
+                  </Menu>
+                </StyledTableCell>
               </TableRow>
             ))}
         </TableBody>
       </Table>
-      <TablePagination
-        rowsPerPageOptions={[1, 5, 10]}
-        component="div"
-        count={data?.patients.length || 0}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      <Pagination count={3} variant="outlined" shape="rounded" />
     </>
   )
 }
