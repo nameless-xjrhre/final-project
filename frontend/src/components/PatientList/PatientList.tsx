@@ -11,6 +11,8 @@ import { useQuery, gql } from 'urql'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import EditPatientForm from '../PatientForm/EditPatientForm'
+import DeletePatientForm from '../PatientForm/DeletePatientForm'
 
 interface PatientQueryData {
   patients: {
@@ -66,14 +68,17 @@ const hasNoAppointments = (patient: Patient) =>
   patient.appointments.length === 0
 
 export default function PatientsList() {
-  const [drop, SetDropDown] = React.useState<null | HTMLElement>(null)
+  const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
+  const [editPatientBtn, setEditPatientBtn] = React.useState(false)
+  const [deletePatientBtn, setDeletePatientBtn] = React.useState(false)
+  const handleOpenEditForm = () => setEditPatientBtn(true)
+  const handleCloseEditForm = () => setEditPatientBtn(false)
+  const handleOpenDeleteForm = () => setDeletePatientBtn(true)
+  const handleCloseDeleteForm = () => setDeletePatientBtn(false)
+  const handleDismissDropdown = () => setDropDown(null)
   const open = Boolean(drop)
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    SetDropDown(event.currentTarget)
-  }
-  const handleClose = () => {
-    SetDropDown(null)
-  }
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) =>
+    setDropDown(event.currentTarget)
 
   const [patients] = useQuery<PatientQueryData>({
     query: patientQueryDocument,
@@ -151,14 +156,28 @@ export default function PatientsList() {
                     id="basic-menu"
                     anchorEl={drop}
                     open={open}
-                    onClose={handleClose}
+                    onClose={handleDismissDropdown}
                     MenuListProps={{
                       'aria-labelledby': 'basic-button',
                     }}
                   >
-                    <MenuItem onClick={handleClose}>Edit</MenuItem>
-                    <MenuItem onClick={handleClose}>View Details</MenuItem>
-                    <MenuItem onClick={handleClose}>Delete</MenuItem>
+                    <MenuItem onClick={handleOpenEditForm}>Edit</MenuItem>
+                    {editPatientBtn && (
+                      <EditPatientForm
+                        handleClose={handleCloseEditForm}
+                        open={editPatientBtn}
+                      />
+                    )}
+                    <MenuItem onClick={handleDismissDropdown}>
+                      View Details
+                    </MenuItem>
+                    <MenuItem onClick={handleOpenDeleteForm}>Delete</MenuItem>
+                    {deletePatientBtn && (
+                      <DeletePatientForm
+                        handleClose={handleCloseDeleteForm}
+                        open={deletePatientBtn}
+                      />
+                    )}
                   </Menu>
                 </StyledTableCell>
               </TableRow>
