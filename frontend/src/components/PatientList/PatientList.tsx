@@ -11,15 +11,27 @@ import { useQuery, gql } from 'urql'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import EditPatientForm from '../PatientForm/EditPatientForm'
+import DeletePatientForm from '../PatientForm/DeletePatientForm'
 
-interface Patient {
+interface PatientQueryData {
   patients: {
     id: number
     fullName: string
     sex: string
     contactNum: string
     dateOfBirth: Date
+    appointments: []
   }[]
+}
+
+interface Patient {
+  id: number
+  fullName: string
+  sex: string
+  contactNum: string
+  dateOfBirth: Date
+  appointments: []
 }
 
 const patientQueryDocument = gql`
@@ -30,6 +42,9 @@ const patientQueryDocument = gql`
       sex
       contactNum
       dateOfBirth
+      appointments {
+        id
+      }
     }
   }
 `
@@ -49,17 +64,23 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
 }))
 
-export default function PatientsList() {
-  const [drop, SetDropDown] = React.useState<null | HTMLElement>(null)
-  const open = Boolean(drop)
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    SetDropDown(event.currentTarget)
-  }
-  const handleClose = () => {
-    SetDropDown(null)
-  }
+const hasNoAppointments = (patient: Patient) =>
+  patient.appointments.length === 0
 
-  const [patients] = useQuery<Patient>({
+export default function PatientsList() {
+  const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
+  const [editPatientBtn, setEditPatientBtn] = React.useState(false)
+  const [deletePatientBtn, setDeletePatientBtn] = React.useState(false)
+  const handleOpenEditForm = () => setEditPatientBtn(true)
+  const handleCloseEditForm = () => setEditPatientBtn(false)
+  const handleOpenDeleteForm = () => setDeletePatientBtn(true)
+  const handleCloseDeleteForm = () => setDeletePatientBtn(false)
+  const handleDismissDropdown = () => setDropDown(null)
+  const open = Boolean(drop)
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) =>
+    setDropDown(event.currentTarget)
+
+  const [patients] = useQuery<PatientQueryData>({
     query: patientQueryDocument,
   })
 
@@ -111,7 +132,9 @@ export default function PatientsList() {
             data.patients.map((patient) => (
               <TableRow key={patient.id}>
                 <StyledTableCell>
-                  {patient.dateOfBirth.toLocaleString()}
+                  {hasNoAppointments(patient)
+                    ? '-----'
+                    : patient.dateOfBirth.toLocaleString()}
                 </StyledTableCell>
                 <StyledTableCell>{patient.fullName}</StyledTableCell>
                 <StyledTableCell>{patient.sex.toString()}</StyledTableCell>
@@ -133,14 +156,28 @@ export default function PatientsList() {
                     id="basic-menu"
                     anchorEl={drop}
                     open={open}
-                    onClose={handleClose}
+                    onClose={handleDismissDropdown}
                     MenuListProps={{
                       'aria-labelledby': 'basic-button',
                     }}
                   >
-                    <MenuItem onClick={handleClose}>Edit</MenuItem>
-                    <MenuItem onClick={handleClose}>View Details</MenuItem>
-                    <MenuItem onClick={handleClose}>Delete</MenuItem>
+                    <MenuItem onClick={handleOpenEditForm}>Edit</MenuItem>
+                    {editPatientBtn && (
+                      <EditPatientForm
+                        handleClose={handleCloseEditForm}
+                        open={editPatientBtn}
+                      />
+                    )}
+                    <MenuItem onClick={handleDismissDropdown}>
+                      View Details
+                    </MenuItem>
+                    <MenuItem onClick={handleOpenDeleteForm}>Delete</MenuItem>
+                    {deletePatientBtn && (
+                      <DeletePatientForm
+                        handleClose={handleCloseDeleteForm}
+                        open={deletePatientBtn}
+                      />
+                    )}
                   </Menu>
                 </StyledTableCell>
               </TableRow>

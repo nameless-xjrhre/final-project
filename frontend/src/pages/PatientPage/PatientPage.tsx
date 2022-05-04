@@ -11,13 +11,13 @@ import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-
+import { faWheelchair } from '@fortawesome/free-solid-svg-icons'
 import Sidebar from '../../components/Sidebar'
 import Header from '../../components/Header'
 import PatientsList from '../../components/PatientList'
-import PatientForm from '../../components/PatientForm'
-import AddPatientBtn from '../../components/PatientForm/AddPatientBtn'
+import AddPatientForm from '../../components/PatientForm/AddPatientForm'
 import './PatientPage.css'
+import CustomFloatingBtn from '../../components/CustomFloatingBtn'
 
 const drawerWidth: number = 240
 
@@ -101,9 +101,12 @@ function DashboardContent() {
                   }}
                 >
                   <PatientsList />
-                  <AddPatientBtn handleOpen={handleOpen} />
+                  <CustomFloatingBtn
+                    handleOpen={handleOpen}
+                    icon={faWheelchair}
+                  />
                   {addPatientBtn && (
-                    <PatientForm
+                    <AddPatientForm
                       handleClose={handleClose}
                       open={addPatientBtn}
                     />
