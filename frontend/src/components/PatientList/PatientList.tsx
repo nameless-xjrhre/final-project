@@ -12,14 +12,24 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
-interface Patient {
+interface PatientQueryData {
   patients: {
     id: number
     fullName: string
     sex: string
     contactNum: string
     dateOfBirth: Date
+    appointments: []
   }[]
+}
+
+interface Patient {
+  id: number
+  fullName: string
+  sex: string
+  contactNum: string
+  dateOfBirth: Date
+  appointments: []
 }
 
 const patientQueryDocument = gql`
@@ -30,6 +40,9 @@ const patientQueryDocument = gql`
       sex
       contactNum
       dateOfBirth
+      appointments {
+        id
+      }
     }
   }
 `
@@ -49,6 +62,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
 }))
 
+const hasNoAppointments = (patient: Patient) =>
+  patient.appointments.length === 0
+
 export default function PatientsList() {
   const [drop, SetDropDown] = React.useState<null | HTMLElement>(null)
   const open = Boolean(drop)
@@ -59,7 +75,7 @@ export default function PatientsList() {
     SetDropDown(null)
   }
 
-  const [patients] = useQuery<Patient>({
+  const [patients] = useQuery<PatientQueryData>({
     query: patientQueryDocument,
   })
 
@@ -111,7 +127,9 @@ export default function PatientsList() {
             data.patients.map((patient) => (
               <TableRow key={patient.id}>
                 <StyledTableCell>
-                  {patient.dateOfBirth.toLocaleString()}
+                  {hasNoAppointments(patient)
+                    ? '-----'
+                    : patient.dateOfBirth.toLocaleString()}
                 </StyledTableCell>
                 <StyledTableCell>{patient.fullName}</StyledTableCell>
                 <StyledTableCell>{patient.sex.toString()}</StyledTableCell>
