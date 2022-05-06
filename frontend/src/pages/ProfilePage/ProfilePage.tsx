@@ -11,13 +11,10 @@ import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import { faWheelchair } from '@fortawesome/free-solid-svg-icons'
 import Sidebar from '../../components/Sidebar'
-import Header from '../../components/Header'
-import PatientsList from '../../components/PatientList'
-import AddPatientForm from '../../components/PatientForm/AddPatientForm'
-import './PatientPage.css'
-import CustomFloatingBtn from '../../components/CustomFloatingBtn'
+import RightSideBar from '../../components/RightSideBar'
+import TabPanel from '../../components/TabPanel'
+import './ProfilePage.css'
 
 const drawerWidth: number = 240
 
@@ -88,33 +85,35 @@ function DashboardContent() {
           }}
         >
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Header />
             <Grid container spacing={3}>
-              {/* Recent Orders */}
-              <Grid item xs={12}>
+              {/* Chart */}
+              <Grid item xs={12} md={8} lg={9}>
                 <Paper
                   sx={{
-                    p: 0,
+                    p: 2,
                     display: 'flex',
                     flexDirection: 'column',
-                    boxShadow: 3,
+                    height: 240,
                   }}
                 >
-                  <PatientsList />
-                  <CustomFloatingBtn
-                    handleOpen={handleOpen}
-                    icon={faWheelchair}
-                  />
-                  {addPatientBtn && (
-                    <AddPatientForm
-                      handleClose={handleClose}
-                      open={addPatientBtn}
-                    />
-                  )}
+                  Profile
+                </Paper>
+              </Grid>
+              <Grid item xs={12} md={8} lg={9}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: 240,
+                  }}
+                >
+                  <TabPanel />
                 </Paper>
               </Grid>
             </Grid>
           </Container>
+          <RightSideBar />
         </Box>
       </Box>
     </ThemeProvider>

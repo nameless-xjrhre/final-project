@@ -15,11 +15,13 @@ import { Sex } from '../../graphql/generated'
 export const FormInputText = ({
   name,
   label,
+  placeholder,
   register,
   errors,
 }: FormInputProps) => (
   <TextField
     label={label}
+    placeholder={placeholder}
     {...register(name)}
     helperText={errors[name]?.message}
     error={!!errors[name]}
@@ -30,6 +32,7 @@ export const FormInputText = ({
 export const FormInputDate = ({
   name,
   label,
+  placeholder,
   control,
   register,
   errors,
@@ -50,6 +53,7 @@ export const FormInputDate = ({
         }
         renderInput={(params) => (
           <TextField
+            placeholder={placeholder}
             variant="outlined"
             margin="dense"
             {...params}
