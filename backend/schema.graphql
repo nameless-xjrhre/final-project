@@ -22,6 +22,15 @@ enum BillStatus {
   UNPAID
 }
 
+input CreatePatientInput {
+  address: String!
+  contactNum: String!
+  dateOfBirth: DateTime!
+  firstName: String!
+  lastName: String!
+  sex: Sex!
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
@@ -53,15 +62,8 @@ type MedicalStaff {
 }
 
 type Mutation {
-  createPatient(
-    address: String
-    contactNum: String
-    dateOfBirth: DateTime!
-    firstName: String
-    lastName: String
-    sex: Sex!
-  ): Patient!
-  createUser(password: String, username: String): User!
+  createPatient(data: CreatePatientInput!): Patient!
+  createUser(password: String!, username: String!): User!
 }
 
 type Patient {
@@ -73,7 +75,7 @@ type Patient {
   hospitalBills: [HospitalBill!]!
   id: Int!
   lastName: String!
-  sex: Sex
+  sex: Sex!
 }
 
 type Query {

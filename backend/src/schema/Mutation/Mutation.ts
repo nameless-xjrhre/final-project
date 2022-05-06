@@ -7,41 +7,53 @@ const Mutation = objectType({
     t.nonNull.field('createUser', {
       type: 'User',
       args: {
-        username: stringArg(),
-        password: stringArg(),
+        username: nonNull(stringArg()),
+        password: nonNull(stringArg()),
       },
       resolve: (_parent, args, context) =>
         createUser(
           {
-            username: args.username || '',
-            password: args.password || '',
+            username: args.username,
+            password: args.password,
           },
           context,
         ),
+      validate: async (rules, args, context) => {
+        // Password must have capital letter, a number, and be at least 8 characters long
+        if (!/^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(args.password)) {
+          throw new Error(
+            'Password must have capital letter, a number, and be at least 8 characters long',
+          )
+        }
+        // throw error if username is already taken
+        const user = await context.prisma.user.findFirst({
+          where: {
+            username: args.username,
+          },
+        })
+        if (user) {
+          throw new Error('Username is already taken')
+        }
+      },
     })
     t.nonNull.field('createPatient', {
       type: 'Patient',
       args: {
-        firstName: stringArg(),
-        lastName: stringArg(),
-        sex: nonNull(arg({ type: 'Sex' })),
-        dateOfBirth: nonNull(
+        data: nonNull(
           arg({
-            type: 'DateTime',
+            type: 'CreatePatientInput',
           }),
         ),
-        contactNum: stringArg(),
-        address: stringArg(),
       },
       resolve: (_parent, args, context) =>
         context.prisma.patient.create({
           data: {
-            firstName: args.firstName || '',
-            lastName: args.lastName || '',
-            sex: args.sex,
-            dateOfBirth: args.dateOfBirth || '',
-            contactNum: args.contactNum || '',
-            address: args.address || '',
+            firstName: args.data.firstName,
+            lastName: args.data.lastName,
+            sex: args.data.sex,
+            dateOfBirth: args.data.dateOfBirth,
+            contactNum: args.data.contactNum,
+            address: args.data.address,
           },
         }),
     })
