@@ -22,6 +22,21 @@ enum BillStatus {
   UNPAID
 }
 
+input CreateAppointmentInput {
+  date: DateTime!
+  medStaffId: Int!
+  patientId: Int!
+  status: AppointmentStatus!
+  visitType: VisitType!
+}
+
+input CreateMedicalStaffInput {
+  address: String!
+  contactNum: String!
+  firstName: String!
+  lastName: String!
+}
+
 input CreatePatientInput {
   address: String!
   contactNum: String!
@@ -29,6 +44,12 @@ input CreatePatientInput {
   firstName: String!
   lastName: String!
   sex: Sex!
+}
+
+input CreateScheduleInput {
+  endTime: DateTime!
+  medStaffId: Int!
+  startTime: DateTime!
 }
 
 """
@@ -62,7 +83,10 @@ type MedicalStaff {
 }
 
 type Mutation {
+  createAppointment(data: CreateAppointmentInput!): Appointment
+  createMedicalStaff(data: CreateMedicalStaffInput!): MedicalStaff
   createPatient(data: CreatePatientInput!): Patient!
+  createSchedule(data: CreateScheduleInput!): Schedule
   createUser(password: String!, username: String!): User!
 }
 
