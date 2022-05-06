@@ -47,9 +47,6 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme()
 
 function DashboardContent() {
-  const [addPatientBtn, setAddPatientBtn] = React.useState(false)
-  const handleOpen = () => setAddPatientBtn(true)
-  const handleClose = () => setAddPatientBtn(false)
   const [open, setOpen] = React.useState(true)
   const toggleDrawer = () => {
     setOpen(!open)
