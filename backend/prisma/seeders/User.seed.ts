@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { PrismaClient, UserType } from '@prisma/client'
 import { faker } from '@faker-js/faker'
 

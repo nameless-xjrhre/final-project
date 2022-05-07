@@ -1,10 +1,21 @@
+/* eslint-disable no-console */
 import { PrismaClient } from '@prisma/client'
-import { seedUsers, seedMedicalStaff } from './seeders'
+import {
+  seedUsers,
+  seedMedicalStaff,
+  seedPatients,
+  seedPatientInfo,
+  seedAppointments,
+} from './seeders'
 
 const prisma = new PrismaClient()
 
 async function main() {
-  Promise.all([seedUsers(), seedMedicalStaff()])
+  await seedUsers()
+  await seedPatients()
+  await seedMedicalStaff()
+  await seedPatientInfo()
+  await seedAppointments()
 }
 
 main()

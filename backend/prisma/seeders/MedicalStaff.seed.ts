@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { PrismaClient } from '@prisma/client'
 import { faker } from '@faker-js/faker'
 
@@ -15,7 +16,7 @@ async function seedMedicalStaff() {
         lastName: faker.name.lastName(),
         contactNum: faker.phone.phoneNumber(),
         address: faker.address.streetAddress(),
-        Schedule: {
+        schedules: {
           create: {
             endTime,
             startTime,

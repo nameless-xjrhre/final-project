@@ -99,7 +99,7 @@ model MedicalStaff {
   contactNum   String        @map("contact_num")
   address      String
   appointments Appointment[]
-  Schedule     Schedule[]
+  schedules     Schedule[]
 
   @@map("medical_staffs")
 }
