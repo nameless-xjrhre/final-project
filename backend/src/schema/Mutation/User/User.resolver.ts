@@ -1,15 +1,12 @@
-import { UserType, User } from '@prisma/client'
-import { Context } from '../../context'
+import { UserType } from '@prisma/client'
+import { Context } from '../../../context'
 
 type CreateUser = {
   username: string
   password: string
 }
 
-export async function createUser(
-  user: CreateUser,
-  ctx: Context,
-): Promise<User> {
+export function createUser(user: CreateUser, ctx: Context) {
   return ctx.prisma.user.create({
     data: {
       username: user.username,
@@ -18,7 +15,7 @@ export async function createUser(
   })
 }
 
-export async function updateUserType(
+export function updateUserType(
   userId: number,
   userType: UserType,
   ctx: Context,

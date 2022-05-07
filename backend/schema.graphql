@@ -53,6 +53,11 @@ input CreateScheduleInput {
   startTime: DateTime!
 }
 
+input CreateUserInput {
+  password: String!
+  username: String!
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
@@ -86,9 +91,9 @@ type MedicalStaff {
 type Mutation {
   createAppointment(data: CreateAppointmentInput!): Appointment
   createMedicalStaff(data: CreateMedicalStaffInput!): MedicalStaff
-  createPatient(data: CreatePatientInput!): Patient!
+  createPatient(data: CreatePatientInput!): Patient
   createSchedule(data: CreateScheduleInput!): Schedule
-  createUser(password: String!, username: String!): User!
+  createUser(data: CreateUserInput!): User
 }
 
 type Patient {

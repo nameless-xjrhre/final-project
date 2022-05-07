@@ -1,6 +1,13 @@
 import { CreateSchedule } from './Schedule'
 import { CreateMedicalStaff } from './MedicalStaff'
 import { CreateAppointment } from './Appointment'
-import Mutation from './Mutation'
+import { CreatePatient } from './Patient'
+import { CreateUser } from './User'
 
-export default [CreateSchedule, CreateMedicalStaff, Mutation, CreateAppointment]
+export default [
+  CreateSchedule,
+  CreateMedicalStaff,
+  CreateAppointment,
+  CreatePatient,
+  CreateUser,
+]

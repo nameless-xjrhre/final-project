@@ -48,9 +48,18 @@ const CreateMedicalStaffInput = inputObjectType({
   },
 })
 
+const CreateUserInput = inputObjectType({
+  name: 'CreateUserInput',
+  definition(t) {
+    t.field(gqlTypes.User.username)
+    t.field(gqlTypes.User.password)
+  },
+})
+
 export default [
   CreatePatientInput,
   CreateAppointmentInput,
   CreateScheduleInput,
   CreateMedicalStaffInput,
+  CreateUserInput,
 ]

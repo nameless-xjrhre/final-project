@@ -1,6 +1,6 @@
 import { User } from '@prisma/client'
-import { MockContext, Context, createMockContext } from '../../context'
-import { createUser, updateUserType } from './resolvers'
+import { MockContext, Context, createMockContext } from '../../../context'
+import { createUser, updateUserType } from './User.resolver'
 
 let mockCtx: MockContext
 let ctx: Context
