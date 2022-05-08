@@ -10,6 +10,8 @@ export type InputPatient = {
   address: string
 }
 
+export type EditPatient = Partial<InputPatient>
+
 export function createPatient(patient: InputPatient, ctx: Context) {
   return ctx.prisma.patient.create({
     data: {
@@ -20,5 +22,21 @@ export function createPatient(patient: InputPatient, ctx: Context) {
       contactNum: patient.contactNum,
       address: patient.address,
     },
+  })
+}
+
+export async function editPatient(
+  patientId: number,
+  patient: EditPatient,
+  ctx: Context,
+) {
+  if (Object.keys(patient).length === 0) {
+    throw new Error('No data provided')
+  }
+  return ctx.prisma.patient.update({
+    where: {
+      id: patientId,
+    },
+    data: { ...patient, id: patientId },
   })
 }

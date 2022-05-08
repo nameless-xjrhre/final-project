@@ -16,6 +16,21 @@ const CreatePatientInput = inputObjectType({
   },
 })
 
+const EditPatientInput = inputObjectType({
+  name: 'EditPatientInput',
+  definition(t) {
+    t.int('id')
+    t.string('firstName')
+    t.string('lastName')
+    t.field('sex', {
+      type: SexType,
+    })
+    t.date('dateOfBirth')
+    t.string('contactNum')
+    t.string('address')
+  },
+})
+
 const CreateAppointmentInput = inputObjectType({
   name: 'CreateAppointmentInput',
   definition(t) {
@@ -58,6 +73,7 @@ const CreateUserInput = inputObjectType({
 
 export default [
   CreatePatientInput,
+  EditPatientInput,
   CreateAppointmentInput,
   CreateScheduleInput,
   CreateMedicalStaffInput,

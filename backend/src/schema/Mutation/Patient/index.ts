@@ -1,1 +1,3 @@
-export { CreatePatient } from './Patient.mutation'
+import * as PatientMutations from './Patient.mutation'
+
+export default Object.values(PatientMutations)
