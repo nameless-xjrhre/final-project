@@ -83,6 +83,7 @@ type MedicalStaff {
   address: String!
   contactNum: String!
   firstName: String!
+  fullName: String
   id: Int!
   lastName: String!
   schedules: [Schedule]
@@ -110,8 +111,12 @@ type Patient {
 }
 
 type Query {
+  appointments: [Appointment!]!
+  hospitalBills: [HospitalBill!]!
+  medicalRecords: [MedicalRecord!]!
   medicalStaff: [MedicalStaff!]!
   patients: [Patient!]!
+  schedules: [Schedule!]!
   users: [User!]!
 }
 

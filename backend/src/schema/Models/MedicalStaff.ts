@@ -19,7 +19,11 @@ const MedicalStaff = objectType({
               id: parent.id,
             },
           })
-          .Schedule(),
+          .schedules(),
+    })
+    t.field('fullName', {
+      type: 'String',
+      resolve: (parent) => `${parent.firstName} ${parent.lastName}`,
     })
   },
 })
