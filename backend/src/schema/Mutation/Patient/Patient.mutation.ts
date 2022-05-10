@@ -1,5 +1,6 @@
+// @ts-nocheck
 import { mutationField, arg, nonNull, intArg } from 'nexus'
-import { createPatient, editPatient } from './Patient.resolver'
+import { createPatient, editPatient, deletePatient } from './Patient.resolver'
 
 export const CreatePatient = mutationField('createPatient', {
   type: 'Patient',
@@ -29,6 +30,7 @@ export const CreatePatient = mutationField('createPatient', {
       data: rules.object({
         firstName: rules.string().min(2).max(20),
         lastName: rules.string().min(2).max(20),
+        address: rules.string().min(2).max(100),
       }),
     }
   },
@@ -45,4 +47,41 @@ export const EditPatient = mutationField('editPatient', {
     ),
   },
   resolve: (_parent, args, context) => editPatient(args.id, args.data, context),
+  validate: async (rules, args, context) => {
+    // check if patient exists
+    const patient = await context.prisma.patient.findFirst({
+      where: {
+        id: args.id,
+      },
+    })
+    if (!patient) {
+      throw new Error(`Patient with id: ${args.id} does not exist`)
+    }
+    return {
+      data: rules.object({
+        firstName: rules.string().min(2).max(20),
+        lastName: rules.string().min(2).max(20),
+        address: rules.string().min(2).max(100),
+      }),
+    }
+  },
+})
+
+export const DeletePatient = mutationField('deletePatient', {
+  type: 'Patient',
+  args: {
+    id: nonNull(intArg()),
+  },
+  resolve: (_parent, args, context) => deletePatient(args.id, context),
+  validate: async (rules, args, context) => {
+    // check if patient exists
+    const patient = await context.prisma.patient.findFirst({
+      where: {
+        id: args.id,
+      },
+    })
+    if (!patient) {
+      throw new Error(`Patient with id: ${args.id} does not exist`)
+    }
+  },
 })

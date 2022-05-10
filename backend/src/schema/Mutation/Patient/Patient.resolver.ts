@@ -30,13 +30,23 @@ export async function editPatient(
   patient: EditPatient,
   ctx: Context,
 ) {
-  if (Object.keys(patient).length === 0) {
-    throw new Error('No data provided')
-  }
   return ctx.prisma.patient.update({
     where: {
       id: patientId,
     },
     data: { ...patient, id: patientId },
+  })
+}
+
+export async function deletePatient(patientId: number, ctx: Context) {
+  return ctx.prisma.patient.delete({
+    where: {
+      id: patientId,
+    },
+    include: {
+      appointments: true,
+      hospitalBills: true,
+      medicalRecords: true,
+    },
   })
 }

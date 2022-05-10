@@ -105,6 +105,7 @@ type Mutation {
   createPatient(data: CreatePatientInput!): Patient
   createSchedule(data: CreateScheduleInput!): Schedule
   createUser(data: CreateUserInput!): User
+  deletePatient(id: Int!): Patient
   editPatient(data: EditPatientInput!, id: Int!): Patient
 }
 

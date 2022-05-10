@@ -62,23 +62,3 @@ test('should edit patient', async () => {
 
   await expect(editPatient(1, input, ctx)).resolves.toEqual(patient)
 })
-
-test('should throw error if edit details is empty', async () => {
-  const input = {
-    firstName: 'Larri',
-    lastName: 'Lamanosa',
-    sex: Sex.MALE,
-    dateOfBirth: new Date('2020-01-01'),
-    contactNum: '1234567890',
-    address: '123 Main St',
-  }
-
-  mockCtx.prisma.patient.create.mockResolvedValue({
-    id: 1,
-    ...input,
-  })
-
-  await createPatient(input, ctx)
-
-  await expect(editPatient(1, {}, ctx)).rejects.toThrowError('No data provided')
-})
