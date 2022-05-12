@@ -1,18 +1,11 @@
-import { Sex } from '@prisma/client'
 import { Context } from '../../../context'
+import { NexusGenInputs } from '../../../generated/nexus'
 
-export type InputPatient = {
-  firstName: string
-  lastName: string
-  sex: Sex
-  dateOfBirth: Date
-  contactNum: string
-  address: string
-}
+export type PatientInputType = NexusGenInputs['CreatePatientInput']
 
-export type EditPatient = Partial<InputPatient>
+export type EditPatientType = NexusGenInputs['EditPatientInput']
 
-export function createPatient(patient: InputPatient, ctx: Context) {
+export function createPatient(patient: PatientInputType, ctx: Context) {
   return ctx.prisma.patient.create({
     data: {
       firstName: patient.firstName,
@@ -27,14 +20,21 @@ export function createPatient(patient: InputPatient, ctx: Context) {
 
 export async function editPatient(
   patientId: number,
-  patient: EditPatient,
+  patient: EditPatientType,
   ctx: Context,
 ) {
   return ctx.prisma.patient.update({
     where: {
       id: patientId,
     },
-    data: { ...patient, id: patientId },
+    data: {
+      address: patient.address ?? undefined,
+      contactNum: patient.contactNum ?? undefined,
+      firstName: patient.firstName ?? undefined,
+      lastName: patient.lastName ?? undefined,
+      sex: patient.sex ?? undefined,
+      dateOfBirth: patient.dateOfBirth ?? undefined,
+    },
   })
 }
 

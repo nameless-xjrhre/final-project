@@ -1,6 +1,6 @@
 import { Patient, Sex } from '@prisma/client'
 import { MockContext, Context, createMockContext } from '../../../context'
-import { createPatient, editPatient, EditPatient } from './Patient.resolver'
+import { createPatient, editPatient } from './Patient.resolver'
 
 let mockCtx: MockContext
 let ctx: Context
@@ -56,7 +56,7 @@ test('should edit patient', async () => {
     ctx,
   )
 
-  const input: EditPatient = {
+  const input = {
     sex: Sex.MALE,
   }
 

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { mutationField, arg, nonNull, intArg } from 'nexus'
 import { createPatient, editPatient, deletePatient } from './Patient.resolver'
 
@@ -81,7 +80,7 @@ export const DeletePatient = mutationField('deletePatient', {
       },
     })
     if (!patient) {
-      throw new Error(`Patient with id: ${args.id} does not exist`)
+      throw new Error(`Patient does not exist`)
     }
   },
 })

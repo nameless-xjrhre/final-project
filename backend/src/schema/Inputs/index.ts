@@ -39,8 +39,6 @@ const CreateAppointmentInput = inputObjectType({
     t.nonNull.field('status', {
       type: StatusType,
     })
-    t.field(gqlTypes.Appointment.patientId)
-    t.field(gqlTypes.Appointment.medStaffId)
   },
 })
 
