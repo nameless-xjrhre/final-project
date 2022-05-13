@@ -2,6 +2,9 @@ import { inputObjectType } from 'nexus'
 import * as gqlTypes from 'nexus-prisma'
 import { SexType, StatusType } from '../Enums'
 
+import HospitalBillInput from './HospitalBill.input'
+import MedicalRecordInput from './MedicalRecord.input'
+
 const CreatePatientInput = inputObjectType({
   name: 'CreatePatientInput',
   definition(t) {
@@ -76,4 +79,6 @@ export default [
   CreateScheduleInput,
   CreateMedicalStaffInput,
   CreateUserInput,
+  ...HospitalBillInput,
+  ...MedicalRecordInput,
 ]

@@ -29,6 +29,20 @@ input CreateAppointmentInput {
   visitType: VisitType!
 }
 
+input CreateHospitalBillInput {
+  amount: Int!
+  date: DateTime!
+  patientId: Int!
+  status: BillStatus!
+}
+
+input CreateMedicalRecordInput {
+  date: DateTime!
+  diagnosis: String!
+  patientId: Int!
+  prescription: String!
+}
+
 input CreateMedicalStaffInput {
   address: String!
   contactNum: String!
@@ -60,6 +74,12 @@ input CreateUserInput {
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
 scalar DateTime
+
+input EditHospitalBillInput {
+  amount: Int
+  date: DateTime
+  status: BillStatus
+}
 
 input EditPatientInput {
   address: String
@@ -100,11 +120,14 @@ type MedicalStaff {
 type Mutation {
   createAppointment(data: CreateAppointmentInput!, medStaffId: Int!, patientId: Int!): Appointment
   createAppointmentWithPatient(appointment: CreateAppointmentInput!, medStaffId: Int!, patient: CreatePatientInput!): Appointment
+  createHospitalBill(data: CreateHospitalBillInput!): HospitalBill
+  createMedicalRecord(data: CreateMedicalRecordInput!): MedicalRecord
   createMedicalStaff(data: CreateMedicalStaffInput!): MedicalStaff
   createPatient(data: CreatePatientInput!): Patient
   createSchedule(data: CreateScheduleInput!): Schedule
   createUser(data: CreateUserInput!): User
   deletePatient(id: Int!): Patient
+  editHospitalBill(data: EditHospitalBillInput!, id: Int!): HospitalBill
   editPatient(data: EditPatientInput!, id: Int!): Patient
 }
 
@@ -118,6 +141,7 @@ type Patient {
   hospitalBills: [HospitalBill!]!
   id: Int!
   lastName: String!
+  medicalRecords: [MedicalRecord!]!
   sex: Sex!
 }
 
@@ -126,6 +150,7 @@ type Query {
   hospitalBills: [HospitalBill!]!
   medicalRecords: [MedicalRecord!]!
   medicalStaff: [MedicalStaff!]!
+  patient(id: Int!): Patient
   patients: [Patient!]!
   schedules: [Schedule!]!
   users: [User!]!

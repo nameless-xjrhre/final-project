@@ -43,5 +43,43 @@ export const CreateAppointmentWithPatient = mutationField(
         args.medStaffId,
         context,
       ),
+    validate: async (rules, args, context) => {
+      const { medStaffId, patient } = args
+      // check if medstaff exists
+      const medStaff = await context.prisma.medicalStaff.findFirst({
+        where: {
+          id: medStaffId,
+        },
+      })
+
+      if (!medStaff) {
+        throw new Error(`Medstaff does not exist`)
+      }
+
+      // check if patient.firstName + " " + patient.lastName exists
+      const existingPatient = await context.prisma.patient.findFirst({
+        where: {
+          firstName: patient.firstName,
+          lastName: patient.lastName,
+        },
+      })
+      if (existingPatient) {
+        throw new Error(
+          `Patient with firstName: ${patient.firstName} and lastName: ${patient.lastName} already exists`,
+        )
+      }
+
+      return {
+        appointment: rules.object({
+          date: rules.date(),
+          description: rules.string().min(5).max(100),
+        }),
+        patient: rules.object({
+          firstName: rules.string().min(2).max(20),
+          lastName: rules.string().min(2).max(20),
+          address: rules.string().min(2).max(100),
+        }),
+      }
+    },
   },
 )

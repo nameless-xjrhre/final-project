@@ -9,7 +9,7 @@ import Models from './Models'
 export const DateTime = asNexusMethod(DateTimeResolver, 'date')
 
 export const schema = makeSchema({
-  types: [Query, ...Mutation, DateTime, ...Models, ...InputTypes],
+  types: [...Query, ...Mutation, DateTime, ...Models, ...InputTypes],
   outputs: {
     schema: `${__dirname}/../../schema.graphql`,
     typegen: `${__dirname}/../generated/nexus.ts`,

@@ -1,7 +1,6 @@
-import { objectType, enumType } from 'nexus'
+import { objectType } from 'nexus'
 import * as gqlTypes from 'nexus-prisma'
-
-const StatusType = enumType(gqlTypes.BillStatus)
+import { BillStatusType } from '../Enums'
 
 const HospitalBill = objectType({
   name: 'HospitalBill',
@@ -10,7 +9,7 @@ const HospitalBill = objectType({
     t.field(gqlTypes.HospitalBill.date)
     t.field(gqlTypes.HospitalBill.amount)
     t.field('status', {
-      type: StatusType,
+      type: BillStatusType,
     })
     t.field('patient', {
       type: 'Patient',
