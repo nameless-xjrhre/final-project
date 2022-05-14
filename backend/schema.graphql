@@ -30,7 +30,7 @@ input CreateAppointmentInput {
 }
 
 input CreateHospitalBillInput {
-  amount: Int!
+  amount: Float!
   date: DateTime!
   patientId: Int!
   status: BillStatus!
@@ -92,7 +92,7 @@ input EditPatientInput {
 }
 
 type HospitalBill {
-  amount: Int!
+  amount: Float!
   date: DateTime!
   id: Int!
   patient: Patient
