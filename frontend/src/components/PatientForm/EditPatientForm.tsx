@@ -9,7 +9,7 @@ import { string, object, mixed } from 'yup'
 import { FormInputText, FormInputRadio, FormInputDate } from './FormInputFields'
 import { Sex } from '../../graphql/generated'
 import CustomForm from '../CustomForm'
-import PatientFormProps from './PatientFormsProps'
+import CustomFormProps from '../CustomFormProps'
 
 const patientSchema = object().shape({
   firstName: string().required('Enter your first name.'),
@@ -25,7 +25,7 @@ const patientSchema = object().shape({
 export default function EditPatientForm({
   handleClose,
   open,
-}: PatientFormProps) {
+}: CustomFormProps) {
   const {
     register,
     control,
