@@ -1,6 +1,6 @@
 import { Patient, Sex } from '@prisma/client'
 import { MockContext, Context, createMockContext } from '../../../context'
-import { createPatient, editPatient, EditPatient } from './Patient.resolver'
+import { createPatient, editPatient, deletePatient } from './Patient.resolver'
 
 let mockCtx: MockContext
 let ctx: Context
@@ -56,15 +56,16 @@ test('should edit patient', async () => {
     ctx,
   )
 
-  const input: EditPatient = {
+  const input = {
     sex: Sex.MALE,
   }
 
   await expect(editPatient(1, input, ctx)).resolves.toEqual(patient)
 })
 
-test('should throw error if edit details is empty', async () => {
-  const input = {
+test('should delete a patient', async () => {
+  const patient: Patient = {
+    id: 1,
     firstName: 'Larri',
     lastName: 'Lamanosa',
     sex: Sex.MALE,
@@ -73,12 +74,15 @@ test('should throw error if edit details is empty', async () => {
     address: '123 Main St',
   }
 
-  mockCtx.prisma.patient.create.mockResolvedValue({
-    id: 1,
-    ...input,
-  })
+  await createPatient(
+    {
+      ...patient,
+      sex: Sex.FEMALE,
+    },
+    ctx,
+  )
 
-  await createPatient(input, ctx)
+  mockCtx.prisma.patient.delete.mockResolvedValue(patient)
 
-  await expect(editPatient(1, {}, ctx)).rejects.toThrowError('No data provided')
+  await expect(deletePatient(1, ctx)).resolves.toEqual(patient)
 })

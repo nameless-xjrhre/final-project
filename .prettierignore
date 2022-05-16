@@ -4,3 +4,4 @@ backend/dist
 coverage
 */.graphql
 backend/schema.graphql
+*/nexus.ts

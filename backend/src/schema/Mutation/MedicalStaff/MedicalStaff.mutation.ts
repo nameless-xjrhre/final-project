@@ -1,4 +1,5 @@
 import { mutationField, arg, nonNull } from 'nexus'
+import { createMedicalStaff } from './MedicalStaff.resolver'
 
 export const CreateMedicalStaff = mutationField('createMedicalStaff', {
   type: 'MedicalStaff',
@@ -9,13 +10,5 @@ export const CreateMedicalStaff = mutationField('createMedicalStaff', {
       }),
     ),
   },
-  resolve: (_parent, args, context) =>
-    context.prisma.medicalStaff.create({
-      data: {
-        firstName: args.data.firstName,
-        lastName: args.data.lastName,
-        contactNum: args.data.contactNum,
-        address: args.data.address,
-      },
-    }),
+  resolve: (_parent, args, context) => createMedicalStaff(args.data, context),
 })

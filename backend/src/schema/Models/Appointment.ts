@@ -38,6 +38,17 @@ const Appointment = objectType({
           })
           .medStaff(),
     })
+    t.field('hospitalBill', {
+      type: 'HospitalBill',
+      resolve: (parent, _args, context) =>
+        context.prisma.appointment
+          .findUnique({
+            where: {
+              id: parent.id,
+            },
+          })
+          .hospitalBill(),
+    })
   },
 })
 

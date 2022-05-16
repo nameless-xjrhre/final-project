@@ -40,6 +40,17 @@ const Patient = objectType({
           },
         }),
     })
+    t.nonNull.list.nonNull.field('medicalRecords', {
+      type: 'MedicalRecord',
+      resolve: (parent, _args, context) =>
+        context.prisma.medicalRecord.findMany({
+          where: {
+            patient: {
+              id: parent.id,
+            },
+          },
+        }),
+    })
   },
 })
 
