@@ -48,12 +48,13 @@ model Patient {
 // A hospital bill has one patient, date, amount, and status
 
 model HospitalBill {
-  id        Int        @id @default(autoincrement())
-  patientId Int        @map("patient_id")
-  date      DateTime
-  amount    Int
-  status    BillStatus @default(UNPAID)
-  patient   Patient    @relation(fields: [patientId], references: [id])
+  id          Int          @id @default(autoincrement())
+  patientId   Int          @map("patient_id")
+  date        DateTime
+  amount      Float
+  status      BillStatus   @default(UNPAID)
+  patient     Patient      @relation(fields: [patientId], references: [id])
+  appointment Appointment?
 
   @@map("hospital_bills")
 }
@@ -77,14 +78,16 @@ model MedicalRecord {
 // visit_type(enum), and status(enum)
 
 model Appointment {
-  id         Int               @id @default(autoincrement())
-  patientId  Int               @map("patient_id")
-  medStaffId Int               @map("med_staff_id")
-  date       DateTime
-  visitType  VisitType         @map("visit_type")
-  status     AppointmentStatus
-  medStaff   MedicalStaff      @relation(fields: [medStaffId], references: [id])
-  patient    Patient           @relation(fields: [patientId], references: [id])
+  id             Int               @id @default(autoincrement())
+  patientId      Int               @map("patient_id")
+  hospitalBillId Int               @unique @map("hospital_bill_id")
+  medStaffId     Int               @map("med_staff_id")
+  date           DateTime
+  visitType      VisitType         @map("visit_type")
+  status         AppointmentStatus
+  medStaff       MedicalStaff      @relation(fields: [medStaffId], references: [id])
+  patient        Patient           @relation(fields: [patientId], references: [id])
+  hospitalBill   HospitalBill      @relation(fields: [hospitalBillId], references: [id])
 
   @@map("appointments")
 }
@@ -99,7 +102,7 @@ model MedicalStaff {
   contactNum   String        @map("contact_num")
   address      String
   appointments Appointment[]
-  schedules     Schedule[]
+  schedules    Schedule[]
 
   @@map("medical_staffs")
 }
