@@ -24,12 +24,6 @@ enum BillStatus {
   UNPAID
 }
 
-input CreateAppointmentBillInput {
-  amount: Float!
-  date: DateTime!
-  status: BillStatus!
-}
-
 input CreateAppointmentInput {
   date: DateTime!
   status: AppointmentStatus!
@@ -125,8 +119,8 @@ type MedicalStaff {
 }
 
 type Mutation {
-  createAppointment(data: CreateAppointmentInput!, hospitalBillId: Int!, medStaffId: Int!, patientId: Int!): Appointment
-  createAppointmentWithPatient(appointment: CreateAppointmentInput!, hospitalBill: CreateAppointmentBillInput!, medStaffId: Int!, patient: CreatePatientInput!): Appointment
+  createAppointment(data: CreateAppointmentInput!, medStaffId: Int!, patientId: Int!): Appointment
+  createAppointmentWithPatient(appointment: CreateAppointmentInput!, medStaffId: Int!, patient: CreatePatientInput!): Appointment
   createHospitalBill(data: CreateHospitalBillInput!): HospitalBill
   createMedicalRecord(data: CreateMedicalRecordInput!): MedicalRecord
   createMedicalStaff(data: CreateMedicalStaffInput!): MedicalStaff

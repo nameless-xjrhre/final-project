@@ -14,16 +14,9 @@ export const CreateAppointment = mutationField('createAppointment', {
     ),
     medStaffId: nonNull(intArg()),
     patientId: nonNull(intArg()),
-    hospitalBillId: nonNull(intArg()),
   },
   resolve: (_parent, args, context) =>
-    createAppointment(
-      args.data,
-      args.medStaffId,
-      args.patientId,
-      args.hospitalBillId,
-      context,
-    ),
+    createAppointment(args.data, args.medStaffId, args.patientId, context),
 })
 
 export const CreateAppointmentWithPatient = mutationField(
@@ -41,18 +34,12 @@ export const CreateAppointmentWithPatient = mutationField(
           type: 'CreatePatientInput',
         }),
       ),
-      hospitalBill: nonNull(
-        arg({
-          type: 'CreateAppointmentBillInput',
-        }),
-      ),
       medStaffId: nonNull(intArg()),
     },
     resolve: async (_parent, args, context) =>
       createAppointmentWithPatient(
         args.appointment,
         args.patient,
-        args.hospitalBill,
         args.medStaffId,
         context,
       ),

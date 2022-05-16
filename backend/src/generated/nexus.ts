@@ -34,12 +34,6 @@ declare global {
 }
 
 export interface NexusGenInputs {
-  CreateAppointmentBillInput: {
-    // input type
-    amount: number // Float!
-    date: NexusGenScalars['DateTime'] // DateTime!
-    status: NexusGenEnums['BillStatus'] // BillStatus!
-  }
   CreateAppointmentInput: {
     // input type
     date: NexusGenScalars['DateTime'] // DateTime!
@@ -378,14 +372,12 @@ export interface NexusGenArgTypes {
     createAppointment: {
       // args
       data: NexusGenInputs['CreateAppointmentInput'] // CreateAppointmentInput!
-      hospitalBillId: number // Int!
       medStaffId: number // Int!
       patientId: number // Int!
     }
     createAppointmentWithPatient: {
       // args
       appointment: NexusGenInputs['CreateAppointmentInput'] // CreateAppointmentInput!
-      hospitalBill: NexusGenInputs['CreateAppointmentBillInput'] // CreateAppointmentBillInput!
       medStaffId: number // Int!
       patient: NexusGenInputs['CreatePatientInput'] // CreatePatientInput!
     }

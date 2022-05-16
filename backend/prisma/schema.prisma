@@ -80,14 +80,14 @@ model MedicalRecord {
 model Appointment {
   id             Int               @id @default(autoincrement())
   patientId      Int               @map("patient_id")
-  hospitalBillId Int               @unique @map("hospital_bill_id")
+  hospitalBillId Int?              @unique @map("hospital_bill_id")
   medStaffId     Int               @map("med_staff_id")
   date           DateTime
   visitType      VisitType         @map("visit_type")
   status         AppointmentStatus
   medStaff       MedicalStaff      @relation(fields: [medStaffId], references: [id])
   patient        Patient           @relation(fields: [patientId], references: [id])
-  hospitalBill   HospitalBill      @relation(fields: [hospitalBillId], references: [id])
+  hospitalBill   HospitalBill?     @relation(fields: [hospitalBillId], references: [id])
 
   @@map("appointments")
 }
