@@ -5,15 +5,9 @@ import {
   Box,
   Typography,
   Button,
-  FormControl,
   IconButton,
   TextField,
-  TextFieldProps,
   Divider,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  FormLabel,
   Grid,
   createTheme,
   ThemeProvider,
@@ -104,13 +98,13 @@ export default function Makeappointment() {
   const [open, setOpen] = React.useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
-  const [dateOfBirth, setDateOfBirth] = React.useState<Date | null>(new Date())
+  const [dateOfBirth] = React.useState<Date | null>(new Date())
   const [, createPatient] = useMutation<Patient>(CreatePatient)
   const [firstName, setFirstName] = React.useState('')
-  const [lastName, setLastName] = React.useState('')
-  const [gender, setGender] = React.useState('')
-  const [contactNum, setContactNum] = React.useState('')
-  const [address, setAddress] = React.useState('')
+  const [lastName] = React.useState('')
+  const [gender] = React.useState('')
+  const [contactNum] = React.useState('')
+  const [address] = React.useState('')
 
   const submitCreatePatient = (e: any) => {
     e.preventDefault()

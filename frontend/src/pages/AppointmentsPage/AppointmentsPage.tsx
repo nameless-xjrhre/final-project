@@ -13,8 +13,6 @@ import Paper from '@mui/material/Paper'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import AppointmentList from '../../components/Appointments/AppoitnmentsList'
 import Sidebar from '../../components/Sidebar'
-import Header from '../../components/Header'
-import PatientsList from '../../components/PatientList'
 import PatientForm from '../../components/PatientForm'
 import HeaderAppointments from '../../components/Header/HeaderAppointments'
 import Makeappointment from '../../components/Appointments/AddpatientsInfo'
@@ -99,7 +97,7 @@ function DashboardContent() {
                 >
                   <AppointmentList />
                   <Makeappointment />
-                  <PatientForm />
+                  <PatientForm handleClose={toggleDrawer} open={open} />
                 </Paper>
               </Grid>
             </Grid>
