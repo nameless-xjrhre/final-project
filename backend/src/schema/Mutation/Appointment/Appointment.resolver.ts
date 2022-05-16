@@ -2,13 +2,15 @@ import { Context } from '../../../context'
 import { NexusGenInputs } from '../../../generated/nexus'
 
 export type CreateAppointmentType = NexusGenInputs['CreateAppointmentInput']
-
 export type CreatePatientType = NexusGenInputs['CreatePatientInput']
+export type CreateAppointmentBillType =
+  NexusGenInputs['CreateHospitalBillInput']
 
 export function createAppointment(
   appointment: CreateAppointmentType,
   medStaffId: number,
   patientId: number,
+  hospitalBillId: number,
   ctx: Context,
 ) {
   return ctx.prisma.appointment.create({
@@ -18,6 +20,7 @@ export function createAppointment(
       status: appointment.status,
       medStaffId,
       patientId,
+      hospitalBillId,
     },
   })
 }
@@ -25,6 +28,7 @@ export function createAppointment(
 export async function createAppointmentWithPatient(
   appointment: CreateAppointmentType,
   patient: CreatePatientType,
+  hospitalBill: CreateAppointmentBillType,
   medStaffId: number,
   ctx: Context,
 ) {
@@ -39,6 +43,15 @@ export async function createAppointmentWithPatient(
     },
   })
 
+  const newBill = await ctx.prisma.hospitalBill.create({
+    data: {
+      patientId: newPatient.id,
+      amount: hospitalBill.amount,
+      status: hospitalBill.status,
+      date: hospitalBill.date,
+    },
+  })
+
   return ctx.prisma.appointment.create({
     data: {
       visitType: appointment.visitType,
@@ -46,6 +59,7 @@ export async function createAppointmentWithPatient(
       status: appointment.status,
       medStaffId,
       patientId: newPatient.id,
+      hospitalBillId: newBill.id,
     },
   })
 }

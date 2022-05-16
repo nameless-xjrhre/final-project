@@ -49,11 +49,12 @@ test('should create an appointment by linking existing patient and medical staff
     status: 'PENDING',
     medStaffId: 1,
     patientId: 1,
+    hospitalBillId: 1,
   }
 
   mockCtx.prisma.appointment.create.mockResolvedValue(expectedAppointment)
 
-  await expect(createAppointment(appointment, 1, 1, ctx)).resolves.toEqual(
+  await expect(createAppointment(appointment, 1, 1, 1, ctx)).resolves.toEqual(
     expectedAppointment,
   )
 })

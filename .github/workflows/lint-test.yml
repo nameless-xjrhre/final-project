@@ -10,7 +10,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  lint-test:
 
     runs-on: ubuntu-latest
 
@@ -26,6 +26,11 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+    - name: 'Create env for backend'
+      run: |
+        cd backend
+        touch .env
+        echo "DATABASE_URL=postgresql://prisma:prisma@localhost:5433/tests" >> .env
     - run: npm ci
     - run: cd frontend && npm ci
     - run: cd backend && npm ci

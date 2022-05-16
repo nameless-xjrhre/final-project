@@ -21,7 +21,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^7.1.0"
+    "@hookform/resolvers": "^2.8.8",
+    "concurrently": "^7.1.0",
+    "react-hook-form": "^7.31.1",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "husky": "^7.0.4",
