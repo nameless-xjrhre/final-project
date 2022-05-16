@@ -11,13 +11,14 @@ import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import AppointmentList from '../../components/Appointments/AppoitnmentsList'
+import AddBoxSharpIcon from '@mui/icons-material/AddBoxSharp'
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
+import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@mui/material'
+import AppointmentList from '../../components/AppointmentList/AppoitnmentsList'
 import Sidebar from '../../components/Sidebar'
-import Header from '../../components/Header'
-import PatientsList from '../../components/PatientList'
-import PatientForm from '../../components/PatientForm'
 import HeaderAppointments from '../../components/Header/HeaderAppointments'
-import Makeappointment from '../../components/Appointments/AddpatientsInfo'
+import CreateAppointmentWithPatientForm from '../../components/AppointmentForm/CreateAppointmentWithPatientForm'
+import CreateAppointmentForm from '../../components/AppointmentForm/CreateAppointmentForm'
 
 const drawerWidth: number = 240
 
@@ -50,10 +51,29 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme()
 
 function DashboardContent() {
+  const [createAppointmentWithPatientBtn, setCreateAppointmentWithPatientBtn] =
+    React.useState(false)
+  const handleNewAppointmentOpen = () =>
+    setCreateAppointmentWithPatientBtn(true)
+  const handleNewAppointmentClose = () =>
+    setCreateAppointmentWithPatientBtn(false)
+  const [createAppointmentBtn, setCreateAppointmentBtn] = React.useState(false)
+  const handleAppointmentOpen = () => setCreateAppointmentBtn(true)
+  const handleAppointmentClose = () => setCreateAppointmentBtn(false)
   const [open, setOpen] = React.useState(true)
   const toggleDrawer = () => {
     setOpen(!open)
   }
+  const actions = [
+    {
+      icon: <AddBoxSharpIcon onClick={handleNewAppointmentOpen} />,
+      name: 'Create New Appointment',
+    },
+    {
+      icon: <CalendarMonthIcon onClick={handleAppointmentOpen} />,
+      name: 'Create Appointment',
+    },
+  ]
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -98,8 +118,31 @@ function DashboardContent() {
                   }}
                 >
                   <AppointmentList />
-                  <Makeappointment />
-                  <PatientForm />
+                  <SpeedDial
+                    ariaLabel="SpeedDial basic example"
+                    sx={{ right: 30, bottom: 30, position: 'absolute' }}
+                    icon={<SpeedDialIcon />}
+                  >
+                    {actions.map((action) => (
+                      <SpeedDialAction
+                        key={action.name}
+                        icon={action.icon}
+                        tooltipTitle={action.name}
+                      />
+                    ))}
+                  </SpeedDial>
+                  {createAppointmentBtn && (
+                    <CreateAppointmentForm
+                      handleClose={handleAppointmentClose}
+                      open={createAppointmentBtn}
+                    />
+                  )}
+                  {createAppointmentWithPatientBtn && (
+                    <CreateAppointmentWithPatientForm
+                      handleClose={handleNewAppointmentClose}
+                      open={createAppointmentWithPatientBtn}
+                    />
+                  )}
                 </Paper>
               </Grid>
             </Grid>
