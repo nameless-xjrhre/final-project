@@ -25,6 +25,7 @@ jobs:
       uses: SpicyPizza/create-envfile@v1.3
       with:
         envkey_DATABASE_URL: postgresql://prisma:prisma@localhost:5433/tests
+        directory: ../../backend
         file_name: .env
         fail_on_empty: false
     - name: Use Node.js ${{ matrix.node-version }}
