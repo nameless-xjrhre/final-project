@@ -27,6 +27,14 @@ const theme = createTheme({
         margin: 'normal',
       },
     },
+    MuiSelect: {
+      defaultProps: {
+        sx: {
+          width: 255,
+        },
+        margin: 'none',
+      },
+    },
     MuiInputLabel: {
       defaultProps: {
         sx: {

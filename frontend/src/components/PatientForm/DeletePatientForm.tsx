@@ -2,12 +2,12 @@ import React from 'react'
 import { Button, Grid, IconButton, Typography } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import CustomForm from '../CustomForm'
-import PatientFormProps from './PatientFormsProps'
+import CustomFormProps from '../CustomFormProps'
 
 export default function DeletePatientForm({
   handleClose,
   open,
-}: PatientFormProps) {
+}: CustomFormProps) {
   return (
     <CustomForm open={open}>
       <Grid container>
