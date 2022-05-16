@@ -25,19 +25,4 @@ const EditHospitalBillInput = inputObjectType({
   },
 })
 
-const CreateAppointmentBillInput = inputObjectType({
-  name: 'CreateAppointmentBillInput',
-  definition(t) {
-    t.field(gqlTypes.HospitalBill.date)
-    t.field(gqlTypes.HospitalBill.amount)
-    t.nonNull.field('status', {
-      type: BillStatusType,
-    })
-  },
-})
-
-export default [
-  CreateHospitalBillInput,
-  EditHospitalBillInput,
-  CreateAppointmentBillInput,
-]
+export default [CreateHospitalBillInput, EditHospitalBillInput]

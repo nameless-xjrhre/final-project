@@ -49,31 +49,17 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }))
 
 export default function AppointmentList() {
-  const [drop, SetDropDown] = React.useState<null | HTMLElement>(null)
+  const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
   const open = Boolean(drop)
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    SetDropDown(event.currentTarget)
+    setDropDown(event.currentTarget)
   }
   const handleClose = () => {
-    SetDropDown(null)
+    setDropDown(null)
   }
   const [patients] = useQuery<Patient>({
     query: patientQueryDocument,
   })
-
-  const [page, setPage] = React.useState(0)
-  const [rowsPerPage, setRowsPerPage] = React.useState(10)
-
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage)
-  }
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setRowsPerPage(+event.target.value)
-    setPage(0)
-  }
 
   const { data, fetching, error } = patients
   if (fetching)
@@ -163,8 +149,4 @@ export default function AppointmentList() {
       <Pagination count={3} variant="outlined" shape="rounded" />
     </>
   )
-}
-
-function SetDropDown(arg0: null) {
-  throw new Error('Function not implemented.')
 }

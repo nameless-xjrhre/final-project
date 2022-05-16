@@ -25,7 +25,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faWheelchair } from '@fortawesome/free-solid-svg-icons'
 import AddIcon from '@mui/icons-material/Add'
 import CloseIcon from '@mui/icons-material/Close'
-import PersonIcon from '@mui/icons-material/Person'
 
 const style = {
   position: 'absolute',
