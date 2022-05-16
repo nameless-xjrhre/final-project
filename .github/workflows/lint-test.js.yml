@@ -26,24 +26,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        
-    - name: Install root dependencies 
     - run: npm ci
-    
-    - name: Install frontend dependencies
     - run: cd frontend && npm ci
-    
-    - name: Install backend dependencies
     - run: cd backend && npm ci
-    
-    - name: Lint using prettier
     - run: npx lint-staged
-    
-    - name: Lint frontend with eslint
     - run: npm run lint:frontend
-    
-    - name: Lint backend with eslint 
     - run: npm run lint:backend
-    
-    - name: Run backend tests
     - run: npm run test-unit:backend
