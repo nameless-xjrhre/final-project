@@ -3,6 +3,7 @@ import { NexusGenInputs } from '../../../generated/nexus'
 
 export type CreateAppointmentType = NexusGenInputs['CreateAppointmentInput']
 export type CreatePatientType = NexusGenInputs['CreatePatientInput']
+export type EditAppointmentType = NexusGenInputs['EditAppointmentInput']
 
 export function createAppointment(
   appointment: CreateAppointmentType,
@@ -45,6 +46,23 @@ export async function createAppointmentWithPatient(
       status: appointment.status,
       medStaffId,
       patientId: newPatient.id,
+    },
+  })
+}
+
+export async function editAppointment(
+  id: number,
+  appointment: EditAppointmentType,
+  ctx: Context,
+) {
+  return ctx.prisma.appointment.update({
+    where: {
+      id,
+    },
+    data: {
+      visitType: appointment.visitType ?? undefined,
+      date: appointment.date,
+      status: appointment.status ?? undefined,
     },
   })
 }

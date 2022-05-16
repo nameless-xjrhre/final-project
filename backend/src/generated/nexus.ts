@@ -81,6 +81,12 @@ export interface NexusGenInputs {
     password: string // String!
     username: string // String!
   }
+  EditAppointmentInput: {
+    // input type
+    date?: NexusGenScalars['DateTime'] | null // DateTime
+    status?: NexusGenEnums['AppointmentStatus'] | null // AppointmentStatus
+    visitType?: NexusGenEnums['VisitType'] | null // VisitType
+  }
   EditHospitalBillInput: {
     // input type
     amount?: number | null // Int
@@ -231,6 +237,7 @@ export interface NexusGenFieldTypes {
     createSchedule: NexusGenRootTypes['Schedule'] | null // Schedule
     createUser: NexusGenRootTypes['User'] | null // User
     deletePatient: NexusGenRootTypes['Patient'] | null // Patient
+    editAppointment: NexusGenRootTypes['Appointment'] | null // Appointment
     editHospitalBill: NexusGenRootTypes['HospitalBill'] | null // HospitalBill
     editPatient: NexusGenRootTypes['Patient'] | null // Patient
   }
@@ -245,6 +252,7 @@ export interface NexusGenFieldTypes {
     hospitalBills: NexusGenRootTypes['HospitalBill'][] // [HospitalBill!]!
     id: number // Int!
     lastName: string // String!
+    latestAppointment: NexusGenRootTypes['Appointment'] | null // Appointment
     medicalRecords: NexusGenRootTypes['MedicalRecord'][] // [MedicalRecord!]!
     sex: NexusGenEnums['Sex'] // Sex!
   }
@@ -323,6 +331,7 @@ export interface NexusGenFieldTypeNames {
     createSchedule: 'Schedule'
     createUser: 'User'
     deletePatient: 'Patient'
+    editAppointment: 'Appointment'
     editHospitalBill: 'HospitalBill'
     editPatient: 'Patient'
   }
@@ -337,6 +346,7 @@ export interface NexusGenFieldTypeNames {
     hospitalBills: 'HospitalBill'
     id: 'Int'
     lastName: 'String'
+    latestAppointment: 'Appointment'
     medicalRecords: 'MedicalRecord'
     sex: 'Sex'
   }
@@ -407,6 +417,11 @@ export interface NexusGenArgTypes {
     }
     deletePatient: {
       // args
+      id: number // Int!
+    }
+    editAppointment: {
+      // args
+      data: NexusGenInputs['EditAppointmentInput'] // EditAppointmentInput!
       id: number // Int!
     }
     editHospitalBill: {

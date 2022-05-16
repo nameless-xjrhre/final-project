@@ -76,6 +76,12 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
+input EditAppointmentInput {
+  date: DateTime
+  status: AppointmentStatus
+  visitType: VisitType
+}
+
 input EditHospitalBillInput {
   amount: Int
   date: DateTime
@@ -128,6 +134,7 @@ type Mutation {
   createSchedule(data: CreateScheduleInput!): Schedule
   createUser(data: CreateUserInput!): User
   deletePatient(id: Int!): Patient
+  editAppointment(data: EditAppointmentInput!, id: Int!): Appointment
   editHospitalBill(data: EditHospitalBillInput!, id: Int!): HospitalBill
   editPatient(data: EditPatientInput!, id: Int!): Patient
 }
@@ -142,6 +149,7 @@ type Patient {
   hospitalBills: [HospitalBill!]!
   id: Int!
   lastName: String!
+  latestAppointment: Appointment
   medicalRecords: [MedicalRecord!]!
   sex: Sex!
 }
