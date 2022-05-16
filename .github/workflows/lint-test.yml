@@ -26,7 +26,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    -name: Create env for backend
+    - name: 'Create env for backend'
       run: |
         cd backend
         touch .env
