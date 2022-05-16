@@ -11,13 +11,13 @@ import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-
+import { faWheelchair } from '@fortawesome/free-solid-svg-icons'
 import Sidebar from '../../components/Sidebar'
 import Header from '../../components/Header'
 import PatientsList from '../../components/PatientList'
-import PatientForm from '../../components/PatientForm'
-
+import AddPatientForm from '../../components/PatientForm/AddPatientForm'
 import './PatientPage.css'
+import CustomFloatingBtn from '../../components/CustomFloatingBtn'
 
 const drawerWidth: number = 240
 
@@ -50,6 +50,9 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme()
 
 function DashboardContent() {
+  const [addPatientBtn, setAddPatientBtn] = React.useState(false)
+  const handleOpen = () => setAddPatientBtn(true)
+  const handleClose = () => setAddPatientBtn(false)
   const [open, setOpen] = React.useState(true)
   const toggleDrawer = () => {
     setOpen(!open)
@@ -98,7 +101,16 @@ function DashboardContent() {
                   }}
                 >
                   <PatientsList />
-                  <PatientForm />
+                  <CustomFloatingBtn
+                    handleOpen={handleOpen}
+                    icon={faWheelchair}
+                  />
+                  {addPatientBtn && (
+                    <AddPatientForm
+                      handleClose={handleClose}
+                      open={addPatientBtn}
+                    />
+                  )}
                 </Paper>
               </Grid>
             </Grid>

@@ -1,7 +1,6 @@
-import { objectType, enumType } from 'nexus'
+import { objectType } from 'nexus'
 import * as gqlTypes from 'nexus-prisma'
-
-const SexType = enumType(gqlTypes.Sex)
+import { SexType } from '../Enums'
 
 const Patient = objectType({
   name: 'Patient',
@@ -9,7 +8,7 @@ const Patient = objectType({
     t.field(gqlTypes.Patient.id)
     t.field(gqlTypes.Patient.firstName)
     t.field(gqlTypes.Patient.lastName)
-    t.field('sex', {
+    t.nonNull.field('sex', {
       type: SexType,
     })
     t.field(gqlTypes.Patient.dateOfBirth)
@@ -18,6 +17,17 @@ const Patient = objectType({
     t.field('fullName', {
       type: 'String',
       resolve: (parent) => `${parent.firstName} ${parent.lastName}`,
+    })
+    t.nonNull.list.nonNull.field('appointments', {
+      type: 'Appointment',
+      resolve: (parent, _args, context) =>
+        context.prisma.appointment.findMany({
+          where: {
+            patient: {
+              id: parent.id,
+            },
+          },
+        }),
     })
     t.nonNull.list.nonNull.field('hospitalBills', {
       type: 'HospitalBill',

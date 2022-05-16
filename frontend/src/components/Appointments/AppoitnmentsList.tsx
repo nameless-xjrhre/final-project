@@ -6,11 +6,12 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Skeleton from '@mui/material/Skeleton'
-import { Button, Pagination, TablePagination } from '@mui/material'
+import { Button, Pagination } from '@mui/material'
 import { useQuery, gql } from 'urql'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+
 interface Patient {
   patients: {
     id: number

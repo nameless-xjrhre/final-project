@@ -16,6 +16,25 @@ const Query = objectType({
       resolve: (_parent, _args, context) =>
         context.prisma.medicalStaff.findMany(),
     })
+    t.nonNull.list.nonNull.field('appointments', {
+      type: 'Appointment',
+      resolve: (_parent, _args, context) =>
+        context.prisma.appointment.findMany(),
+    })
+    t.nonNull.list.nonNull.field('medicalRecords', {
+      type: 'MedicalRecord',
+      resolve: (_parent, _args, context) =>
+        context.prisma.medicalRecord.findMany(),
+    })
+    t.nonNull.list.nonNull.field('hospitalBills', {
+      type: 'HospitalBill',
+      resolve: (_parent, _args, context) =>
+        context.prisma.hospitalBill.findMany(),
+    })
+    t.nonNull.list.nonNull.field('schedules', {
+      type: 'Schedule',
+      resolve: (_parent, _args, context) => context.prisma.schedule.findMany(),
+    })
   },
 })
 

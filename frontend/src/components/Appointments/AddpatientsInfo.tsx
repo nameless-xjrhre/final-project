@@ -19,16 +19,11 @@ import {
   ThemeProvider,
   Stack,
 } from '@mui/material'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faWheelchair } from '@fortawesome/free-solid-svg-icons'
-import AddIcon from '@mui/icons-material/Add'
 import CloseIcon from '@mui/icons-material/Close'
 import { useMutation, gql } from 'urql'
-import { MutationCreatePatientArgs, Sex } from '../../graphql/generated'
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
+import { MutationCreatePatientArgs, Sex } from '../../graphql/generated'
+
 const style = {
   position: 'absolute',
   top: '45%',

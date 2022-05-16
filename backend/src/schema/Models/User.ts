@@ -1,7 +1,6 @@
-import { objectType, enumType } from 'nexus'
+import { objectType } from 'nexus'
 import * as gqlTypes from 'nexus-prisma'
-
-const UserType = enumType(gqlTypes.UserType)
+import { UserType } from '../Enums'
 
 const User = objectType({
   name: 'User',

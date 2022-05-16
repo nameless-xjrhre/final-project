@@ -1,11 +1,9 @@
-import { objectType, enumType } from 'nexus'
+import { objectType } from 'nexus'
 import * as gqlTypes from 'nexus-prisma'
+import { VisitType, StatusType } from '../Enums'
 
 import MedicalStaff from './MedicalStaff'
 import Patient from './Patient'
-
-const VisitType = enumType(gqlTypes.VisitType)
-const StatusType = enumType(gqlTypes.AppointmentStatus)
 
 const Appointment = objectType({
   name: 'Appointment',
