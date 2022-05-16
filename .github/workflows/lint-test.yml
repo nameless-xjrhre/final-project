@@ -10,7 +10,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  lint-test:
 
     runs-on: ubuntu-latest
 
@@ -21,6 +21,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Make envfile
+      uses: SpicyPizza/create-envfile@v1.3
+      with:
+        envkey_DATABASE_URL: postgresql://prisma:prisma@localhost:5433/tests
+        file_name: .env
+        fail_on_empty: false
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
