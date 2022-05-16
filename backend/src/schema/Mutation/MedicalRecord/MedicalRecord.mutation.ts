@@ -9,7 +9,7 @@ export const CreateMedicalRecord = mutationField('createMedicalRecord', {
       }),
     ),
   },
-  resolve: (parent, args, context) =>
+  resolve: (_parent, args, context) =>
     context.prisma.medicalRecord.create({
       data: {
         patientId: args.data.patientId,
