@@ -13,6 +13,5 @@ jobs:
       uses: SpicyPizza/create-envfile@v1.3
       with:
         envkey_DATABASE_URL: postgresql://prisma:prisma@localhost:5433/tests
-        directory: <directory_name>
         file_name: .env
         fail_on_empty: false
