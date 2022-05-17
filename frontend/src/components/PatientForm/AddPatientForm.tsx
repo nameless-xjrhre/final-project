@@ -8,37 +8,29 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { string, object, mixed } from 'yup'
 import { useMutation, gql } from 'urql'
 import { FormInputText, FormInputRadio, FormInputDate } from './FormInputFields'
-import { MutationCreatePatientArgs, Sex } from '../../graphql/generated'
+import { CreatePatientInput, Sex } from '../../graphql/generated'
 import CustomForm from '../CustomForm'
-
-interface Patient {
-  patients: {
-    id: number
-    firstName: string
-    lastName: string
-    sex: Sex
-    dateObBirth: Date
-    contactNum: string
-    address: string
-  }[]
-}
 
 const CreatePatient = gql`
   mutation CreatePatient(
-    $firstName: String!
-    $lastName: String!
-    $sex: Sex!
-    $dateOfBirth: DateTime!
-    $contactNum: String!
-    $address: String!
+    $data: {
+      $firstName: String!
+      $lastName: String!
+      $sex: Sex!
+      $dateOfBirth: DateTime!
+      $contactNum: String!
+      $address: String!
+    }
   ) {
     createPatient(
-      firstName: $firstName
-      lastName: $lastName
-      sex: $sex
-      dateOfBirth: $dateOfBirth
-      contactNum: $contactNum
-      address: $address
+      data: {
+        firstName: $firstName
+        lastName: $lastName
+        sex: $sex
+        dateOfBirth: $dateOfBirth
+        contactNum: $contactNum
+        address: $address
+      }
     ) {
       id
       firstName
@@ -71,7 +63,7 @@ export default function AddPatientForm({
   handleClose,
   open,
 }: PatientFormProps) {
-  const [, createPatient] = useMutation<Patient>(CreatePatient)
+  const [, createPatient] = useMutation<CreatePatientInput>(CreatePatient)
 
   const {
     register,
@@ -84,10 +76,13 @@ export default function AddPatientForm({
   })
 
   const submitCreatePatientForm = handleSubmit((data) => {
-    const input: MutationCreatePatientArgs = {
-      ...data,
+    const input: CreatePatientInput = {
       dateOfBirth: new Date(data.dateOfBirth),
       sex: data.sex,
+      address: data.address,
+      contactNum: data.contactNum,
+      firstName: data.firstName,
+      lastName: data.lastName,
     }
     createPatient(input).then((result) => console.log(result))
   })

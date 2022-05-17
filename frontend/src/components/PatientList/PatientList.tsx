@@ -14,17 +14,6 @@ import MenuItem from '@mui/material/MenuItem'
 import EditPatientForm from '../PatientForm/EditPatientForm'
 import DeletePatientForm from '../PatientForm/DeletePatientForm'
 
-// interface PatientQueryData {
-//   patients: {
-//     id: number
-//     fullName: string
-//     sex: string
-//     contactNum: string
-//     dateOfBirth: Date
-//     appointments: []
-//   }[]
-// }
-
 interface PatientQueryData {
   patients: {
     id: number
@@ -89,7 +78,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }))
 
 const hasNoAppointments = (patient: Patient) =>
-  patient.latestAppointment != null
+  patient.latestAppointment == null
 
 export default function PatientsList() {
   const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
