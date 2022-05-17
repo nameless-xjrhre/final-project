@@ -11,20 +11,23 @@ import { useQuery, gql } from 'urql'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import AddBillForm from '../BillForm/AddBillForm'
 
 interface Appointment {
-  appointments: {
-    id: number
-    visitType: string
-    date: Date
-    status: string
-    patient: {
-      fullName: string
-    }
-    medStaff: {
-      fullName: string
-    }
-  }[]
+  id: number
+  visitType: string
+  date: Date
+  status: string
+  patient: {
+    fullName: string
+  }
+  medStaff: {
+    fullName: string
+  }
+}
+
+interface AppointmentQuery {
+  appointments: Appointment[]
 }
 
 const appointmentQueryDocument = gql`
@@ -60,15 +63,21 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }))
 
 export default function AppointmentList() {
-  const [drop, SetDropDown] = React.useState<null | HTMLElement>(null)
+  const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
   const open = Boolean(drop)
+  const [generateBillBtn, setGenerateBillBtn] = React.useState(false)
+  const handleOpenBillForm = () => setGenerateBillBtn(true)
+  const handleCloseBillForm = () => setGenerateBillBtn(false)
+  const [appt, setAppointment] = React.useState<Appointment>()
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    SetDropDown(event.currentTarget)
+    event.preventDefault()
+    setDropDown(event.currentTarget)
   }
   const handleClose = () => {
-    SetDropDown(null)
+    setDropDown(null)
   }
-  const [appointment] = useQuery<Appointment>({
+  const [appointment] = useQuery<AppointmentQuery>({
     query: appointmentQueryDocument,
   })
 
@@ -151,7 +160,10 @@ export default function AppointmentList() {
                     aria-controls={open ? 'basic-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
-                    onClick={handleClick}
+                    onClick={(e) => {
+                      handleClick(e)
+                      setAppointment(item)
+                    }}
                     style={{ color: '#808080' }}
                   >
                     <MoreVertIcon />
@@ -166,8 +178,20 @@ export default function AppointmentList() {
                     }}
                   >
                     <MenuItem onClick={handleClose}>Edit</MenuItem>
-                    <MenuItem onClick={handleClose}>View Details</MenuItem>
-                    <MenuItem onClick={handleClose}>Delete</MenuItem>
+                    <MenuItem onClick={handleClose}>View Notes</MenuItem>
+                    <MenuItem onClick={handleOpenBillForm}>
+                      Generate Bill
+                    </MenuItem>
+                    {generateBillBtn && (
+                      <AddBillForm
+                        handleClose={handleCloseBillForm}
+                        open={generateBillBtn}
+                        apppointment={appt!}
+                      />
+                    )}
+                    <MenuItem onClick={handleClose} sx={{ color: 'red' }}>
+                      Cancel
+                    </MenuItem>
                   </Menu>
                 </StyledTableCell>
               </TableRow>
