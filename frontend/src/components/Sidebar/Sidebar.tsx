@@ -2,8 +2,6 @@ import * as React from 'react'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-import ListSubheader from '@mui/material/ListSubheader'
-import AssignmentIcon from '@mui/icons-material/Assignment'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faColumns,
@@ -11,67 +9,62 @@ import {
   faUserDoctor,
   faCreditCard,
   faWheelchair,
+  faUser,
 } from '@fortawesome/free-solid-svg-icons'
+import { Link } from 'react-router-dom'
+import './Sidebar.css'
 
 export const mainListItems = (
   <>
-    <ListItemButton>
-      <ListItemIcon>
-        <FontAwesomeIcon icon={faColumns} />
-      </ListItemIcon>
-      <ListItemText primary="Dashboard" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <FontAwesomeIcon icon={faStethoscope} />
-      </ListItemIcon>
-      <ListItemText primary="Appointments" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <FontAwesomeIcon icon={faUserDoctor} />
-      </ListItemIcon>
-      <ListItemText primary="Doctors" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <FontAwesomeIcon icon={faWheelchair} />
-      </ListItemIcon>
-      <ListItemText primary="Patients" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <FontAwesomeIcon icon={faCreditCard} />
-      </ListItemIcon>
-      <ListItemText primary="Payments" />
-    </ListItemButton>
+    <Link to="/dashboard" className="nav-link">
+      <ListItemButton>
+        <ListItemIcon>
+          <FontAwesomeIcon icon={faColumns} />
+        </ListItemIcon>
+        <ListItemText primary="Dashboard" />
+      </ListItemButton>
+    </Link>
+    <Link to="/appointments" className="nav-link">
+      <ListItemButton>
+        <ListItemIcon>
+          <FontAwesomeIcon icon={faStethoscope} />
+        </ListItemIcon>
+        <ListItemText primary="Appointments" />
+      </ListItemButton>
+    </Link>
+    <Link to="/doctors" className="nav-link">
+      <ListItemButton>
+        <ListItemIcon>
+          <FontAwesomeIcon icon={faUserDoctor} />
+        </ListItemIcon>
+        <ListItemText primary="Doctors" />
+      </ListItemButton>
+    </Link>
+    <Link to="/patients" className="nav-link">
+      <ListItemButton>
+        <ListItemIcon>
+          <FontAwesomeIcon icon={faWheelchair} />
+        </ListItemIcon>
+        <ListItemText primary="Patients" />
+      </ListItemButton>
+    </Link>
+    <Link to="/payments" className="nav-link">
+      <ListItemButton>
+        <ListItemIcon>
+          <FontAwesomeIcon icon={faCreditCard} />
+        </ListItemIcon>
+        <ListItemText primary="Payments" />
+      </ListItemButton>
+    </Link>
+    <Link to="/sign-in" className="nav-link">
+      <ListItemButton sx={{ marginTop: 30 }}>
+        <ListItemIcon>
+          <FontAwesomeIcon icon={faUser} />
+        </ListItemIcon>
+        <ListItemText primary="Logout" />
+      </ListItemButton>
+    </Link>
   </>
 )
 
 export default mainListItems
-
-export const secondaryListItems = (
-  <>
-    <ListSubheader component="div" inset>
-      Saved reports
-    </ListSubheader>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Current month" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Last quarter" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Year-end sale" />
-    </ListItemButton>
-  </>
-)
