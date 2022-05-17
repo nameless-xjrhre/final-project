@@ -51,6 +51,24 @@ const Patient = objectType({
           },
         }),
     })
+    t.field('latestAppointment', {
+      type: 'Appointment',
+      resolve: (parent, _args, context) =>
+        context.prisma.appointment
+          .findMany({
+            where: {
+              patient: {
+                id: parent.id,
+              },
+            },
+            orderBy: {
+              date: 'desc',
+            },
+            take: 1,
+          })
+          .then((appointments) => appointments[0])
+          .catch(() => null),
+    })
   },
 })
 

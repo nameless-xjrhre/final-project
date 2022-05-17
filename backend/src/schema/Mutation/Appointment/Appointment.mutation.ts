@@ -2,6 +2,7 @@ import { mutationField, arg, nonNull, intArg } from 'nexus'
 import {
   createAppointment,
   createAppointmentWithPatient,
+  editAppointment,
 } from './Appointment.resolver'
 
 export const CreateAppointment = mutationField('createAppointment', {
@@ -83,3 +84,17 @@ export const CreateAppointmentWithPatient = mutationField(
     },
   },
 )
+
+export const EditAppointment = mutationField('editAppointment', {
+  type: 'Appointment',
+  args: {
+    id: nonNull(intArg()),
+    data: nonNull(
+      arg({
+        type: 'EditAppointmentInput',
+      }),
+    ),
+  },
+  resolve: (_parent, args, context) =>
+    editAppointment(args.id, args.data, context),
+})
