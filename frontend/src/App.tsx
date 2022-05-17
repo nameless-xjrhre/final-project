@@ -8,7 +8,7 @@ import ProfilePage from './pages/ProfilePage'
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<div>Hello World</div>} />
+      <Route path="/" element={<AppointmentsPage />} />
       <Route path="sign-in" element={<SignIn />} />
       <Route path="patients" element={<PatientPage />} />
       <Route path="appointments" element={<AppointmentsPage />} />
