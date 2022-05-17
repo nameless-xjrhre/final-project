@@ -20,8 +20,13 @@ interface PatientQueryData {
     fullName: string
     sex: string
     contactNum: string
-    dateOfBirth: Date
-    appointments: []
+    latestAppointment: {
+      date: Date
+      visitType: string
+      medStaff: {
+        fullName: string
+      }
+    }
   }[]
 }
 
@@ -30,8 +35,13 @@ interface Patient {
   fullName: string
   sex: string
   contactNum: string
-  dateOfBirth: Date
-  appointments: []
+  latestAppointment: {
+    date: Date
+    visitType: string
+    medStaff: {
+      fullName: string
+    }
+  }
 }
 
 const patientQueryDocument = gql`
@@ -41,9 +51,12 @@ const patientQueryDocument = gql`
       fullName
       sex
       contactNum
-      dateOfBirth
-      appointments {
-        id
+      latestAppointment {
+        date
+        visitType
+        medStaff {
+          fullName
+        }
       }
     }
   }
@@ -65,7 +78,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }))
 
 const hasNoAppointments = (patient: Patient) =>
-  patient.appointments.length === 0
+  patient.latestAppointment == null
 
 export default function PatientsList() {
   const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
@@ -134,13 +147,19 @@ export default function PatientsList() {
                 <StyledTableCell>
                   {hasNoAppointments(patient)
                     ? '-----'
-                    : patient.dateOfBirth.toLocaleString()}
+                    : new Date(
+                        patient?.latestAppointment?.date,
+                      ).toLocaleDateString('en-ZA')}
                 </StyledTableCell>
                 <StyledTableCell>{patient.fullName}</StyledTableCell>
                 <StyledTableCell>{patient.sex.toString()}</StyledTableCell>
                 <StyledTableCell>{patient.contactNum}</StyledTableCell>
-                <StyledTableCell>Check Up</StyledTableCell>
-                <StyledTableCell>Dr. Ralph</StyledTableCell>
+                <StyledTableCell>
+                  {patient?.latestAppointment?.visitType}
+                </StyledTableCell>
+                <StyledTableCell>
+                  {patient?.latestAppointment?.medStaff?.fullName}
+                </StyledTableCell>
                 <StyledTableCell>
                   <Button
                     id="basic-button"

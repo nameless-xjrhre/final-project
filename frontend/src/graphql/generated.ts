@@ -23,42 +23,236 @@ export type Scalars = {
   DateTime: any
 }
 
-export type Mutation = {
-  __typename?: 'Mutation'
-  createPatient: Patient
-  createUser: User
+export type Appointment = {
+  __typename?: 'Appointment'
+  date: Scalars['DateTime']
+  hospitalBill?: Maybe<HospitalBill>
+  id: Scalars['Int']
+  medStaff?: Maybe<MedicalStaff>
+  patient?: Maybe<Patient>
+  status?: Maybe<AppointmentStatus>
+  visitType?: Maybe<VisitType>
 }
 
-export type MutationCreatePatientArgs = {
-  address?: InputMaybe<Scalars['String']>
-  contactNum?: InputMaybe<Scalars['String']>
+export enum AppointmentStatus {
+  Canceled = 'CANCELED',
+  Done = 'DONE',
+  Expired = 'EXPIRED',
+  Pending = 'PENDING',
+}
+
+export enum BillStatus {
+  Paid = 'PAID',
+  Unpaid = 'UNPAID',
+}
+
+export type CreateAppointmentInput = {
+  date: Scalars['DateTime']
+  status: AppointmentStatus
+  visitType: VisitType
+}
+
+export type CreateHospitalBillInput = {
+  amount: Scalars['Float']
+  date: Scalars['DateTime']
+  patientId: Scalars['Int']
+  status: BillStatus
+}
+
+export type CreateMedicalRecordInput = {
+  date: Scalars['DateTime']
+  diagnosis: Scalars['String']
+  patientId: Scalars['Int']
+  prescription: Scalars['String']
+}
+
+export type CreateMedicalStaffInput = {
+  address: Scalars['String']
+  contactNum: Scalars['String']
+  firstName: Scalars['String']
+  lastName: Scalars['String']
+}
+
+export type CreatePatientInput = {
+  address: Scalars['String']
+  contactNum: Scalars['String']
   dateOfBirth: Scalars['DateTime']
-  firstName?: InputMaybe<Scalars['String']>
-  lastName?: InputMaybe<Scalars['String']>
+  firstName: Scalars['String']
+  lastName: Scalars['String']
   sex: Sex
 }
 
+export type CreateScheduleInput = {
+  endTime: Scalars['DateTime']
+  medStaffId: Scalars['Int']
+  startTime: Scalars['DateTime']
+}
+
+export type CreateUserInput = {
+  password: Scalars['String']
+  username: Scalars['String']
+}
+
+export type EditAppointmentInput = {
+  date?: InputMaybe<Scalars['DateTime']>
+  status?: InputMaybe<AppointmentStatus>
+  visitType?: InputMaybe<VisitType>
+}
+
+export type EditHospitalBillInput = {
+  amount?: InputMaybe<Scalars['Int']>
+  date?: InputMaybe<Scalars['DateTime']>
+  status?: InputMaybe<BillStatus>
+}
+
+export type EditPatientInput = {
+  address?: InputMaybe<Scalars['String']>
+  contactNum?: InputMaybe<Scalars['String']>
+  dateOfBirth?: InputMaybe<Scalars['DateTime']>
+  firstName?: InputMaybe<Scalars['String']>
+  id?: InputMaybe<Scalars['Int']>
+  lastName?: InputMaybe<Scalars['String']>
+  sex?: InputMaybe<Sex>
+}
+
+export type HospitalBill = {
+  __typename?: 'HospitalBill'
+  amount: Scalars['Float']
+  date: Scalars['DateTime']
+  id: Scalars['Int']
+  patient?: Maybe<Patient>
+  status?: Maybe<BillStatus>
+}
+
+export type MedicalRecord = {
+  __typename?: 'MedicalRecord'
+  date: Scalars['DateTime']
+  diagnosis: Scalars['String']
+  id: Scalars['Int']
+  patient?: Maybe<Patient>
+  prescription: Scalars['String']
+}
+
+export type MedicalStaff = {
+  __typename?: 'MedicalStaff'
+  address: Scalars['String']
+  contactNum: Scalars['String']
+  firstName: Scalars['String']
+  fullName?: Maybe<Scalars['String']>
+  id: Scalars['Int']
+  lastName: Scalars['String']
+  schedules?: Maybe<Array<Maybe<Schedule>>>
+}
+
+export type Mutation = {
+  __typename?: 'Mutation'
+  createAppointment?: Maybe<Appointment>
+  createAppointmentWithPatient?: Maybe<Appointment>
+  createHospitalBill?: Maybe<HospitalBill>
+  createMedicalRecord?: Maybe<MedicalRecord>
+  createMedicalStaff?: Maybe<MedicalStaff>
+  createPatient?: Maybe<Patient>
+  createSchedule?: Maybe<Schedule>
+  createUser?: Maybe<User>
+  deletePatient?: Maybe<Patient>
+  editAppointment?: Maybe<Appointment>
+  editHospitalBill?: Maybe<HospitalBill>
+  editPatient?: Maybe<Patient>
+}
+
+export type MutationCreateAppointmentArgs = {
+  data: CreateAppointmentInput
+  medStaffId: Scalars['Int']
+  patientId: Scalars['Int']
+}
+
+export type MutationCreateAppointmentWithPatientArgs = {
+  appointment: CreateAppointmentInput
+  medStaffId: Scalars['Int']
+  patient: CreatePatientInput
+}
+
+export type MutationCreateHospitalBillArgs = {
+  data: CreateHospitalBillInput
+}
+
+export type MutationCreateMedicalRecordArgs = {
+  data: CreateMedicalRecordInput
+}
+
+export type MutationCreateMedicalStaffArgs = {
+  data: CreateMedicalStaffInput
+}
+
+export type MutationCreatePatientArgs = {
+  data: CreatePatientInput
+}
+
+export type MutationCreateScheduleArgs = {
+  data: CreateScheduleInput
+}
+
 export type MutationCreateUserArgs = {
-  password?: InputMaybe<Scalars['String']>
-  username?: InputMaybe<Scalars['String']>
+  data: CreateUserInput
+}
+
+export type MutationDeletePatientArgs = {
+  id: Scalars['Int']
+}
+
+export type MutationEditAppointmentArgs = {
+  data: EditAppointmentInput
+  id: Scalars['Int']
+}
+
+export type MutationEditHospitalBillArgs = {
+  data: EditHospitalBillInput
+  id: Scalars['Int']
+}
+
+export type MutationEditPatientArgs = {
+  data: EditPatientInput
+  id: Scalars['Int']
 }
 
 export type Patient = {
   __typename?: 'Patient'
   address: Scalars['String']
+  appointments: Array<Appointment>
   contactNum: Scalars['String']
   dateOfBirth: Scalars['DateTime']
   firstName: Scalars['String']
   fullName?: Maybe<Scalars['String']>
+  hospitalBills: Array<HospitalBill>
   id: Scalars['Int']
   lastName: Scalars['String']
-  sex?: Maybe<Sex>
+  latestAppointment?: Maybe<Appointment>
+  medicalRecords: Array<MedicalRecord>
+  sex: Sex
 }
 
 export type Query = {
   __typename?: 'Query'
+  appointments: Array<Appointment>
+  hospitalBills: Array<HospitalBill>
+  medicalRecords: Array<MedicalRecord>
+  medicalStaff: Array<MedicalStaff>
+  patient?: Maybe<Patient>
   patients: Array<Patient>
+  schedules: Array<Schedule>
   users: Array<User>
+}
+
+export type QueryPatientArgs = {
+  id: Scalars['Int']
+}
+
+export type Schedule = {
+  __typename?: 'Schedule'
+  endTime: Scalars['DateTime']
+  id: Scalars['Int']
+  medStaff?: Maybe<MedicalStaff>
+  startTime: Scalars['DateTime']
 }
 
 export enum Sex {
@@ -79,6 +273,38 @@ export enum UserType {
   User = 'USER',
 }
 
+export enum VisitType {
+  Followup = 'FOLLOWUP',
+  Routine = 'ROUTINE',
+  Urgent = 'URGENT',
+}
+
+export type MedicalStaffQueryQueryVariables = Exact<{ [key: string]: never }>
+
+export type MedicalStaffQueryQuery = {
+  __typename?: 'Query'
+  medicalStaff: Array<{
+    __typename?: 'MedicalStaff'
+    id: number
+    lastName: string
+  }>
+}
+
+export type AppointmentQueryQueryVariables = Exact<{ [key: string]: never }>
+
+export type AppointmentQueryQuery = {
+  __typename?: 'Query'
+  appointments: Array<{
+    __typename?: 'Appointment'
+    id: number
+    visitType?: VisitType | null
+    date: any
+    status?: AppointmentStatus | null
+    patient?: { __typename?: 'Patient'; fullName?: string | null } | null
+    medStaff?: { __typename?: 'MedicalStaff'; fullName?: string | null } | null
+  }>
+}
+
 export type PatientQueryQueryVariables = Exact<{ [key: string]: never }>
 
 export type PatientQueryQuery = {
@@ -87,12 +313,62 @@ export type PatientQueryQuery = {
     __typename?: 'Patient'
     id: number
     fullName?: string | null
-    sex?: Sex | null
+    sex: Sex
     contactNum: string
-    dateOfBirth: any
+    latestAppointment?: {
+      __typename?: 'Appointment'
+      date: any
+      visitType?: VisitType | null
+      medStaff?: {
+        __typename?: 'MedicalStaff'
+        fullName?: string | null
+      } | null
+    } | null
   }>
 }
 
+export const MedicalStaffQueryDocument = gql`
+  query MedicalStaffQuery {
+    medicalStaff {
+      id
+      lastName
+    }
+  }
+`
+
+export function useMedicalStaffQueryQuery(
+  options?: Omit<Urql.UseQueryArgs<MedicalStaffQueryQueryVariables>, 'query'>,
+) {
+  return Urql.useQuery<MedicalStaffQueryQuery>({
+    query: MedicalStaffQueryDocument,
+    ...options,
+  })
+}
+export const AppointmentQueryDocument = gql`
+  query appointmentQuery {
+    appointments {
+      id
+      visitType
+      date
+      status
+      patient {
+        fullName
+      }
+      medStaff {
+        fullName
+      }
+    }
+  }
+`
+
+export function useAppointmentQueryQuery(
+  options?: Omit<Urql.UseQueryArgs<AppointmentQueryQueryVariables>, 'query'>,
+) {
+  return Urql.useQuery<AppointmentQueryQuery>({
+    query: AppointmentQueryDocument,
+    ...options,
+  })
+}
 export const PatientQueryDocument = gql`
   query patientQuery {
     patients {
@@ -100,7 +376,13 @@ export const PatientQueryDocument = gql`
       fullName
       sex
       contactNum
-      dateOfBirth
+      latestAppointment {
+        date
+        visitType
+        medStaff {
+          fullName
+        }
+      }
     }
   }
 `
