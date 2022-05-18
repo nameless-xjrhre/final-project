@@ -82,7 +82,7 @@ function DashboardContent() {
           }}
         >
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Header />
+            <Header title="Patients" />
             <Grid container spacing={3}>
               {/* Recent Orders */}
               <Grid item xs={12}>

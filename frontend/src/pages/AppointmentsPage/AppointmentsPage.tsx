@@ -16,7 +16,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@mui/material'
 import AppointmentList from '../../components/AppointmentsList'
 import Sidebar from '../../components/Sidebar'
-import HeaderAppointments from '../../components/Header/HeaderAppointments'
+import Header from '../../components/Header/Header'
 import CreateAppointmentWithPatientForm from '../../components/AppointmentForm/CreateAppointmentWithPatientForm'
 import CreateAppointmentForm from '../../components/AppointmentForm/CreateAppointmentForm'
 
@@ -105,7 +105,7 @@ function DashboardContent() {
           }}
         >
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <HeaderAppointments />
+            <Header title="Appointments" />
             <Grid container spacing={3}>
               {/* Recent Orders */}
               <Grid item xs={12}>

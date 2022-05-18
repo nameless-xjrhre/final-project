@@ -13,7 +13,7 @@ import Paper from '@mui/material/Paper'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import DoctorsScheduler from '../../components/DoctorsScheduler'
 import Sidebar from '../../components/Sidebar'
-import HeaderAppointments from '../../components/Header/HeaderAppointments'
+import Header from '../../components/Header/Header'
 
 const drawerWidth: number = 240
 
@@ -80,7 +80,7 @@ function DashboardContent() {
           }}
         >
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <HeaderAppointments />
+            <Header title="Doctors" />
             <Grid container spacing={3}>
               {/* Recent Orders */}
               <Grid item xs={12}>
