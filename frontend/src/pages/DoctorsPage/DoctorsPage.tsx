@@ -11,9 +11,18 @@ import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import { SpeedDial, SpeedDialAction } from '@mui/material'
+import { faUserDoctor } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+import EditIcon from '@mui/icons-material/Edit'
+import AddIcon from '@mui/icons-material/Add'
 import DoctorsScheduler from '../../components/DoctorsScheduler'
 import Sidebar from '../../components/Sidebar'
-import HeaderDoctors from '../../components/Header/HeaderDoctors'
+import Header from '../../components/Header'
+import AddDoctorIcon from './AddDoctorIcon'
+import CreateAppointmentWithPatientForm from '../../components/AppointmentForm/CreateAppointmentWithPatientForm'
+import CreateAppointmentForm from '../../components/AppointmentForm/CreateAppointmentForm'
 
 const drawerWidth: number = 240
 
@@ -50,6 +59,27 @@ function DashboardContent() {
   const toggleDrawer = () => {
     setOpen(!open)
   }
+  const [createScheduleBtn, setCreateScheduleBtn] = React.useState(false)
+  const handleNewScheduleOpen = () => setCreateScheduleBtn(true)
+  const handleNewScheduleClose = () => setCreateScheduleBtn(false)
+  const [editScheduleBtn, setEditScheduleBtn] = React.useState(false)
+  const handleScheduleOpen = () => setEditScheduleBtn(true)
+  const handleScheduleClose = () => setEditScheduleBtn(false)
+  const actions = [
+    {
+      icon: <AddDoctorIcon onClick={handleScheduleOpen} />,
+      name: 'Add Doctor',
+    },
+    {
+      icon: <AddIcon onClick={handleNewScheduleOpen} />,
+      name: 'Create New Schedule',
+    },
+    {
+      icon: <EditIcon onClick={handleScheduleOpen} />,
+      name: 'Edit Schedule',
+    },
+  ]
+
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex', boxShadow: 3 }}>
@@ -93,6 +123,31 @@ function DashboardContent() {
                   }}
                 >
                   <DoctorsScheduler />
+                  <SpeedDial
+                    ariaLabel="SpeedDial basic example"
+                    sx={{ right: 30, bottom: 30, position: 'absolute' }}
+                    icon={<FontAwesomeIcon icon={faUserDoctor} size="2x" />}
+                  >
+                    {actions.map((action) => (
+                      <SpeedDialAction
+                        key={action.name}
+                        icon={action.icon}
+                        tooltipTitle={action.name}
+                      />
+                    ))}
+                  </SpeedDial>
+                  {editScheduleBtn && (
+                    <CreateAppointmentForm
+                      handleClose={handleScheduleClose}
+                      open={editScheduleBtn}
+                    />
+                  )}
+                  {createScheduleBtn && (
+                    <CreateAppointmentWithPatientForm
+                      handleClose={handleNewScheduleClose}
+                      open={createScheduleBtn}
+                    />
+                  )}
                 </Paper>
               </Grid>
             </Grid>
