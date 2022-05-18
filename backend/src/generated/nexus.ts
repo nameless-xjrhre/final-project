@@ -75,6 +75,7 @@ export interface NexusGenInputs {
     endTime: NexusGenScalars['DateTime'] // DateTime!
     medStaffId: number // Int!
     startTime: NexusGenScalars['DateTime'] // DateTime!
+    status?: NexusGenEnums['ScheduleStatus'] | null // ScheduleStatus
   }
   CreateUserInput: {
     // input type
@@ -108,6 +109,7 @@ export interface NexusGenInputs {
 export interface NexusGenEnums {
   AppointmentStatus: 'CANCELED' | 'DONE' | 'EXPIRED' | 'PENDING'
   BillStatus: 'PAID' | 'UNPAID'
+  ScheduleStatus: 'CLOSED' | 'DONE' | 'NOT_AVAILABLE' | 'OPEN'
   Sex: 'FEMALE' | 'MALE'
   UserType: 'ADMIN' | 'USER'
   VisitType: 'FOLLOWUP' | 'ROUTINE' | 'URGENT'
@@ -169,6 +171,7 @@ export interface NexusGenObjects {
     endTime: NexusGenScalars['DateTime'] // DateTime!
     id: number // Int!
     startTime: NexusGenScalars['DateTime'] // DateTime!
+    status?: NexusGenEnums['ScheduleStatus'] | null // ScheduleStatus
   }
   User: {
     // root type
@@ -273,6 +276,7 @@ export interface NexusGenFieldTypes {
     id: number // Int!
     medStaff: NexusGenRootTypes['MedicalStaff'] | null // MedicalStaff
     startTime: NexusGenScalars['DateTime'] // DateTime!
+    status: NexusGenEnums['ScheduleStatus'] | null // ScheduleStatus
   }
   User: {
     // field return type
@@ -367,6 +371,7 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
     medStaff: 'MedicalStaff'
     startTime: 'DateTime'
+    status: 'ScheduleStatus'
   }
   User: {
     // field return type name

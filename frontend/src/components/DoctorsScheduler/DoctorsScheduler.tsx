@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import * as React from 'react'
 import { styled } from '@mui/material/styles'
 import Table from '@mui/material/Table'
@@ -8,40 +9,39 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Skeleton from '@mui/material/Skeleton'
 import Paper from '@mui/material/Paper'
-import Chip from '@mui/material/Chip'
-import Stack from '@mui/material/Stack'
 import { useQuery, gql } from 'urql'
 import './index.css'
 
-interface Appointment {
-  id: number
-  visitType: string
-  date: Date
+import ScheduleStack from './ScheduleStack'
+import { getDateOfLastMonday, getDateOfNextSunday } from '../../utils'
+import { ScheduleStatus } from '../../graphql/generated'
+
+interface Schedule {
+  startTime: Date
+  endTime: Date
   status: string
-  patient: {
-    fullName: string
-  }
-  medStaff: {
-    fullName: string
-  }
 }
 
-interface AppointmentQuery {
-  appointments: Appointment[]
+interface MedicalStaff {
+  id: number
+  fullName: string
+  schedules: Schedule[]
+  status: ScheduleStatus
 }
 
-const appointmentQueryDocument = gql`
-  query appointmentQuery {
-    appointments {
+interface MedicalStaffQuery {
+  medicalStaff: MedicalStaff[]
+}
+
+const medicalStaffQuery = gql`
+  query medicalStaffsQuery {
+    medicalStaff {
       id
-      visitType
-      date
-      status
-      patient {
-        fullName
-      }
-      medStaff {
-        fullName
+      fullName
+      schedules {
+        startTime
+        endTime
+        status
       }
     }
   }
@@ -50,8 +50,9 @@ const appointmentQueryDocument = gql`
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: '#f4f4f4',
-    color: theme.palette.common.black,
-    fontWeight: 'bold',
+    color: '#828080',
+    fontWeight: 'Regular',
+    fontSize: '1em',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -62,12 +63,35 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
 }))
 
-export default function AppointmentList() {
-  const [appointment] = useQuery<AppointmentQuery>({
-    query: appointmentQueryDocument,
+function checkIfBetween(startTime: Date, endTime: Date, time: Date) {
+  return time >= startTime && time <= endTime
+}
+
+function validScheduleForWeek(time: Date) {
+  const startOfWeek = getDateOfLastMonday(new Date())
+  const endOfWeek = getDateOfNextSunday(new Date())
+  return checkIfBetween(startOfWeek, endOfWeek, time)
+}
+
+function validScheduleForDay(time: Date, day: number) {
+  return time.getDay() === day
+}
+
+function validTimeIntervalForWeek(startTime: Date, endTime: Date, day: number) {
+  return (
+    validScheduleForWeek(startTime) &&
+    validScheduleForWeek(endTime) &&
+    validScheduleForDay(startTime, day) &&
+    validScheduleForDay(endTime, day)
+  )
+}
+
+export default function DoctorsScheduler() {
+  const [medicalStaffs] = useQuery<MedicalStaffQuery>({
+    query: medicalStaffQuery,
   })
 
-  const { data, fetching, error } = appointment
+  const { data, fetching, error } = medicalStaffs
   if (fetching)
     return (
       <div className="scheduler">
@@ -85,10 +109,10 @@ export default function AppointmentList() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.from({ length: 5 }).map(() => (
-              <TableRow>
-                {Array.from({ length: 8 }).map(() => (
-                  <StyledTableCell>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <TableRow key={i}>
+                {Array.from({ length: 8 }).map((__, j) => (
+                  <StyledTableCell key={j}>
                     <Skeleton variant="text" />
                   </StyledTableCell>
                 ))}
@@ -117,37 +141,34 @@ export default function AppointmentList() {
           </TableHead>
           <TableBody>
             {data &&
-              data.appointments.map((item) => (
-                <TableRow key={item.id}>
-                  <StyledTableCell>Dr. {item.patient.fullName}</StyledTableCell>
-                  <StyledTableCell>
-                    <Stack direction="column" spacing={0.5}>
-                      <Chip
-                        label="9:00 - 12:00"
-                        color="success"
-                        size="small"
-                        sx={{
-                          borderRadius: 1,
-                        }}
-                      />
-                      <Chip
-                        label="13:00 - 17:00"
-                        color="error"
-                        size="small"
-                        sx={{
-                          borderRadius: 1,
-                        }}
-                      />
-                    </Stack>
-                  </StyledTableCell>
-                  <StyledTableCell>d</StyledTableCell>
-                  <StyledTableCell>d</StyledTableCell>
-                  <StyledTableCell>d</StyledTableCell>
-                  <StyledTableCell>d</StyledTableCell>
-                  <StyledTableCell>d</StyledTableCell>
-                  <StyledTableCell>d</StyledTableCell>
-                </TableRow>
-              ))}
+              data.medicalStaff.map((medStaff: MedicalStaff) => {
+                const { id, fullName, schedules } = medStaff
+                return (
+                  <TableRow key={id}>
+                    <StyledTableCell>Dr. {fullName}</StyledTableCell>
+                    {Array.from({ length: 7 }).map((_, i) => {
+                      // filter out schedules that are not the same day of the week
+                      const validSchedules = schedules.filter((schedule) =>
+                        validTimeIntervalForWeek(
+                          new Date(schedule.startTime),
+                          new Date(schedule.endTime),
+                          i,
+                        ),
+                      )
+                      // if there are no valid schedules, return a skeleton
+                      if (validSchedules.length === 0) {
+                        return <StyledTableCell key={i} />
+                      }
+                      // if there are valid schedules, return a schedule stack
+                      return (
+                        <StyledTableCell key={i}>
+                          <ScheduleStack schedules={validSchedules} />
+                        </StyledTableCell>
+                      )
+                    })}
+                  </TableRow>
+                )
+              })}
           </TableBody>
         </Table>
       </TableContainer>

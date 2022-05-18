@@ -13,7 +13,7 @@ import Paper from '@mui/material/Paper'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import DoctorsScheduler from '../../components/DoctorsScheduler'
 import Sidebar from '../../components/Sidebar'
-import Header from '../../components/Header/Header'
+import HeaderDoctors from '../../components/Header/HeaderDoctors'
 
 const drawerWidth: number = 240
 

@@ -6,6 +6,7 @@ export const VisitType = enumType(gqlTypes.VisitType)
 export const StatusType = enumType(gqlTypes.AppointmentStatus)
 export const UserType = enumType(gqlTypes.UserType)
 export const BillStatusType = enumType(gqlTypes.BillStatus)
+export const ScheduleStatusType = enumType(gqlTypes.ScheduleStatus)
 export const OrderType = enumType({
   name: 'OrderType',
   members: [
@@ -26,4 +27,5 @@ export default [
   UserType,
   BillStatusType,
   OrderType,
+  ScheduleStatusType,
 ]
