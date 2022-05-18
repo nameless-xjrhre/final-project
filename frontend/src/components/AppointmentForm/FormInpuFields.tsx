@@ -8,7 +8,49 @@ import {
 } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
-import { FormInputProps, FormInputSelectProps } from './FormInputProps'
+import {
+  FormInputProps,
+  FormInputSelectMedStaffProps,
+  FormInputSelectPatientProps,
+} from './FormInputProps'
+
+export const FormInputSelectPatient = ({
+  name,
+  label,
+  data,
+  control,
+  register,
+  errors,
+}: FormInputSelectPatientProps) => (
+  <FormControl error={!!errors[name]}>
+    <InputLabel>{label}</InputLabel>
+    <Controller
+      name={name}
+      control={control}
+      defaultValue=""
+      render={({ field: { onChange, value } }) => (
+        <>
+          <Select
+            label={label}
+            value={value || ''}
+            onChange={onChange}
+            name={name}
+          >
+            {data &&
+              data.patients.map((item) => (
+                <MenuItem value={item.id} key={item.id} {...register(name)}>
+                  {item.fullName}
+                </MenuItem>
+              ))}
+          </Select>
+          <FormHelperText sx={{ color: '#d32f2f' }}>
+            {errors[name]?.message}
+          </FormHelperText>
+        </>
+      )}
+    />
+  </FormControl>
+)
 
 export const FormInputSelectMedStaff = ({
   name,
@@ -17,7 +59,7 @@ export const FormInputSelectMedStaff = ({
   control,
   register,
   errors,
-}: FormInputSelectProps) => (
+}: FormInputSelectMedStaffProps) => (
   <FormControl error={!!errors[name]}>
     <InputLabel>{label}</InputLabel>
     <Controller
@@ -93,9 +135,10 @@ export const FormInputText = ({
   errors,
 }: FormInputProps) => (
   <TextField
+    sx={{ marginTop: -0.3, width: 250 }}
     label={label}
     multiline
-    rows={3}
+    rows={2}
     {...register(name)}
     helperText={errors[name]?.message}
     error={!!errors[name]}
@@ -128,7 +171,7 @@ export const FormInputDate = ({
         }
         renderInput={(params) => (
           <TextField
-            sx={{ marginTop: -0.3 }}
+            sx={{ marginTop: -0.3, width: 250 }}
             placeholder={placeholder}
             variant="outlined"
             margin="dense"

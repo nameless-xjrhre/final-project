@@ -158,7 +158,7 @@ export default function PatientsList() {
                   {patient?.latestAppointment?.visitType}
                 </StyledTableCell>
                 <StyledTableCell>
-                  {patient?.latestAppointment?.medStaff?.fullName}
+                  Dr. {patient?.latestAppointment?.medStaff?.fullName}
                 </StyledTableCell>
                 <StyledTableCell>
                   <Button
