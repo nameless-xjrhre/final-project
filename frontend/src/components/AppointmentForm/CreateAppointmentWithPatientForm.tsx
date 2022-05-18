@@ -8,10 +8,16 @@ import CloseIcon from '@mui/icons-material/Close'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { string, object } from 'yup'
+import { gql, useMutation } from 'urql'
+import swal from 'sweetalert'
 import AddPatientForm from '../PatientForm'
 import CustomForm from '../CustomForm'
 import CustomFormProps from '../CustomFormProps'
 import AppointmentForm from './AppointmentForm'
+import {
+  AppointmentStatus,
+  MutationCreateAppointmentWithPatientArgs,
+} from '../../graphql/generated'
 
 const steps = ['Patient Data', 'Create Appointment']
 
@@ -41,15 +47,48 @@ const appointmentSchema = object().shape({
   note: string().required('Provide reason for appointment.'),
 })
 
+const CreateAppointmentWithPatient = gql`
+  mutation CreateAppointmentWithPatient(
+    $appointment: CreateAppointmentInput!
+    $patient: CreatePatientInput!
+    $medStaffId: Int!
+  ) {
+    createAppointmentWithPatient(
+      appointment: $appointment
+      patient: $patient
+      medStaffId: $medStaffId
+    ) {
+      id
+      date
+      visitType
+      status
+      patient {
+        firstName
+        lastName
+        sex
+        dateOfBirth
+        contactNum
+        address
+      }
+      medStaff {
+        id
+      }
+    }
+  }
+`
+
 export default function CreateAppointmentWithPatientForm({
   handleClose,
   open,
 }: CustomFormProps) {
   const [activeStep, setActiveStep] = React.useState(0)
   const isLastStep = activeStep === steps.length - 1
-  // const [,createAppointmentWithPatient] = useMutation<AppointmentWithPatient>(
-  //   CreateAppointmentWithPatient,
-  // )
+  const [isComplete, setIsComplete] = React.useState(false)
+  const [, createAppointmentWithPatient] = useMutation(
+    CreateAppointmentWithPatient,
+  )
+
+  const handleComplete = () => setIsComplete(true)
 
   const {
     register,
@@ -71,28 +110,54 @@ export default function CreateAppointmentWithPatientForm({
     setActiveStep((prevActiveStep) => prevActiveStep - 1)
   }
 
+  const showAlert = () =>
+    swal({
+      title: 'Success!',
+      text: 'Your data has been saved.',
+      icon: 'success',
+    })
+
   const submitMultiStepForm = handleSubmit((data) => {
     if (isLastStep) {
-      const input = {
-        address: data.address,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        contactNum: data.contactNum,
-        dateOfBirth: new Date(data.dateOfBirth),
-        sex: data.sex,
-        patientId: 1,
-        medStaffId: data.medicalStaff,
-        date: data.appointmentDate,
-        visitType: data.visitType,
-        status: 'PENDING',
+      handleComplete()
+      const input: MutationCreateAppointmentWithPatientArgs = {
+        appointment: {
+          date: new Date(data.appointmentDate),
+          visitType: data.visitType,
+          status: AppointmentStatus.Pending,
+          // note: data.note
+        },
+        patient: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          contactNum: data.contactNum,
+          dateOfBirth: new Date(data.dateOfBirth),
+          sex: data.sex,
+          address: data.address,
+        },
+        medStaffId: parseInt(data.medicalStaff, 10),
       }
       console.log(input)
-
-      // createAppointmentWithPatient(input).then((result) => console.log(result))
+      createAppointmentWithPatient(input).then((result) => console.log(result))
     } else {
       handleNext()
     }
   })
+
+  const handleSubmitForm = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    e.preventDefault()
+    handleComplete()
+
+    if (isComplete) {
+      if (isLastStep) {
+        handleClose(e)
+        showAlert()
+      }
+      submitMultiStepForm()
+    }
+  }
 
   function getStepsContent(stepsIndex: number) {
     switch (stepsIndex) {
@@ -110,6 +175,7 @@ export default function CreateAppointmentWithPatientForm({
             control={control}
             register={register}
             errors={errors}
+            isNewAppointment
           />
         )
       default:
@@ -150,7 +216,7 @@ export default function CreateAppointmentWithPatientForm({
         ) : null}
         <Grid item>
           <Button
-            onClick={submitMultiStepForm}
+            onClick={(e) => handleSubmitForm(e)}
             variant="contained"
             color="primary"
             type="submit"
