@@ -1,1 +1,1 @@
-export { default } from './AppoitnmentsList'
+export { default } from './AppointmentsList'
