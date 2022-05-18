@@ -3,13 +3,43 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
+import {
+  styled,
+  Table,
+  TableCell,
+  tableCellClasses,
+  TableHead,
+  TableRow,
+} from '@mui/material'
+
+function MedicalRecords(
+  date: string,
+  doctor: string,
+  diagnosis: string,
+  prescription: string,
+) {
+  return { date, doctor, diagnosis, prescription }
+}
+const data = [MedicalRecords('2022/10/17', 'Dr Renzo', 'COVID', 'J and J')]
 
 interface TabPanelProps {
   children?: React.ReactNode
   index: number
   value: number
 }
-
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    color: theme.palette.common.black,
+    fontWeight: 'bold',
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    color: '#A9A9A9',
+  },
+  fontFamily: `'Lato', sans-serif`,
+  paddingTop: theme.spacing(2),
+  paddingBottom: theme.spacing(2),
+}))
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props
 
@@ -22,7 +52,7 @@ function TabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -57,10 +87,32 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        Medical Records
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Date</StyledTableCell>
+              <StyledTableCell>Doctor</StyledTableCell>
+              <StyledTableCell>Diagnosis</StyledTableCell>
+              <StyledTableCell>Perscription</StyledTableCell>
+              <StyledTableCell align="right" />
+            </TableRow>
+          </TableHead>
+        </Table>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Financial Records
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Payment Date</StyledTableCell>
+              <StyledTableCell>Staff</StyledTableCell>
+              <StyledTableCell>Visit Type </StyledTableCell>
+              <StyledTableCell>Due Date</StyledTableCell>
+              <StyledTableCell>Amount </StyledTableCell>
+              <StyledTableCell>Status</StyledTableCell>
+              <StyledTableCell align="right" />
+            </TableRow>
+          </TableHead>
+        </Table>
       </TabPanel>
     </Box>
   )
