@@ -48,7 +48,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }))
 
-export default function SearchAppBar() {
+interface Props {
+  title: string
+}
+
+export default function SearchAppBar({ title }: Props) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Toolbar>
@@ -62,7 +66,7 @@ export default function SearchAppBar() {
             display: { xs: 'none', sm: 'block' },
           }}
         >
-          Patients
+          {title}
         </Typography>
         <Search>
           <SearchIconWrapper>
