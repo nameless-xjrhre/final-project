@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import * as React from 'react'
 import { styled } from '@mui/material/styles'
 import Table from '@mui/material/Table'
@@ -111,10 +112,10 @@ export default function AppointmentList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Array.from({ length: 5 }).map(() => (
-            <TableRow>
-              {Array.from({ length: 7 }).map(() => (
-                <StyledTableCell>
+          {Array.from({ length: 5 }).map((_, i) => (
+            <TableRow key={i}>
+              {Array.from({ length: 7 }).map((__, j) => (
+                <StyledTableCell key={j}>
                   <Skeleton variant="text" />
                 </StyledTableCell>
               ))}

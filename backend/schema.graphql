@@ -64,6 +64,7 @@ input CreateScheduleInput {
   endTime: DateTime!
   medStaffId: Int!
   startTime: DateTime!
+  status: ScheduleStatus
 }
 
 input CreateUserInput {
@@ -170,6 +171,14 @@ type Schedule {
   id: Int!
   medStaff: MedicalStaff
   startTime: DateTime!
+  status: ScheduleStatus
+}
+
+enum ScheduleStatus {
+  CLOSED
+  DONE
+  NOT_AVAILABLE
+  OPEN
 }
 
 enum Sex {
