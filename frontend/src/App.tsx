@@ -5,6 +5,7 @@ import AppointmentsPage from './pages/AppointmentsPage'
 import PatientPage from './pages/PatientPage'
 import ProfilePage from './pages/ProfilePage'
 import DoctorsPage from './pages/DoctorsPage'
+import DashboardPage from './pages/DashboardPage'
 
 import './App.css'
 
@@ -17,6 +18,7 @@ function App() {
       <Route path="appointments" element={<AppointmentsPage />} />
       <Route path="profile" element={<ProfilePage />} />
       <Route path="doctors" element={<DoctorsPage />} />
+      <Route path="dashboard" element={<DashboardPage />} />
     </Routes>
   )
 }
