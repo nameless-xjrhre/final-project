@@ -1,39 +1,75 @@
 import * as React from 'react'
-import { Grid, Typography, IconButton, Divider, Button } from '@mui/material'
+import {
+  Grid,
+  Typography,
+  IconButton,
+  Divider,
+  Button,
+  CircularProgress,
+} from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { object, string } from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { gql, useMutation } from 'urql'
-import swal from 'sweetalert'
 import CustomForm from '../CustomForm'
 import CustomFormProps from '../CustomFormProps'
 import ScheduleForm from './ScheduleForm'
-import { MutationCreateScheduleArgs } from '../../graphql/generated'
+import {
+  MutationCreateScheduleArgs,
+  ScheduleStatus,
+} from '../../graphql/generated'
+import { showFailAlert, showSuccessAlert } from '../../utils'
 
 const scheduleSchema = object().shape({
   medicalStaff: string().required('Select preferred doctor.'),
-  status: string().required('Select type of status.'),
-  startTime: string().nullable().required('Select start time date.'),
-  endTime: string().nullable().required('Select end time date.'),
+  startTime: string().nullable().required('Select start time.'),
+  endTime: string().nullable().required('Select end time.'),
 })
 
 const CreateSchedule = gql`
   mutation CreateSchedule($data: CreateScheduleInput!) {
     createSchedule(data: $data) {
       id
-      status
       startTime
       endTime
+      medStaff {
+        id
+      }
+      status
     }
   }
 `
+
+const getDate = (time: string) => {
+  const hour = parseInt(time.split(':')[0], 10)
+  const min = parseInt(time.split(':')[1], 10)
+  const today = new Date()
+
+  return new Date(today.setHours(hour, min))
+}
 
 export default function CreateScheduleForm({
   open,
   handleClose,
 }: CustomFormProps) {
   const [, createSchedule] = useMutation(CreateSchedule)
+  const [complete, setComplete] = React.useState(false)
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const handleComplete = () => setComplete(true)
+  const handleSubmitting = () => setIsSubmitting(true)
+
+  const buttonSx = {
+    ...(complete && {
+      bgcolor: '#336CFB',
+      '&:hover': {
+        bgcolor: '#336CFB',
+      },
+    }),
+    display: 'block',
+    marginTop: 3,
+    marginLeft: 'auto',
+  }
 
   const {
     register,
@@ -47,32 +83,33 @@ export default function CreateScheduleForm({
   const handleCreateSchedule = handleSubmit((data) => {
     const input: MutationCreateScheduleArgs = {
       data: {
-        medStaffId: data.medicalStaff,
-        status: data.status,
-        startTime: data.startTime,
-        endTime: data.endTime,
+        medStaffId: parseInt(data.medicalStaff, 10),
+        status: ScheduleStatus.Open,
+        startTime: getDate(data.startTime),
+        endTime: getDate(data.endTime),
       },
     }
-    console.log(data)
-    console.log(input)
 
-    createSchedule(input).then((result) => console.log(result))
+    handleSubmitting()
+    createSchedule(input)
+      .then((result) => {
+        if (result.error) {
+          handleClose(handleComplete)
+          showFailAlert()
+        } else {
+          console.log(result)
+          handleClose(handleComplete)
+          showSuccessAlert()
+        }
+      })
+      .catch((err) => console.error(err))
   })
-
-  const showAlert = () =>
-    swal({
-      title: 'Success!',
-      text: 'Your data has been saved.',
-      icon: 'success',
-    })
 
   const handleSubmitForm = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault()
     handleCreateSchedule()
-    handleClose(e)
-    showAlert()
   }
 
   return (
@@ -94,16 +131,23 @@ export default function CreateScheduleForm({
       <ScheduleForm control={control} register={register} errors={errors} />
       <Button
         onClick={(e) => handleSubmitForm(e)}
+        disabled={isSubmitting}
         variant="contained"
-        sx={{
-          background: '#336CFB',
-          display: 'block',
-          marginLeft: 'auto',
-          marginTop: 2,
-        }}
+        sx={buttonSx}
       >
         Add Schedule
       </Button>
+      {isSubmitting && (
+        <CircularProgress
+          size={17}
+          sx={{
+            color: 'blue',
+            position: 'absolute',
+            marginTop: -3.5,
+            marginLeft: 60,
+          }}
+        />
+      )}
     </CustomForm>
   )
 }
