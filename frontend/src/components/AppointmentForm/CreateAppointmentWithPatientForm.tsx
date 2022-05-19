@@ -3,15 +3,27 @@ import Box from '@mui/material/Box'
 import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
-import { Button, Divider, Grid, IconButton } from '@mui/material'
+import {
+  Button,
+  CircularProgress,
+  Divider,
+  Grid,
+  IconButton,
+} from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { string, object } from 'yup'
+import { gql, useMutation } from 'urql'
 import AddPatientForm from '../PatientForm'
 import CustomForm from '../CustomForm'
 import CustomFormProps from '../CustomFormProps'
 import AppointmentForm from './AppointmentForm'
+import {
+  AppointmentStatus,
+  MutationCreateAppointmentWithPatientArgs,
+} from '../../graphql/generated'
+import { showFailAlert, showSuccessAlert } from '../../utils'
 
 const steps = ['Patient Data', 'Create Appointment']
 
@@ -26,7 +38,7 @@ const useStyles = {
 const patientSchema = object().shape({
   firstName: string().required('Enter your first name.'),
   lastName: string().required('Enter your last name.'),
-  sex: string().required('Choose your gender.'),
+  sex: string().nullable().required('Choose your gender.'),
   dateOfBirth: string().nullable().required('Select date of birth.'),
   contactNum: string()
     .required('Enter your contact number.')
@@ -41,15 +53,61 @@ const appointmentSchema = object().shape({
   note: string().required('Provide reason for appointment.'),
 })
 
+const CreateAppointmentWithPatient = gql`
+  mutation CreateAppointmentWithPatient(
+    $appointment: CreateAppointmentInput!
+    $patient: CreatePatientInput!
+    $medStaffId: Int!
+  ) {
+    createAppointmentWithPatient(
+      appointment: $appointment
+      patient: $patient
+      medStaffId: $medStaffId
+    ) {
+      id
+      date
+      visitType
+      status
+      patient {
+        firstName
+        lastName
+        sex
+        dateOfBirth
+        contactNum
+        address
+      }
+      medStaff {
+        id
+      }
+    }
+  }
+`
+
 export default function CreateAppointmentWithPatientForm({
   handleClose,
   open,
 }: CustomFormProps) {
+  const [, createAppointmentWithPatient] = useMutation(
+    CreateAppointmentWithPatient,
+  )
   const [activeStep, setActiveStep] = React.useState(0)
   const isLastStep = activeStep === steps.length - 1
-  // const [,createAppointmentWithPatient] = useMutation<AppointmentWithPatient>(
-  //   CreateAppointmentWithPatient,
-  // )
+  const [complete, setComplete] = React.useState(false)
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const handleComplete = () => setComplete(true)
+  const handleSubmitting = () => setIsSubmitting(true)
+
+  const buttonSx = {
+    ...(complete && {
+      bgcolor: '#336CFB',
+      '&:hover': {
+        bgcolor: '#336CFB',
+      },
+    }),
+    display: 'block',
+    marginTop: 3,
+    marginLeft: 'auto',
+  }
 
   const {
     register,
@@ -73,26 +131,48 @@ export default function CreateAppointmentWithPatientForm({
 
   const submitMultiStepForm = handleSubmit((data) => {
     if (isLastStep) {
-      const input = {
-        address: data.address,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        contactNum: data.contactNum,
-        dateOfBirth: new Date(data.dateOfBirth),
-        sex: data.sex,
-        patientId: 1,
-        medStaffId: data.medicalStaff,
-        date: data.appointmentDate,
-        visitType: data.visitType,
-        status: 'PENDING',
+      const input: MutationCreateAppointmentWithPatientArgs = {
+        appointment: {
+          date: new Date(data.appointmentDate),
+          visitType: data.visitType,
+          status: AppointmentStatus.Pending,
+          // note: data.note
+        },
+        patient: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          contactNum: data.contactNum,
+          dateOfBirth: new Date(data.dateOfBirth),
+          sex: data.sex,
+          address: data.address,
+        },
+        medStaffId: parseInt(data.medicalStaff, 10),
       }
-      console.log(input)
 
-      // createAppointmentWithPatient(input).then((result) => console.log(result))
+      handleSubmitting()
+      createAppointmentWithPatient(input)
+        .then((result) => {
+          if (result.error) {
+            handleClose(handleComplete)
+            showFailAlert()
+          } else {
+            console.log(result)
+            handleClose(handleComplete)
+            showSuccessAlert()
+          }
+        })
+        .catch((err) => console.error(err))
     } else {
       handleNext()
     }
   })
+
+  const handleSubmitForm = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    e.preventDefault()
+    submitMultiStepForm()
+  }
 
   function getStepsContent(stepsIndex: number) {
     switch (stepsIndex) {
@@ -110,6 +190,7 @@ export default function CreateAppointmentWithPatientForm({
             control={control}
             register={register}
             errors={errors}
+            isNewAppointment
           />
         )
       default:
@@ -143,21 +224,38 @@ export default function CreateAppointmentWithPatientForm({
         {getStepsContent(activeStep)}
         {activeStep > 0 ? (
           <Grid item>
-            <Button variant="contained" color="primary" onClick={handleBack}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleBack}
+              disabled={isSubmitting}
+            >
               Back
             </Button>
           </Grid>
         ) : null}
         <Grid item>
           <Button
-            onClick={submitMultiStepForm}
+            onClick={(e) => handleSubmitForm(e)}
+            disabled={isSubmitting}
             variant="contained"
             color="primary"
             type="submit"
-            sx={{ marginLeft: 'auto' }}
+            sx={buttonSx}
           >
             {activeStep === steps.length - 1 ? 'Book Now' : 'Next'}
           </Button>
+          {isSubmitting && (
+            <CircularProgress
+              size={17}
+              sx={{
+                color: 'blue',
+                position: 'absolute',
+                marginTop: -3.5,
+                marginLeft: 62,
+              }}
+            />
+          )}
         </Grid>
       </Grid>
     </CustomForm>

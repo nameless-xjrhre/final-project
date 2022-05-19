@@ -6,6 +6,8 @@ import PatientPage from './pages/PatientPage'
 import ProfilePage from './pages/ProfilePage'
 import DoctorsPage from './pages/DoctorsPage'
 
+import './App.css'
+
 function App() {
   return (
     <Routes>

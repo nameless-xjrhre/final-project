@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import * as React from 'react'
 import { styled } from '@mui/material/styles'
 import Table from '@mui/material/Table'
@@ -12,16 +13,19 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import AddBillForm from '../BillForm/AddBillForm'
+import { BillStatus } from '../../graphql/generated'
 
 interface Appointment {
   id: number
   visitType: string
   date: Date
-  status: string
+  status: BillStatus
   patient: {
+    id: number
     fullName: string
   }
   medStaff: {
+    id: number
     fullName: string
   }
 }
@@ -38,9 +42,11 @@ const appointmentQueryDocument = gql`
       date
       status
       patient {
+        id
         fullName
       }
       medStaff {
+        id
         fullName
       }
     }
@@ -111,10 +117,10 @@ export default function AppointmentList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Array.from({ length: 5 }).map(() => (
-            <TableRow>
-              {Array.from({ length: 7 }).map(() => (
-                <StyledTableCell>
+          {Array.from({ length: 5 }).map((_, i) => (
+            <TableRow key={i}>
+              {Array.from({ length: 7 }).map((__, j) => (
+                <StyledTableCell key={j}>
                   <Skeleton variant="text" />
                 </StyledTableCell>
               ))}

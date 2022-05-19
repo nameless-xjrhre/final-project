@@ -62,7 +62,7 @@ export default function SearchAppBar() {
             display: { xs: 'none', sm: 'block' },
           }}
         >
-          Appointments
+          Doctors
         </Typography>
         <Search>
           <SearchIconWrapper>

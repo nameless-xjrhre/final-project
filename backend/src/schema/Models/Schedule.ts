@@ -1,5 +1,6 @@
 import { objectType } from 'nexus'
 import * as gqlTypes from 'nexus-prisma'
+import { ScheduleStatusType } from '../Enums'
 
 const Schedule = objectType({
   name: 'Schedule',
@@ -17,6 +18,9 @@ const Schedule = objectType({
             },
           })
           .medStaff(),
+    })
+    t.field('status', {
+      type: ScheduleStatusType,
     })
   },
 })

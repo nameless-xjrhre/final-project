@@ -1,21 +1,4 @@
-import { verify } from 'jsonwebtoken'
-import { Context } from './context'
-
-export const APP_SECRET = 'appsecret321'
-
-interface Token {
-  userId: string
-}
-
-export function getUserId(context: Context) {
-  const authHeader = context.req.get('Authorization')
-  if (authHeader) {
-    const token = authHeader.replace('Bearer ', '')
-    const verifiedToken = verify(token, APP_SECRET) as Token
-    return verifiedToken && Number(verifiedToken.userId)
-  }
-  return null
-}
+import swal from 'sweetalert'
 
 export function getDateOfLastMonday(currentDate: Date) {
   const today = currentDate
@@ -32,3 +15,24 @@ export function getDateOfNextSunday(currentDate: Date) {
   const sunday = new Date(today.setDate(diff))
   return new Date(sunday.setHours(23, 59, 59, 0))
 }
+
+export const getDueDate = (paymentTerm: string) => {
+  const today = new Date()
+  const day = parseInt(paymentTerm.split(' ')[0], 10)
+
+  return new Date(today.setDate(today.getDate() + day))
+}
+
+export const showSuccessAlert = () =>
+  swal({
+    title: 'Success!',
+    text: 'Data has been saved.',
+    icon: 'success',
+  })
+
+export const showFailAlert = () =>
+  swal({
+    title: 'Failed!',
+    text: 'Data has not been saved.',
+    icon: 'success',
+  })

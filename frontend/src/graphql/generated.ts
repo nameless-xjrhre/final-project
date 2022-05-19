@@ -86,6 +86,7 @@ export type CreateScheduleInput = {
   endTime: Scalars['DateTime']
   medStaffId: Scalars['Int']
   startTime: Scalars['DateTime']
+  status?: InputMaybe<ScheduleStatus>
 }
 
 export type CreateUserInput = {
@@ -253,6 +254,14 @@ export type Schedule = {
   id: Scalars['Int']
   medStaff?: Maybe<MedicalStaff>
   startTime: Scalars['DateTime']
+  status?: Maybe<ScheduleStatus>
+}
+
+export enum ScheduleStatus {
+  Closed = 'CLOSED',
+  Done = 'DONE',
+  NotAvailable = 'NOT_AVAILABLE',
+  Open = 'OPEN',
 }
 
 export enum Sex {
@@ -302,6 +311,23 @@ export type AppointmentQueryQuery = {
     status?: AppointmentStatus | null
     patient?: { __typename?: 'Patient'; fullName?: string | null } | null
     medStaff?: { __typename?: 'MedicalStaff'; fullName?: string | null } | null
+  }>
+}
+
+export type MedicalStaffsQueryQueryVariables = Exact<{ [key: string]: never }>
+
+export type MedicalStaffsQueryQuery = {
+  __typename?: 'Query'
+  medicalStaff: Array<{
+    __typename?: 'MedicalStaff'
+    id: number
+    fullName?: string | null
+    schedules?: Array<{
+      __typename?: 'Schedule'
+      startTime: any
+      endTime: any
+      status?: ScheduleStatus | null
+    } | null> | null
   }>
 }
 
@@ -366,6 +392,28 @@ export function useAppointmentQueryQuery(
 ) {
   return Urql.useQuery<AppointmentQueryQuery>({
     query: AppointmentQueryDocument,
+    ...options,
+  })
+}
+export const MedicalStaffsQueryDocument = gql`
+  query medicalStaffsQuery {
+    medicalStaff {
+      id
+      fullName
+      schedules {
+        startTime
+        endTime
+        status
+      }
+    }
+  }
+`
+
+export function useMedicalStaffsQueryQuery(
+  options?: Omit<Urql.UseQueryArgs<MedicalStaffsQueryQueryVariables>, 'query'>,
+) {
+  return Urql.useQuery<MedicalStaffsQueryQuery>({
+    query: MedicalStaffsQueryDocument,
     ...options,
   })
 }
