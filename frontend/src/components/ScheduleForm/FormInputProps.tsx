@@ -17,26 +17,10 @@ export const medicalStaffQueryDocument = gql`
   }
 `
 
-export interface PatientQueryData {
-  patients: {
-    id: number
-    fullName: string
-  }[]
-}
-
-export const patientQueryDocument = gql`
-  query PatientQuery {
-    patients {
-      id
-      fullName
-    }
-  }
-`
-
 export interface FormInputProps {
   id?: string
   name: string
-  label: string
+  label?: string
   placeholder?: string
   control?: Control<FieldValues, any>
   register: UseFormRegister<FieldValues>
@@ -53,15 +37,4 @@ export interface FormInputSelectMedStaffProps {
   register: UseFormRegister<FieldValues>
   errors: FieldValues
   data: MedicalStaffQueryData
-}
-
-export interface FormInputSelectPatientProps {
-  id?: string
-  name: string
-  label: string
-  placeholder?: string
-  control?: Control<FieldValues, any>
-  register: UseFormRegister<FieldValues>
-  errors: FieldValues
-  data: PatientQueryData
 }
