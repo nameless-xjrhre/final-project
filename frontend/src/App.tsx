@@ -5,7 +5,7 @@ import AppointmentsPage from './pages/AppointmentsPage'
 import PatientPage from './pages/PatientPage'
 import ProfilePage from './pages/ProfilePage'
 import DoctorsPage from './pages/DoctorsPage'
-
+import BillsPage from './pages/BillsPage'
 import './App.css'
 
 function App() {
@@ -17,6 +17,7 @@ function App() {
       <Route path="appointments" element={<AppointmentsPage />} />
       <Route path="profile" element={<ProfilePage />} />
       <Route path="doctors" element={<DoctorsPage />} />
+      <Route path="bills" element={<BillsPage />} />
     </Routes>
   )
 }
