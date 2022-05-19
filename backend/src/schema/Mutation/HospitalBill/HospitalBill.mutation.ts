@@ -11,6 +11,24 @@ export const CreateHospitalBill = mutationField('createHospitalBill', {
     ),
   },
   resolve: (parent, args, context) => createHospitalBill(args.data, context),
+  validate: async (parent, args, context) => {
+    // throw if patient does not exist
+
+    const patient = await context.prisma.patient.findFirst({
+      where: {
+        id: args.data.patientId,
+      },
+    })
+
+    if (!patient) {
+      throw new Error(`Patient with does not exist`)
+    }
+
+    // date cannot be before today
+    if (args.data.date < new Date()) {
+      throw new Error('Date cannot be before today')
+    }
+  },
 })
 
 export const EditHospitalBill = mutationField('editHospitalBill', {
