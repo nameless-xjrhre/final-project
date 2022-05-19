@@ -34,5 +34,5 @@ export const showFailAlert = () =>
   swal({
     title: 'Failed!',
     text: 'Data has not been saved.',
-    icon: 'success',
+    icon: 'warning',
   })

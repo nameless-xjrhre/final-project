@@ -1,31 +1,36 @@
+import React from 'react'
 import { Typography, Grid } from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { UseFormRegister, FieldValues, Control } from 'react-hook-form'
 import { useQuery } from 'urql'
-import { ScheduleStatus } from '../../graphql/generated'
-import {
-  FormInputDate,
-  FormInputSelectMedStaff,
-  FormInputSelect,
-} from './FormInputFields'
+import Select from 'react-select'
+import { FormInputTime, FormInputSelectMedStaff } from './FormInputFields'
 import {
   MedicalStaffQueryData,
   medicalStaffQueryDocument,
 } from './FormInputProps'
+
+export interface FormValue {
+  readonly value: string
+  readonly label: string
+}
+
+export const daysSchedule: FormValue[] = [
+  { value: 'M', label: 'Mon' },
+  { value: 'T', label: 'Tue' },
+  { value: 'W', label: 'Wed' },
+  { value: 'Th', label: 'Thu' },
+  { value: 'F', label: 'Fri' },
+  { value: 'Sa', label: 'Sat' },
+  { value: 'Su', label: 'Sun' },
+]
 
 interface CreateAppointmentFormProps {
   control: Control<FieldValues, any>
   register: UseFormRegister<FieldValues>
   errors: FieldValues
 }
-
-const scheduleTypes = [
-  ScheduleStatus.Closed,
-  ScheduleStatus.Done,
-  ScheduleStatus.NotAvailable,
-  ScheduleStatus.Open,
-]
 
 export default function ScheduleForm({
   control,
@@ -35,13 +40,13 @@ export default function ScheduleForm({
   const [medicalStaff] = useQuery<MedicalStaffQueryData>({
     query: medicalStaffQueryDocument,
   })
-
+  const [days, setDays] = React.useState<string[]>([])
   return (
     <>
       <Grid container mt={2}>
         <Grid>
           <Typography variant="body2" color="GrayText">
-            Select Medical Staff
+            Select Doctor
           </Typography>
           <FormInputSelectMedStaff
             name="medicalStaff"
@@ -52,19 +57,21 @@ export default function ScheduleForm({
             errors={errors}
           />
         </Grid>
-        <Grid>
-          <Typography variant="body2" color="GrayText">
-            Select Schedule Status
-          </Typography>
-          <FormInputSelect
-            name="scheduleType"
-            label="Select Schedule Type"
-            data={scheduleTypes}
-            control={control}
-            register={register}
-            errors={errors}
-          />
-        </Grid>
+      </Grid>
+      <Grid>
+        <Typography variant="body2" color="GrayText" mt={2}>
+          Select Days
+        </Typography>
+        <Select
+          closeMenuOnSelect={false}
+          value={daysSchedule.filter((day) => days.includes(day.value))}
+          options={daysSchedule}
+          onChange={(e) =>
+            setDays(Array.isArray(e) ? e.map((x) => x.value) : [])
+          }
+          isMulti
+          isClearable
+        />
       </Grid>
 
       <Grid container mt={2}>
@@ -73,28 +80,24 @@ export default function ScheduleForm({
             Select Start Time
           </Typography>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <FormInputDate
-              id="date-and-time"
-              name="startTimeDate"
-              label="Select Start Time"
-              control={control}
-              register={register}
+            <FormInputTime
+              name="startTime"
               errors={errors}
+              register={register}
+              control={control}
             />
           </LocalizationProvider>
         </Grid>
         <Grid>
           <Typography variant="body2" color="GrayText" mt={1} mb={1}>
-            Select Start Time
+            Select End Time
           </Typography>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <FormInputDate
-              id="date-and-time"
-              name="endTimeDate"
-              label="Select End Time"
-              control={control}
-              register={register}
+            <FormInputTime
+              name="endTime"
               errors={errors}
+              register={register}
+              control={control}
             />
           </LocalizationProvider>
         </Grid>
