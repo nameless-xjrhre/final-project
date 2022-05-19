@@ -21,7 +21,7 @@ import DoctorsScheduler from '../../components/DoctorsScheduler'
 import Sidebar from '../../components/Sidebar'
 import Header from '../../components/Header'
 import AddDoctorIcon from './AddDoctorIcon'
-import CreateAppointmentWithPatientForm from '../../components/AppointmentForm/CreateAppointmentWithPatientForm'
+import CreateScheduleForm from '../../components/ScheduleForm/CreateScheduleForm'
 import CreateAppointmentForm from '../../components/AppointmentForm/CreateAppointmentForm'
 
 const drawerWidth: number = 240
@@ -60,22 +60,22 @@ function DashboardContent() {
     setOpen(!open)
   }
   const [createScheduleBtn, setCreateScheduleBtn] = React.useState(false)
-  const handleNewScheduleOpen = () => setCreateScheduleBtn(true)
-  const handleNewScheduleClose = () => setCreateScheduleBtn(false)
+  const handleCreateScheduleOpen = () => setCreateScheduleBtn(true)
+  const handleCreateScheduleClose = () => setCreateScheduleBtn(false)
   const [editScheduleBtn, setEditScheduleBtn] = React.useState(false)
-  const handleScheduleOpen = () => setEditScheduleBtn(true)
-  const handleScheduleClose = () => setEditScheduleBtn(false)
+  const handleEditScheduleOpen = () => setEditScheduleBtn(true)
+  const handleEditScheduleClose = () => setEditScheduleBtn(false)
   const actions = [
     {
-      icon: <AddDoctorIcon onClick={handleScheduleOpen} />,
+      icon: <AddDoctorIcon onClick={handleEditScheduleOpen} />,
       name: 'Add Doctor',
     },
     {
-      icon: <AddIcon onClick={handleNewScheduleOpen} />,
+      icon: <AddIcon onClick={handleCreateScheduleOpen} />,
       name: 'Create New Schedule',
     },
     {
-      icon: <EditIcon onClick={handleScheduleOpen} />,
+      icon: <EditIcon onClick={handleEditScheduleOpen} />,
       name: 'Edit Schedule',
     },
   ]
@@ -138,13 +138,13 @@ function DashboardContent() {
                   </SpeedDial>
                   {editScheduleBtn && (
                     <CreateAppointmentForm
-                      handleClose={handleScheduleClose}
+                      handleClose={handleEditScheduleClose}
                       open={editScheduleBtn}
                     />
                   )}
                   {createScheduleBtn && (
-                    <CreateAppointmentWithPatientForm
-                      handleClose={handleNewScheduleClose}
+                    <CreateScheduleForm
+                      handleClose={handleCreateScheduleClose}
                       open={createScheduleBtn}
                     />
                   )}
