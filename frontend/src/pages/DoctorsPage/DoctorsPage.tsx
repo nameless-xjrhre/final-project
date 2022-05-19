@@ -23,6 +23,7 @@ import Header from '../../components/Header'
 import AddDoctorIcon from './AddDoctorIcon'
 import CreateScheduleForm from '../../components/ScheduleForm/CreateScheduleForm'
 import CreateAppointmentForm from '../../components/AppointmentForm/CreateAppointmentForm'
+import AddDoctor from '../../components/DoctorForm/AddDoctorForm'
 
 const drawerWidth: number = 240
 
@@ -65,9 +66,12 @@ function DashboardContent() {
   const [editScheduleBtn, setEditScheduleBtn] = React.useState(false)
   const handleEditScheduleOpen = () => setEditScheduleBtn(true)
   const handleEditScheduleClose = () => setEditScheduleBtn(false)
+  const [addDoctorBtn, setCreateDoctorBtn] = React.useState(false)
+  const handleCreateDoctorOpen = () => setCreateDoctorBtn(true)
+  const handleAddDoctorClose = () => setCreateDoctorBtn(false)
   const actions = [
     {
-      icon: <AddDoctorIcon onClick={handleEditScheduleOpen} />,
+      icon: <AddDoctorIcon onClick={handleCreateDoctorOpen} />,
       name: 'Add Doctor',
     },
     {
@@ -146,6 +150,12 @@ function DashboardContent() {
                     <CreateScheduleForm
                       handleClose={handleCreateScheduleClose}
                       open={createScheduleBtn}
+                    />
+                  )}
+                  {addDoctorBtn && (
+                    <AddDoctor
+                      handleClose={handleAddDoctorClose}
+                      open={addDoctorBtn}
                     />
                   )}
                 </Paper>
