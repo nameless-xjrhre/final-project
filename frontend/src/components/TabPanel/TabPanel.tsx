@@ -12,15 +12,15 @@ import {
   TableRow,
 } from '@mui/material'
 
-function MedicalRecords(
-  date: string,
-  doctor: string,
-  diagnosis: string,
-  prescription: string,
-) {
-  return { date, doctor, diagnosis, prescription }
-}
-const data = [MedicalRecords('2022/10/17', 'Dr Renzo', 'COVID', 'J and J')]
+// function MedicalRecords(
+//   date: string,
+//   doctor: string,
+//   diagnosis: string,
+//   prescription: string,
+// ) {
+//   return { date, doctor, diagnosis, prescription }
+// }
+// const data = [MedicalRecords('2022/10/17', 'Dr Renzo', 'COVID', 'J and J')]
 
 interface TabPanelProps {
   children?: React.ReactNode
