@@ -11,12 +11,13 @@ import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import { Typography, Avatar } from '@mui/material'
 import Sidebar from '../../components/Sidebar'
 import RightSideBar from '../../components/RightSideBar'
 import TabPanel from '../../components/TabPanel'
+
 import './ProfilePage.css'
-import Avatar from '@mui/material/Avatar'
-import { Typography } from '@mui/material'
+
 const drawerWidth: number = 240
 
 function stringToColor(string: string) {
@@ -39,7 +40,7 @@ function stringToColor(string: string) {
   return color
 }
 
-function stringAvatar(name: string) {
+export function stringAvatar(name: string) {
   return {
     sx: {
       bgcolor: stringToColor(name),

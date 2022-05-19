@@ -137,7 +137,8 @@ export interface NexusGenObjects {
     amount: number // Float!
     date: NexusGenScalars['DateTime'] // DateTime!
     id: number // Int!
-    status?: NexusGenEnums['BillStatus'] | null // BillStatus
+    patientId: number // Int!
+    status: NexusGenEnums['BillStatus'] // BillStatus!
   }
   MedicalRecord: {
     // root type
@@ -209,7 +210,8 @@ export interface NexusGenFieldTypes {
     date: NexusGenScalars['DateTime'] // DateTime!
     id: number // Int!
     patient: NexusGenRootTypes['Patient'] | null // Patient
-    status: NexusGenEnums['BillStatus'] | null // BillStatus
+    patientId: number // Int!
+    status: NexusGenEnums['BillStatus'] // BillStatus!
   }
   MedicalRecord: {
     // field return type
@@ -304,6 +306,7 @@ export interface NexusGenFieldTypeNames {
     date: 'DateTime'
     id: 'Int'
     patient: 'Patient'
+    patientId: 'Int'
     status: 'BillStatus'
   }
   MedicalRecord: {

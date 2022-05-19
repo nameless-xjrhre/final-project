@@ -104,7 +104,8 @@ type HospitalBill {
   date: DateTime!
   id: Int!
   patient: Patient
-  status: BillStatus
+  patientId: Int!
+  status: BillStatus!
 }
 
 type MedicalRecord {

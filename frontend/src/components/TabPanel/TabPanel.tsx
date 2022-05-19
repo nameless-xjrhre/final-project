@@ -20,7 +20,9 @@ function MedicalRecords(
 ) {
   return { date, doctor, diagnosis, prescription }
 }
-const data = [MedicalRecords('2022/10/17', 'Dr Renzo', 'COVID', 'J and J')]
+export const data = [
+  MedicalRecords('2022/10/17', 'Dr Renzo', 'COVID', 'J and J'),
+]
 
 interface TabPanelProps {
   children?: React.ReactNode
