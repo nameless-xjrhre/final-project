@@ -1,16 +1,19 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
 import { Control, FieldValues, UseFormRegister } from 'react-hook-form'
+import { BillStatus } from '../../graphql/generated'
 
 interface Appointment {
   id: number
   visitType: string
   date: Date
-  status: string
+  status: BillStatus
   patient: {
+    id: number
     fullName: string
   }
   medStaff: {
+    id: number
     fullName: string
   }
 }
@@ -27,7 +30,7 @@ export interface FormInputProps {
 }
 
 export default interface CustomFormProps {
-  handleClose: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  handleClose: (e: any) => void
   open: boolean
   apppointment: Appointment
 }

@@ -1,11 +1,17 @@
 import * as React from 'react'
-import { Grid, Typography, IconButton, Divider, Button } from '@mui/material'
+import {
+  Grid,
+  Typography,
+  IconButton,
+  Divider,
+  Button,
+  CircularProgress,
+} from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { object, string } from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { gql, useMutation } from 'urql'
-import swal from 'sweetalert'
 import CustomForm from '../CustomForm'
 import CustomFormProps from '../CustomFormProps'
 import AppointmentForm from './AppointmentForm'
@@ -13,6 +19,7 @@ import {
   AppointmentStatus,
   MutationCreateAppointmentArgs,
 } from '../../graphql/generated'
+import { showFailAlert, showSuccessAlert } from '../../utils'
 
 const appointmentSchema = object().shape({
   visitType: string().required('Select type of visit.'),
@@ -51,6 +58,22 @@ export default function CreateAppointmentForm({
   handleClose,
 }: CustomFormProps) {
   const [, createAppointment] = useMutation(CreateAppointment)
+  const [complete, setComplete] = React.useState(false)
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const handleComplete = () => setComplete(true)
+  const handleSubmitting = () => setIsSubmitting(true)
+
+  const buttonSx = {
+    ...(complete && {
+      bgcolor: '#336CFB',
+      '&:hover': {
+        bgcolor: '#336CFB',
+      },
+    }),
+    display: 'block',
+    marginTop: 3,
+    marginLeft: 'auto',
+  }
 
   const {
     register,
@@ -73,25 +96,26 @@ export default function CreateAppointmentForm({
       patientId: parseInt(data.patient, 10),
     }
 
-    console.log(input)
-
-    createAppointment(input).then((result) => console.log(result))
+    handleSubmitting()
+    createAppointment(input)
+      .then((result) => {
+        if (result.error) {
+          handleClose(handleComplete)
+          showFailAlert()
+        } else {
+          console.log(result)
+          handleClose(handleComplete)
+          showSuccessAlert()
+        }
+      })
+      .catch((err) => console.error(err))
   })
-
-  const showAlert = () =>
-    swal({
-      title: 'Success!',
-      text: 'Your data has been saved.',
-      icon: 'success',
-    })
 
   const handleSubmitForm = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault()
     handleCreateAppointment()
-    handleClose(e)
-    showAlert()
   }
 
   return (
@@ -118,16 +142,23 @@ export default function CreateAppointmentForm({
       />
       <Button
         onClick={(e) => handleSubmitForm(e)}
+        disabled={isSubmitting}
         variant="contained"
-        sx={{
-          background: '#336CFB',
-          display: 'block',
-          marginLeft: 'auto',
-          marginTop: 2,
-        }}
+        sx={buttonSx}
       >
         Book Now
       </Button>
+      {isSubmitting && (
+        <CircularProgress
+          size={17}
+          sx={{
+            color: 'blue',
+            position: 'absolute',
+            marginTop: -3.5,
+            marginLeft: 62.5,
+          }}
+        />
+      )}
     </CustomForm>
   )
 }

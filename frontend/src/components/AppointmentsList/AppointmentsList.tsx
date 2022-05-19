@@ -13,16 +13,19 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import AddBillForm from '../BillForm/AddBillForm'
+import { BillStatus } from '../../graphql/generated'
 
 interface Appointment {
   id: number
   visitType: string
   date: Date
-  status: string
+  status: BillStatus
   patient: {
+    id: number
     fullName: string
   }
   medStaff: {
+    id: number
     fullName: string
   }
 }
@@ -39,9 +42,11 @@ const appointmentQueryDocument = gql`
       date
       status
       patient {
+        id
         fullName
       }
       medStaff {
+        id
         fullName
       }
     }
