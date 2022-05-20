@@ -48,12 +48,12 @@ export const mainListItems = (
         <ListItemText primary="Patients" />
       </ListItemButton>
     </Link>
-    <Link to="/payments" className="nav-link">
+    <Link to="/bills" className="nav-link">
       <ListItemButton>
         <ListItemIcon>
           <FontAwesomeIcon icon={faCreditCard} />
         </ListItemIcon>
-        <ListItemText primary="Payments" />
+        <ListItemText primary="Bills" />
       </ListItemButton>
     </Link>
     <Link to="/sign-in" className="nav-link">
