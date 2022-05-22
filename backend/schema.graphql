@@ -7,6 +7,7 @@ type Appointment {
   hospitalBill: HospitalBill
   id: Int!
   medStaff: MedicalStaff
+  note: String
   patient: Patient
   status: AppointmentStatus
   visitType: VisitType
@@ -26,6 +27,7 @@ enum BillStatus {
 
 input CreateAppointmentInput {
   date: DateTime!
+  note: String
   status: AppointmentStatus!
   visitType: VisitType!
 }
@@ -33,6 +35,8 @@ input CreateAppointmentInput {
 input CreateHospitalBillInput {
   amount: Float!
   date: DateTime!
+  deadlineDate: DateTime
+  medStaffId: Int
   patientId: Int!
   status: BillStatus!
 }
@@ -40,6 +44,7 @@ input CreateHospitalBillInput {
 input CreateMedicalRecordInput {
   date: DateTime!
   diagnosis: String!
+  medStaffId: Int
   patientId: Int!
   prescription: String!
 }
@@ -79,6 +84,7 @@ scalar DateTime
 
 input EditAppointmentInput {
   date: DateTime
+  note: String
   status: AppointmentStatus
   visitType: VisitType
 }
@@ -86,6 +92,7 @@ input EditAppointmentInput {
 input EditHospitalBillInput {
   amount: Int
   date: DateTime
+  deadlineDate: DateTime
   status: BillStatus
 }
 
@@ -102,7 +109,9 @@ input EditPatientInput {
 type HospitalBill {
   amount: Float!
   date: DateTime!
+  deadlineDate: DateTime
   id: Int!
+  medStaff: MedicalStaff
   patient: Patient
   patientId: Int!
   status: BillStatus!
@@ -112,6 +121,7 @@ type MedicalRecord {
   date: DateTime!
   diagnosis: String!
   id: Int!
+  medStaff: MedicalStaff
   patient: Patient
   prescription: String!
 }
@@ -121,8 +131,10 @@ type MedicalStaff {
   contactNum: String!
   firstName: String!
   fullName: String
+  hospitalBills: [HospitalBill]
   id: Int!
   lastName: String!
+  medicalRecords: [MedicalRecord]
   schedules: [Schedule]
 }
 

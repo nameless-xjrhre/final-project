@@ -25,6 +25,24 @@ const MedicalStaff = objectType({
       type: 'String',
       resolve: (parent) => `${parent.firstName} ${parent.lastName}`,
     })
+    t.field('medicalRecords', {
+      type: list('MedicalRecord'),
+      resolve: (parent, _args, context) =>
+        context.prisma.medicalRecord.findMany({
+          where: {
+            medStaffId: parent.id,
+          },
+        }),
+    })
+    t.field('hospitalBills', {
+      type: list('HospitalBill'),
+      resolve: (parent, _args, context) =>
+        context.prisma.hospitalBill.findMany({
+          where: {
+            medStaffId: parent.id,
+          },
+        }),
+    })
   },
 })
 

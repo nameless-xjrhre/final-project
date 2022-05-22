@@ -6,8 +6,10 @@ const CreateHospitalBillInput = inputObjectType({
   name: 'CreateHospitalBillInput',
   definition(t) {
     t.field(gqlTypes.HospitalBill.patientId)
+    t.field(gqlTypes.HospitalBill.medStaffId)
     t.field(gqlTypes.HospitalBill.date)
     t.field(gqlTypes.HospitalBill.amount)
+    t.field(gqlTypes.HospitalBill.deadlineDate)
     t.nonNull.field('status', {
       type: BillStatusType,
     })
@@ -19,6 +21,7 @@ const EditHospitalBillInput = inputObjectType({
   definition(t) {
     t.date('date')
     t.int('amount')
+    t.date('deadlineDate')
     t.field('status', {
       type: BillStatusType,
     })

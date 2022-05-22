@@ -43,6 +43,7 @@ export async function createAppointmentWithPatient(
     data: {
       visitType: appointment.visitType,
       date: appointment.date,
+      note: appointment.note,
       status: appointment.status,
       medStaffId,
       patientId: newPatient.id,
@@ -61,6 +62,7 @@ export async function editAppointment(
     },
     data: {
       visitType: appointment.visitType ?? undefined,
+      note: appointment.note ?? undefined,
       date: appointment.date,
       status: appointment.status ?? undefined,
     },

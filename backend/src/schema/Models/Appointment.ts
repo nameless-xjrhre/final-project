@@ -10,6 +10,7 @@ const Appointment = objectType({
   definition(t) {
     t.field(gqlTypes.Appointment.id)
     t.field(gqlTypes.Appointment.date)
+    t.field(gqlTypes.Appointment.note)
     t.field('visitType', {
       type: VisitType,
     })
