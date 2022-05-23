@@ -4,8 +4,9 @@ import {
   Select,
   InputLabel,
   FormHelperText,
+  InputAdornment,
+  OutlinedInput,
 } from '@mui/material'
-import TextField from '@mui/material/TextField'
 import { Controller } from 'react-hook-form'
 import { FormInputProps } from './FormInputProps'
 
@@ -50,16 +51,31 @@ export const FormInputSelect = ({
 export const FormInputText = ({
   name,
   label,
-  placeholder,
+  control,
   register,
   errors,
 }: FormInputProps) => (
-  <TextField
-    label={label}
-    placeholder={placeholder}
-    {...register(name)}
-    helperText={errors[name]?.message}
-    error={!!errors[name]}
-    InputProps={{ style: { fontSize: 12 } }}
-  />
+  <FormControl error={!!errors[name]} sx={{ marginTop: 2.3 }}>
+    <InputLabel>{label}</InputLabel>
+    <Controller
+      name={name}
+      control={control}
+      defaultValue=""
+      render={({ field: { value } }) => (
+        <>
+          <OutlinedInput
+            value={value || ''}
+            startAdornment={<InputAdornment position="start">₱</InputAdornment>}
+            label={label}
+            {...register(name)}
+            error={!!errors[name]}
+            sx={{ width: 235 }}
+          />
+          <FormHelperText sx={{ color: '#d32f2f' }}>
+            {errors[name]?.message}
+          </FormHelperText>
+        </>
+      )}
+    />
+  </FormControl>
 )

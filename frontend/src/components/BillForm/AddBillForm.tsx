@@ -15,11 +15,8 @@ import { gql, useMutation } from 'urql'
 import CustomForm from '../CustomForm'
 import { FormInputSelect, FormInputText } from './FormInputFields'
 import CustomFormProps from './FormInputProps'
-import {
-  BillStatus,
-  MutationCreateHospitalBillArgs,
-} from '../../graphql/generated'
-import { showFailAlert, showSuccessAlert } from '../../utils'
+import { BillStatus } from '../../graphql/generated'
+import { getDueDate, showFailAlert, showSuccessAlert } from '../../utils'
 
 export const terms = [
   '0 days',
@@ -31,7 +28,9 @@ export const terms = [
 ]
 
 const billSchema = object().shape({
-  amount: string().required('Amount is required.'),
+  amount: string()
+    .required('Amount is required.')
+    .matches(/^[1-9]\d*(\.\d+)?$/, 'Please provide valid amount.'),
   paymentTerm: string().nullable().required('Select payment terms.'),
 })
 
@@ -42,7 +41,11 @@ const CreateBill = gql`
       date
       amount
       status
+      deadlineDate
       patient {
+        id
+      }
+      medStaff {
         id
       }
     }
@@ -59,7 +62,7 @@ export default function AddBillForm({
   const [isSubmitting, setIsSubmitting] = React.useState(false)
   const handleComplete = () => setComplete(true)
   const handleSubmitting = () => setIsSubmitting(true)
-  const { patient } = apppointment
+  const { patient, visitType, medStaff } = apppointment
 
   const buttonSx = {
     ...(complete && {
@@ -83,21 +86,22 @@ export default function AddBillForm({
   })
 
   const handleCreateBill = handleSubmit((data) => {
-    const input: MutationCreateHospitalBillArgs = {
+    const input = {
       data: {
         amount: parseFloat(data.amount),
         date: new Date(),
+        deadlineDate: getDueDate(data.paymentTerm),
         patientId: patient.id,
+        medStaffId: medStaff.id,
         status: BillStatus.Unpaid,
       },
-      // visitType,
-      // medStaff: fullName,
-      // dueDate: getDueDate(data.paymentTerm),
     }
+
     handleSubmitting()
     createBill(input)
       .then((result) => {
         if (result.error) {
+          console.log(result)
           handleClose(handleComplete)
           showFailAlert()
         } else {
@@ -133,8 +137,23 @@ export default function AddBillForm({
       </Grid>
       <Divider />
       <Grid container mt={2}>
+        <Typography variant="body1" color="gray">
+          Visit Type
+        </Typography>
+        <Typography variant="body1" color="gray">
+          Consultant
+        </Typography>
+      </Grid>
+      <Grid container>
+        <Typography variant="body1" color="lightgray">
+          {visitType}
+        </Typography>
+        <Typography variant="body1" color="lightgray">
+          Dr. {medStaff.fullName}
+        </Typography>
+      </Grid>
+      <Grid container mt={2}>
         <FormInputText
-          id="amount"
           name="amount"
           label="Amount"
           control={control}
@@ -143,7 +162,7 @@ export default function AddBillForm({
         />
         <FormInputSelect
           name="paymentTerm"
-          label="Payment Terms"
+          label="Payment Term"
           control={control}
           register={register}
           errors={errors}
