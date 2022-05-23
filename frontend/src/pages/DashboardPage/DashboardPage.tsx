@@ -14,6 +14,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import Sidebar from '../../components/Sidebar'
 import HeaderDashboard from '../../components/Header/HeaderDashboard'
 import DetailsCount from '../../components/Dashboard/DetailsCount'
+import AppointmentsList from '../../components/Dashboard/AppointmentsList'
 
 import AppointmentLogo from '../../images/icons/AppointmentLogo.svg'
 import BankLogo from '../../images/icons/BankLogo.svg'
@@ -136,6 +137,33 @@ function DashboardPage() {
                 />
               </Grid>
             </Grid>
+            <Box
+              component="main"
+              sx={{
+                backgroundColor: '#F6F8FB',
+                flexGrow: 1,
+                height: '100vh',
+                overflow: 'auto',
+              }}
+            >
+              <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                <Grid container spacing={3}>
+                  {/* Recent Orders */}
+                  <Grid item xs={12}>
+                    <Paper
+                      sx={{
+                        p: 0,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        boxShadow: 3,
+                      }}
+                    >
+                      <AppointmentsList />
+                    </Paper>
+                  </Grid>
+                </Grid>
+              </Container>
+            </Box>
           </Container>
         </Box>
       </Box>
