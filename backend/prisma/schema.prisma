@@ -48,13 +48,16 @@ model Patient {
 // A hospital bill has one patient, date, amount, and status
 
 model HospitalBill {
-  id          Int          @id @default(autoincrement())
-  patientId   Int          @map("patient_id")
-  date        DateTime
-  amount      Float
-  status      BillStatus   @default(UNPAID)
-  patient     Patient      @relation(fields: [patientId], references: [id])
-  appointment Appointment?
+  id           Int           @id @default(autoincrement())
+  medStaffId   Int?          @map("med_staff_id")
+  patientId    Int           @map("patient_id")
+  date         DateTime
+  deadlineDate DateTime?
+  amount       Float
+  status       BillStatus    @default(UNPAID)
+  patient      Patient       @relation(fields: [patientId], references: [id])
+  medStaff     MedicalStaff? @relation(fields: [medStaffId], references: [id])
+  appointment  Appointment?
 
   @@map("hospital_bills")
 }
@@ -63,12 +66,14 @@ model HospitalBill {
 // A medical recordhas an id, patient_id, date, diagnosis, and prescription
 
 model MedicalRecord {
-  id           Int      @id @default(autoincrement())
-  patientId    Int      @map("patient_id")
+  id           Int           @id @default(autoincrement())
+  medStaffId   Int?          @map("med_staff_id")
+  patientId    Int           @map("patient_id")
   date         DateTime
   diagnosis    String
   prescription String
-  patient      Patient  @relation(fields: [patientId], references: [id])
+  patient      Patient       @relation(fields: [patientId], references: [id])
+  medStaff     MedicalStaff? @relation(fields: [medStaffId], references: [id])
 
   @@map("medical_records")
 }
@@ -83,6 +88,7 @@ model Appointment {
   hospitalBillId Int?              @unique @map("hospital_bill_id")
   medStaffId     Int               @map("med_staff_id")
   date           DateTime
+  note           String?
   visitType      VisitType         @map("visit_type")
   status         AppointmentStatus
   medStaff       MedicalStaff      @relation(fields: [medStaffId], references: [id])
@@ -96,13 +102,15 @@ model Appointment {
 // last name, contact number, and address
 
 model MedicalStaff {
-  id           Int           @id @default(autoincrement())
-  firstName    String        @map("first_name")
-  lastName     String        @map("last_name")
-  contactNum   String        @map("contact_num")
-  address      String
-  appointments Appointment[]
-  schedules    Schedule[]
+  id             Int             @id @default(autoincrement())
+  firstName      String          @map("first_name")
+  lastName       String          @map("last_name")
+  contactNum     String          @map("contact_num")
+  address        String
+  appointments   Appointment[]
+  schedules      Schedule[]
+  medicalRecords MedicalRecord[]
+  hospitalBills  HospitalBill[]
 
   @@map("medical_staffs")
 }

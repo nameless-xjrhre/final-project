@@ -45,6 +45,7 @@ test('should create an appointment by linking existing patient and medical staff
   const expectedAppointment: Appointment = {
     id: 1,
     date: new Date('2020-01-01'),
+    note: 'Rest More',
     visitType: 'ROUTINE',
     status: 'PENDING',
     medStaffId: 1,

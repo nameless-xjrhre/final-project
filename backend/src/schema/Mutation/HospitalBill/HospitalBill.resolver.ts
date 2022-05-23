@@ -11,6 +11,8 @@ export function createHospitalBill(
 ) {
   return ctx.prisma.hospitalBill.create({
     data: {
+      medStaffId: hospitalBill.medStaffId,
+      deadlineDate: hospitalBill.deadlineDate,
       amount: hospitalBill.amount,
       status: hospitalBill.status,
       date: hospitalBill.date,
@@ -29,6 +31,7 @@ export function editHospitalBill(
       id: hospitalId,
     },
     data: {
+      deadlineDate: hospitalBill.deadlineDate,
       date: hospitalBill.date,
       status: hospitalBill.status ?? undefined,
       amount: hospitalBill.amount ?? undefined,

@@ -37,6 +37,7 @@ export interface NexusGenInputs {
   CreateAppointmentInput: {
     // input type
     date: NexusGenScalars['DateTime'] // DateTime!
+    note?: string | null // String
     status: NexusGenEnums['AppointmentStatus'] // AppointmentStatus!
     visitType: NexusGenEnums['VisitType'] // VisitType!
   }
@@ -44,6 +45,8 @@ export interface NexusGenInputs {
     // input type
     amount: number // Float!
     date: NexusGenScalars['DateTime'] // DateTime!
+    deadlineDate?: NexusGenScalars['DateTime'] | null // DateTime
+    medStaffId?: number | null // Int
     patientId: number // Int!
     status: NexusGenEnums['BillStatus'] // BillStatus!
   }
@@ -51,6 +54,7 @@ export interface NexusGenInputs {
     // input type
     date: NexusGenScalars['DateTime'] // DateTime!
     diagnosis: string // String!
+    medStaffId?: number | null // Int
     patientId: number // Int!
     prescription: string // String!
   }
@@ -85,6 +89,7 @@ export interface NexusGenInputs {
   EditAppointmentInput: {
     // input type
     date?: NexusGenScalars['DateTime'] | null // DateTime
+    note?: string | null // String
     status?: NexusGenEnums['AppointmentStatus'] | null // AppointmentStatus
     visitType?: NexusGenEnums['VisitType'] | null // VisitType
   }
@@ -92,6 +97,7 @@ export interface NexusGenInputs {
     // input type
     amount?: number | null // Int
     date?: NexusGenScalars['DateTime'] | null // DateTime
+    deadlineDate?: NexusGenScalars['DateTime'] | null // DateTime
     status?: NexusGenEnums['BillStatus'] | null // BillStatus
   }
   EditPatientInput: {
@@ -129,6 +135,7 @@ export interface NexusGenObjects {
     // root type
     date: NexusGenScalars['DateTime'] // DateTime!
     id: number // Int!
+    note?: string | null // String
     status?: NexusGenEnums['AppointmentStatus'] | null // AppointmentStatus
     visitType?: NexusGenEnums['VisitType'] | null // VisitType
   }
@@ -136,6 +143,7 @@ export interface NexusGenObjects {
     // root type
     amount: number // Float!
     date: NexusGenScalars['DateTime'] // DateTime!
+    deadlineDate?: NexusGenScalars['DateTime'] | null // DateTime
     id: number // Int!
     patientId: number // Int!
     status: NexusGenEnums['BillStatus'] // BillStatus!
@@ -200,6 +208,7 @@ export interface NexusGenFieldTypes {
     hospitalBill: NexusGenRootTypes['HospitalBill'] | null // HospitalBill
     id: number // Int!
     medStaff: NexusGenRootTypes['MedicalStaff'] | null // MedicalStaff
+    note: string | null // String
     patient: NexusGenRootTypes['Patient'] | null // Patient
     status: NexusGenEnums['AppointmentStatus'] | null // AppointmentStatus
     visitType: NexusGenEnums['VisitType'] | null // VisitType
@@ -208,7 +217,9 @@ export interface NexusGenFieldTypes {
     // field return type
     amount: number // Float!
     date: NexusGenScalars['DateTime'] // DateTime!
+    deadlineDate: NexusGenScalars['DateTime'] | null // DateTime
     id: number // Int!
+    medStaff: NexusGenRootTypes['MedicalStaff'] | null // MedicalStaff
     patient: NexusGenRootTypes['Patient'] | null // Patient
     patientId: number // Int!
     status: NexusGenEnums['BillStatus'] // BillStatus!
@@ -218,6 +229,7 @@ export interface NexusGenFieldTypes {
     date: NexusGenScalars['DateTime'] // DateTime!
     diagnosis: string // String!
     id: number // Int!
+    medStaff: NexusGenRootTypes['MedicalStaff'] | null // MedicalStaff
     patient: NexusGenRootTypes['Patient'] | null // Patient
     prescription: string // String!
   }
@@ -227,8 +239,10 @@ export interface NexusGenFieldTypes {
     contactNum: string // String!
     firstName: string // String!
     fullName: string | null // String
+    hospitalBills: Array<NexusGenRootTypes['HospitalBill'] | null> | null // [HospitalBill]
     id: number // Int!
     lastName: string // String!
+    medicalRecords: Array<NexusGenRootTypes['MedicalRecord'] | null> | null // [MedicalRecord]
     schedules: Array<NexusGenRootTypes['Schedule'] | null> | null // [Schedule]
   }
   Mutation: {
@@ -296,6 +310,7 @@ export interface NexusGenFieldTypeNames {
     hospitalBill: 'HospitalBill'
     id: 'Int'
     medStaff: 'MedicalStaff'
+    note: 'String'
     patient: 'Patient'
     status: 'AppointmentStatus'
     visitType: 'VisitType'
@@ -304,7 +319,9 @@ export interface NexusGenFieldTypeNames {
     // field return type name
     amount: 'Float'
     date: 'DateTime'
+    deadlineDate: 'DateTime'
     id: 'Int'
+    medStaff: 'MedicalStaff'
     patient: 'Patient'
     patientId: 'Int'
     status: 'BillStatus'
@@ -314,6 +331,7 @@ export interface NexusGenFieldTypeNames {
     date: 'DateTime'
     diagnosis: 'String'
     id: 'Int'
+    medStaff: 'MedicalStaff'
     patient: 'Patient'
     prescription: 'String'
   }
@@ -323,8 +341,10 @@ export interface NexusGenFieldTypeNames {
     contactNum: 'String'
     firstName: 'String'
     fullName: 'String'
+    hospitalBills: 'HospitalBill'
     id: 'Int'
     lastName: 'String'
+    medicalRecords: 'MedicalRecord'
     schedules: 'Schedule'
   }
   Mutation: {
