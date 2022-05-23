@@ -10,11 +10,24 @@ const MedicalRecord = objectType({
     t.field('patient', {
       type: 'Patient',
       resolve: (parent, _args, context) =>
-        context.prisma.patient.findFirst({
-          where: {
-            id: parent.id,
-          },
-        }),
+        context.prisma.medicalRecord
+          .findUnique({
+            where: {
+              id: parent.id,
+            },
+          })
+          .patient(),
+    })
+    t.field('medStaff', {
+      type: 'MedicalStaff',
+      resolve: (parent, _args, context) =>
+        context.prisma.medicalRecord
+          .findUnique({
+            where: {
+              id: parent.id,
+            },
+          })
+          .medStaff(),
     })
     t.field(gqlTypes.MedicalRecord.prescription)
   },

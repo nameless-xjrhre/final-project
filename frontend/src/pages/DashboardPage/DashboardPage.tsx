@@ -23,29 +23,29 @@ import PatientLogo from '../../images/icons/PatientLogo.svg'
 interface DetailCardProps {
   logo: string
   title: string
-  amount: number
+  amount: string
 }
 
 const detailCards: DetailCardProps[] = [
   {
     logo: AppointmentLogo,
     title: 'Appointments',
-    amount: 10,
+    amount: '213',
   },
   {
     logo: PatientLogo,
-    title: 'Patients',
-    amount: 10,
+    title: 'New Patients',
+    amount: '104',
   },
   {
     logo: OperationsLogo,
     title: 'Operations',
-    amount: 10,
+    amount: '24',
   },
   {
     logo: BankLogo,
-    title: 'Banks',
-    amount: 10,
+    title: 'Earnings',
+    amount: '₱ 12,174',
   },
 ]
 

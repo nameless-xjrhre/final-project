@@ -7,6 +7,7 @@ const HospitalBill = objectType({
   definition(t) {
     t.field(gqlTypes.HospitalBill.id)
     t.field(gqlTypes.HospitalBill.date)
+    t.field(gqlTypes.HospitalBill.deadlineDate)
     t.field(gqlTypes.HospitalBill.amount)
     t.field(gqlTypes.HospitalBill.patientId)
     t.nonNull.field('status', {
@@ -22,6 +23,17 @@ const HospitalBill = objectType({
             },
           })
           .patient(),
+    })
+    t.field('medStaff', {
+      type: 'MedicalStaff',
+      resolve: (parent, _args, context) =>
+        context.prisma.hospitalBill
+          .findUnique({
+            where: {
+              id: parent.id,
+            },
+          })
+          .medStaff(),
     })
   },
 })

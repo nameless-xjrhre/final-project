@@ -5,7 +5,7 @@ import DetailCard from './DetailCard'
 interface DetailCardProps {
   logo: string
   title: string
-  amount: number
+  amount: string
 }
 
 interface DetailsProps {
