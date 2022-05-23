@@ -30,17 +30,20 @@ interface CreateAppointmentFormProps {
   control: Control<FieldValues, any>
   register: UseFormRegister<FieldValues>
   errors: FieldValues
+  days: string[]
+  setDays: React.Dispatch<React.SetStateAction<string[]>>
 }
 
 export default function ScheduleForm({
   control,
   register,
   errors,
+  days,
+  setDays,
 }: CreateAppointmentFormProps) {
   const [medicalStaff] = useQuery<MedicalStaffQueryData>({
     query: medicalStaffQueryDocument,
   })
-  const [days, setDays] = React.useState<string[]>([])
   return (
     <>
       <Grid container mt={2}>

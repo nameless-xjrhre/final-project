@@ -16,8 +16,8 @@ import CustomForm from '../CustomForm'
 import CustomFormProps from '../CustomFormProps'
 import ScheduleForm from './ScheduleForm'
 import {
-  MutationCreateScheduleArgs,
   ScheduleStatus,
+  MutationCreateSchedulesArgs,
 } from '../../graphql/generated'
 import { showFailAlert, showSuccessAlert } from '../../utils'
 
@@ -27,37 +27,61 @@ const scheduleSchema = object().shape({
   endTime: string().nullable().required('Select end time.'),
 })
 
-const CreateSchedule = gql`
-  mutation CreateSchedule($data: CreateScheduleInput!) {
-    createSchedule(data: $data) {
+const CreateSchedules = gql`
+  mutation CreateSchedules($data: [CreateScheduleInput!]!) {
+    createSchedules(data: $data) {
       id
+      status
       startTime
       endTime
-      medStaff {
-        id
-      }
-      status
     }
   }
 `
 
-const getDate = (time: string) => {
-  const hour = parseInt(time.split(':')[0], 10)
-  const min = parseInt(time.split(':')[1], 10)
-  const today = new Date()
+const getDayIndex = (day: string) => {
+  switch (day) {
+    case 'M':
+      return 0
+    case 'T':
+      return 1
+    case 'W':
+      return 2
+    case 'Th':
+      return 3
+    case 'F':
+      return 4
+    case 'Sa':
+      return 5
+    case 'Su':
+      return 6
+    default:
+      return 0
+  }
+}
 
-  return new Date(today.setHours(hour, min))
+const getDate = (time: string, day: string) => {
+  const date = new Date(time)
+  const dayIndex = getDayIndex(day)
+  return new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate() + dayIndex,
+    date.getHours(),
+    date.getMinutes(),
+    date.getSeconds(),
+  ).toISOString()
 }
 
 export default function CreateScheduleForm({
   open,
   handleClose,
 }: CustomFormProps) {
-  const [, createSchedule] = useMutation(CreateSchedule)
+  const [, createSchedules] = useMutation(CreateSchedules)
   const [complete, setComplete] = React.useState(false)
   const [isSubmitting, setIsSubmitting] = React.useState(false)
   const handleComplete = () => setComplete(true)
   const handleSubmitting = () => setIsSubmitting(true)
+  const [days, setDays] = React.useState<string[]>([])
 
   const buttonSx = {
     ...(complete && {
@@ -81,17 +105,20 @@ export default function CreateScheduleForm({
   })
 
   const handleCreateSchedule = handleSubmit((data) => {
-    const input: MutationCreateScheduleArgs = {
-      data: {
-        medStaffId: parseInt(data.medicalStaff, 10),
-        status: ScheduleStatus.Open,
-        startTime: getDate(data.startTime),
-        endTime: getDate(data.endTime),
-      },
+    const dateInputs = days.map((day) => ({
+      medStaffId: parseInt(data.medicalStaff, 10),
+      status: ScheduleStatus.Open,
+      startTime: getDate(data.startTime, day),
+      endTime: getDate(data.endTime, day),
+    }))
+    const inputs: MutationCreateSchedulesArgs = {
+      data: dateInputs,
     }
 
+    console.log(inputs)
+
     handleSubmitting()
-    createSchedule(input)
+    createSchedules(inputs)
       .then((result) => {
         if (result.error) {
           handleClose(handleComplete)
@@ -128,7 +155,13 @@ export default function CreateScheduleForm({
         </IconButton>
       </Grid>
       <Divider />
-      <ScheduleForm control={control} register={register} errors={errors} />
+      <ScheduleForm
+        control={control}
+        register={register}
+        errors={errors}
+        setDays={setDays}
+        days={days}
+      />
       <Button
         onClick={(e) => handleSubmitForm(e)}
         disabled={isSubmitting}

@@ -105,30 +105,41 @@ export default function AppointmentList() {
   const { data, fetching, error } = appointment
   if (fetching)
     return (
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Patient</StyledTableCell>
-            <StyledTableCell>Visit Type</StyledTableCell>
-            <StyledTableCell>Date</StyledTableCell>
-            <StyledTableCell>Visit Time</StyledTableCell>
-            <StyledTableCell>Doctor</StyledTableCell>
-            <StyledTableCell>Status</StyledTableCell>
-            <StyledTableCell align="right" />
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {Array.from({ length: 5 }).map((_, i) => (
-            <TableRow key={i}>
-              {Array.from({ length: 7 }).map((__, j) => (
-                <StyledTableCell key={j}>
-                  <Skeleton variant="text" />
-                </StyledTableCell>
-              ))}
+      <>
+        <Typography
+          sx={{ flex: '1 1 100%', mt: 3, mb: 3, ml: 2, fontSize: 25 }}
+          variant="h6"
+          id="tableTitle"
+          component="div"
+          fontWeight="bold"
+        >
+          Appointment Activity
+        </Typography>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Patient</StyledTableCell>
+              <StyledTableCell>Visit Type</StyledTableCell>
+              <StyledTableCell>Date</StyledTableCell>
+              <StyledTableCell>Visit Time</StyledTableCell>
+              <StyledTableCell>Doctor</StyledTableCell>
+              <StyledTableCell>Status</StyledTableCell>
+              <StyledTableCell align="right" />
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <TableRow key={i}>
+                {Array.from({ length: 7 }).map((__, j) => (
+                  <StyledTableCell key={j}>
+                    <Skeleton variant="text" />
+                  </StyledTableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </>
     )
   if (error) return <p>Oh no... {error.message}</p>
   return (
