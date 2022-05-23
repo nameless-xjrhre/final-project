@@ -20,7 +20,12 @@ interface Bill {
   date: Date
   amount: number
   status: BillStatus
+  deadlineDate: Date
   patient: {
+    id: number
+    fullName: string
+  }
+  medStaff: {
     id: number
     fullName: string
   }
@@ -37,7 +42,12 @@ const billQueryDocument = gql`
       date
       amount
       status
+      deadlineDate
       patient {
+        id
+        fullName
+      }
+      medStaff {
         id
         fullName
       }
@@ -87,6 +97,7 @@ export default function BillsList() {
             <StyledTableCell>Payment Date</StyledTableCell>
             <StyledTableCell>Amount</StyledTableCell>
             <StyledTableCell>Doctor</StyledTableCell>
+            <StyledTableCell>Due Date</StyledTableCell>
             <StyledTableCell>Status</StyledTableCell>
             <StyledTableCell align="right" />
           </TableRow>
@@ -114,6 +125,7 @@ export default function BillsList() {
             <StyledTableCell>Payment Date</StyledTableCell>
             <StyledTableCell>Amount</StyledTableCell>
             <StyledTableCell>Doctor</StyledTableCell>
+            <StyledTableCell>Due Date</StyledTableCell>
             <StyledTableCell>Status</StyledTableCell>
             <StyledTableCell align="right" />
           </TableRow>
@@ -131,7 +143,10 @@ export default function BillsList() {
                 <StyledTableCell>
                   <strong>₱ {bill.amount.toFixed(2)}</strong>
                 </StyledTableCell>
-                <StyledTableCell>Dr. Cruz</StyledTableCell>
+                <StyledTableCell>{bill.medStaff.fullName}</StyledTableCell>
+                <StyledTableCell>
+                  {new Date(bill.deadlineDate).toLocaleDateString('en-ZA')}
+                </StyledTableCell>
                 <StyledTableCell>{bill.status}</StyledTableCell>
                 <StyledTableCell align="right">
                   <Button
