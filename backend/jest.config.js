@@ -10,6 +10,7 @@ module.exports = {
     '^.+\\.(t|j)sx?$': ['@swc/jest'],
   },
   testEnvironment: 'node',
-  testPathIgnorePatterns: ['src/tests/unit', 'src/schema', dist],
+  testPathIgnorePatterns: ['dist'],
+  testMatch: ['<rootDir>/src/tests/integration/**/*.test.ts'],
   testTimeout: 30000,
 }

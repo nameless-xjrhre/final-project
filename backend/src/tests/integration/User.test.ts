@@ -16,7 +16,7 @@ const createUserFn = (userDetails: UserDetails) => {
   return ctx.client.request(
     gql`
       mutation ($username: String!, $password: String!) {
-        createUser(username: $username, password: $password) {
+        createUser(data: { username: $username, password: $password }) {
           userType
           username
           password
@@ -33,13 +33,13 @@ const createUserFn = (userDetails: UserDetails) => {
 it('creates a user', async () => {
   const createUser = await createUserFn({
     username: 'user1',
-    password: 'password1',
+    password: 'Password1',
   })
 
   expect(createUser).toMatchInlineSnapshot(`
     Object {
       "createUser": Object {
-        "password": "password1",
+        "password": "Password1",
         "userType": "USER",
         "username": "user1",
       },
@@ -50,12 +50,12 @@ it('creates a user', async () => {
 it('queries all all the users', async () => {
   await createUserFn({
     username: 'user1',
-    password: 'password1',
+    password: 'Password1',
   })
 
   await createUserFn({
     username: 'user2',
-    password: 'password2',
+    password: 'Password2',
   })
 
   const allUsers = await ctx.client.request(
@@ -74,12 +74,12 @@ it('queries all all the users', async () => {
     Object {
       "users": Array [
         Object {
-          "password": "password1",
+          "password": "Password1",
           "userType": "USER",
           "username": "user1",
         },
         Object {
-          "password": "password2",
+          "password": "Password2",
           "userType": "USER",
           "username": "user2",
         },
