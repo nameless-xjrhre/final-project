@@ -78,6 +78,7 @@ export default function DoctorsScheduler() {
   })
 
   const { data, fetching, error } = medicalStaffs
+  console.log(data)
   if (fetching)
     return (
       <div className="scheduler">
