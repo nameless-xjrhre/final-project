@@ -19,6 +19,11 @@ export const OrderType = enumType({
   ],
   description: 'Ordering type based on mathematical comparison',
 })
+export const PeriodType = enumType({
+  name: 'PeriodType',
+  members: ['DAY', 'WEEK', 'MONTH', 'YEAR'],
+  description: 'Period type based on time period',
+})
 
 export default [
   SexType,
@@ -28,4 +33,5 @@ export default [
   BillStatusType,
   OrderType,
   ScheduleStatusType,
+  PeriodType,
 ]

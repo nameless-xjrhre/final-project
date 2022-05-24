@@ -1,5 +1,7 @@
 import { objectType } from 'nexus'
 import PatientQueries from './Patient.query'
+import AppointmentQueries from './Appointment.query'
+import HospitalBillQueries from './HospitalBill.query'
 
 const Query = objectType({
   name: 'Query',
@@ -39,4 +41,9 @@ const Query = objectType({
   },
 })
 
-export default [Query, ...PatientQueries]
+export default [
+  Query,
+  ...PatientQueries,
+  ...AppointmentQueries,
+  ...HospitalBillQueries,
+]

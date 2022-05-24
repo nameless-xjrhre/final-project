@@ -155,6 +155,7 @@ type Mutation {
   createSchedule(data: CreateScheduleInput!): Schedule
   createSchedules(data: [CreateScheduleInput!]!): [Schedule]
   createUser(data: CreateUserInput!): User
+  deleteAppointment(id: Int!): Appointment
   deletePatient(id: Int!): Patient
   deleteSchedule(id: Int!): Schedule
   editAppointment(data: EditAppointmentInput!, id: Int!): Appointment
@@ -186,6 +187,12 @@ type Query {
   patient(id: Int!): Patient
   patients: [Patient!]!
   schedules: [Schedule!]!
+  totalAppointments: Int
+  totalBill: Float
+  totalBillPaid: Float
+  totalBillUnpaid: Float
+  totalDoneAppointments: Int
+  totalPatients: Int
   users: [User!]!
 }
 
