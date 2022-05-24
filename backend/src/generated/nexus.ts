@@ -79,7 +79,7 @@ export interface NexusGenInputs {
     endTime: NexusGenScalars['DateTime'] // DateTime!
     medStaffId: number // Int!
     startTime: NexusGenScalars['DateTime'] // DateTime!
-    status?: NexusGenEnums['ScheduleStatus'] | null // ScheduleStatus
+    status: NexusGenEnums['ScheduleStatus'] // ScheduleStatus!
   }
   CreateUserInput: {
     // input type
@@ -109,6 +109,13 @@ export interface NexusGenInputs {
     id?: number | null // Int
     lastName?: string | null // String
     sex?: NexusGenEnums['Sex'] | null // Sex
+  }
+  EditScheduleInput: {
+    // input type
+    endTime?: NexusGenScalars['DateTime'] | null // DateTime
+    medStaffId?: number | null // Int
+    startTime?: NexusGenScalars['DateTime'] | null // DateTime
+    status?: NexusGenEnums['ScheduleStatus'] | null // ScheduleStatus
   }
 }
 
@@ -254,11 +261,14 @@ export interface NexusGenFieldTypes {
     createMedicalStaff: NexusGenRootTypes['MedicalStaff'] | null // MedicalStaff
     createPatient: NexusGenRootTypes['Patient'] | null // Patient
     createSchedule: NexusGenRootTypes['Schedule'] | null // Schedule
+    createSchedules: Array<NexusGenRootTypes['Schedule'] | null> | null // [Schedule]
     createUser: NexusGenRootTypes['User'] | null // User
     deletePatient: NexusGenRootTypes['Patient'] | null // Patient
+    deleteSchedule: NexusGenRootTypes['Schedule'] | null // Schedule
     editAppointment: NexusGenRootTypes['Appointment'] | null // Appointment
     editHospitalBill: NexusGenRootTypes['HospitalBill'] | null // HospitalBill
     editPatient: NexusGenRootTypes['Patient'] | null // Patient
+    editSchedule: NexusGenRootTypes['Schedule'] | null // Schedule
   }
   Patient: {
     // field return type
@@ -356,11 +366,14 @@ export interface NexusGenFieldTypeNames {
     createMedicalStaff: 'MedicalStaff'
     createPatient: 'Patient'
     createSchedule: 'Schedule'
+    createSchedules: 'Schedule'
     createUser: 'User'
     deletePatient: 'Patient'
+    deleteSchedule: 'Schedule'
     editAppointment: 'Appointment'
     editHospitalBill: 'HospitalBill'
     editPatient: 'Patient'
+    editSchedule: 'Schedule'
   }
   Patient: {
     // field return type name
@@ -439,11 +452,19 @@ export interface NexusGenArgTypes {
       // args
       data: NexusGenInputs['CreateScheduleInput'] // CreateScheduleInput!
     }
+    createSchedules: {
+      // args
+      data: NexusGenInputs['CreateScheduleInput'][] // [CreateScheduleInput!]!
+    }
     createUser: {
       // args
       data: NexusGenInputs['CreateUserInput'] // CreateUserInput!
     }
     deletePatient: {
+      // args
+      id: number // Int!
+    }
+    deleteSchedule: {
       // args
       id: number // Int!
     }
@@ -460,6 +481,11 @@ export interface NexusGenArgTypes {
     editPatient: {
       // args
       data: NexusGenInputs['EditPatientInput'] // EditPatientInput!
+      id: number // Int!
+    }
+    editSchedule: {
+      // args
+      data: NexusGenInputs['EditScheduleInput'] // EditScheduleInput!
       id: number // Int!
     }
   }

@@ -29,6 +29,7 @@ export type Appointment = {
   hospitalBill?: Maybe<HospitalBill>
   id: Scalars['Int']
   medStaff?: Maybe<MedicalStaff>
+  note?: Maybe<Scalars['String']>
   patient?: Maybe<Patient>
   status?: Maybe<AppointmentStatus>
   visitType?: Maybe<VisitType>
@@ -48,6 +49,7 @@ export enum BillStatus {
 
 export type CreateAppointmentInput = {
   date: Scalars['DateTime']
+  note?: InputMaybe<Scalars['String']>
   status: AppointmentStatus
   visitType: VisitType
 }
@@ -55,6 +57,8 @@ export type CreateAppointmentInput = {
 export type CreateHospitalBillInput = {
   amount: Scalars['Float']
   date: Scalars['DateTime']
+  deadlineDate?: InputMaybe<Scalars['DateTime']>
+  medStaffId?: InputMaybe<Scalars['Int']>
   patientId: Scalars['Int']
   status: BillStatus
 }
@@ -62,6 +66,7 @@ export type CreateHospitalBillInput = {
 export type CreateMedicalRecordInput = {
   date: Scalars['DateTime']
   diagnosis: Scalars['String']
+  medStaffId?: InputMaybe<Scalars['Int']>
   patientId: Scalars['Int']
   prescription: Scalars['String']
 }
@@ -86,7 +91,7 @@ export type CreateScheduleInput = {
   endTime: Scalars['DateTime']
   medStaffId: Scalars['Int']
   startTime: Scalars['DateTime']
-  status?: InputMaybe<ScheduleStatus>
+  status: ScheduleStatus
 }
 
 export type CreateUserInput = {
@@ -96,6 +101,7 @@ export type CreateUserInput = {
 
 export type EditAppointmentInput = {
   date?: InputMaybe<Scalars['DateTime']>
+  note?: InputMaybe<Scalars['String']>
   status?: InputMaybe<AppointmentStatus>
   visitType?: InputMaybe<VisitType>
 }
@@ -103,6 +109,7 @@ export type EditAppointmentInput = {
 export type EditHospitalBillInput = {
   amount?: InputMaybe<Scalars['Int']>
   date?: InputMaybe<Scalars['DateTime']>
+  deadlineDate?: InputMaybe<Scalars['DateTime']>
   status?: InputMaybe<BillStatus>
 }
 
@@ -116,13 +123,23 @@ export type EditPatientInput = {
   sex?: InputMaybe<Sex>
 }
 
+export type EditScheduleInput = {
+  endTime?: InputMaybe<Scalars['DateTime']>
+  medStaffId?: InputMaybe<Scalars['Int']>
+  startTime?: InputMaybe<Scalars['DateTime']>
+  status?: InputMaybe<ScheduleStatus>
+}
+
 export type HospitalBill = {
   __typename?: 'HospitalBill'
   amount: Scalars['Float']
   date: Scalars['DateTime']
+  deadlineDate?: Maybe<Scalars['DateTime']>
   id: Scalars['Int']
+  medStaff?: Maybe<MedicalStaff>
   patient?: Maybe<Patient>
-  status?: Maybe<BillStatus>
+  patientId: Scalars['Int']
+  status: BillStatus
 }
 
 export type MedicalRecord = {
@@ -130,6 +147,7 @@ export type MedicalRecord = {
   date: Scalars['DateTime']
   diagnosis: Scalars['String']
   id: Scalars['Int']
+  medStaff?: Maybe<MedicalStaff>
   patient?: Maybe<Patient>
   prescription: Scalars['String']
 }
@@ -140,8 +158,10 @@ export type MedicalStaff = {
   contactNum: Scalars['String']
   firstName: Scalars['String']
   fullName?: Maybe<Scalars['String']>
+  hospitalBills?: Maybe<Array<Maybe<HospitalBill>>>
   id: Scalars['Int']
   lastName: Scalars['String']
+  medicalRecords?: Maybe<Array<Maybe<MedicalRecord>>>
   schedules?: Maybe<Array<Maybe<Schedule>>>
 }
 
@@ -154,11 +174,14 @@ export type Mutation = {
   createMedicalStaff?: Maybe<MedicalStaff>
   createPatient?: Maybe<Patient>
   createSchedule?: Maybe<Schedule>
+  createSchedules?: Maybe<Array<Maybe<Schedule>>>
   createUser?: Maybe<User>
   deletePatient?: Maybe<Patient>
+  deleteSchedule?: Maybe<Schedule>
   editAppointment?: Maybe<Appointment>
   editHospitalBill?: Maybe<HospitalBill>
   editPatient?: Maybe<Patient>
+  editSchedule?: Maybe<Schedule>
 }
 
 export type MutationCreateAppointmentArgs = {
@@ -193,11 +216,19 @@ export type MutationCreateScheduleArgs = {
   data: CreateScheduleInput
 }
 
+export type MutationCreateSchedulesArgs = {
+  data: Array<CreateScheduleInput>
+}
+
 export type MutationCreateUserArgs = {
   data: CreateUserInput
 }
 
 export type MutationDeletePatientArgs = {
+  id: Scalars['Int']
+}
+
+export type MutationDeleteScheduleArgs = {
   id: Scalars['Int']
 }
 
@@ -213,6 +244,11 @@ export type MutationEditHospitalBillArgs = {
 
 export type MutationEditPatientArgs = {
   data: EditPatientInput
+  id: Scalars['Int']
+}
+
+export type MutationEditScheduleArgs = {
+  data: EditScheduleInput
   id: Scalars['Int']
 }
 
@@ -288,6 +324,51 @@ export enum VisitType {
   Urgent = 'URGENT',
 }
 
+export type CreateAppointmentMutationVariables = Exact<{
+  data: CreateAppointmentInput
+  medStaffId: Scalars['Int']
+  patientId: Scalars['Int']
+}>
+
+export type CreateAppointmentMutation = {
+  __typename?: 'Mutation'
+  createAppointment?: {
+    __typename?: 'Appointment'
+    id: number
+    date: any
+    visitType?: VisitType | null
+    patient?: { __typename?: 'Patient'; id: number } | null
+    medStaff?: { __typename?: 'MedicalStaff'; id: number } | null
+  } | null
+}
+
+export type CreateAppointmentWithPatientMutationVariables = Exact<{
+  appointment: CreateAppointmentInput
+  patient: CreatePatientInput
+  medStaffId: Scalars['Int']
+}>
+
+export type CreateAppointmentWithPatientMutation = {
+  __typename?: 'Mutation'
+  createAppointmentWithPatient?: {
+    __typename?: 'Appointment'
+    id: number
+    date: any
+    visitType?: VisitType | null
+    status?: AppointmentStatus | null
+    patient?: {
+      __typename?: 'Patient'
+      firstName: string
+      lastName: string
+      sex: Sex
+      dateOfBirth: any
+      contactNum: string
+      address: string
+    } | null
+    medStaff?: { __typename?: 'MedicalStaff'; id: number } | null
+  } | null
+}
+
 export type MedicalStaffQueryQueryVariables = Exact<{ [key: string]: never }>
 
 export type MedicalStaffQueryQuery = {
@@ -309,9 +390,75 @@ export type AppointmentQueryQuery = {
     visitType?: VisitType | null
     date: any
     status?: AppointmentStatus | null
-    patient?: { __typename?: 'Patient'; fullName?: string | null } | null
-    medStaff?: { __typename?: 'MedicalStaff'; fullName?: string | null } | null
+    patient?: {
+      __typename?: 'Patient'
+      id: number
+      fullName?: string | null
+    } | null
+    medStaff?: {
+      __typename?: 'MedicalStaff'
+      id: number
+      fullName?: string | null
+    } | null
   }>
+}
+
+export type CreateBillMutationVariables = Exact<{
+  data: CreateHospitalBillInput
+}>
+
+export type CreateBillMutation = {
+  __typename?: 'Mutation'
+  createHospitalBill?: {
+    __typename?: 'HospitalBill'
+    id: number
+    date: any
+    amount: number
+    status: BillStatus
+    deadlineDate?: any | null
+    patient?: { __typename?: 'Patient'; id: number } | null
+    medStaff?: { __typename?: 'MedicalStaff'; id: number } | null
+  } | null
+}
+
+export type Unnamed_1_QueryVariables = Exact<{ [key: string]: never }>
+
+export type Unnamed_1_Query = {
+  __typename?: 'Query'
+  hospitalBills: Array<{
+    __typename?: 'HospitalBill'
+    id: number
+    date: any
+    amount: number
+    status: BillStatus
+    deadlineDate?: any | null
+    patient?: {
+      __typename?: 'Patient'
+      id: number
+      fullName?: string | null
+    } | null
+    medStaff?: {
+      __typename?: 'MedicalStaff'
+      id: number
+      fullName?: string | null
+    } | null
+  }>
+}
+
+export type CreateMedicalStaffMutationVariables = Exact<{
+  data: CreateMedicalStaffInput
+}>
+
+export type CreateMedicalStaffMutation = {
+  __typename?: 'Mutation'
+  createMedicalStaff?: {
+    __typename?: 'MedicalStaff'
+    id: number
+    firstName: string
+    lastName: string
+    contactNum: string
+    address: string
+  } | null
 }
 
 export type MedicalStaffsQueryQueryVariables = Exact<{ [key: string]: never }>
@@ -353,6 +500,87 @@ export type PatientQueryQuery = {
   }>
 }
 
+export type CreateSchedulesMutationVariables = Exact<{
+  data: Array<CreateScheduleInput> | CreateScheduleInput
+}>
+
+export type CreateSchedulesMutation = {
+  __typename?: 'Mutation'
+  createSchedules?: Array<{
+    __typename?: 'Schedule'
+    id: number
+    status?: ScheduleStatus | null
+    startTime: any
+    endTime: any
+  } | null> | null
+}
+
+export const CreateAppointmentDocument = gql`
+  mutation CreateAppointment(
+    $data: CreateAppointmentInput!
+    $medStaffId: Int!
+    $patientId: Int!
+  ) {
+    createAppointment(
+      data: $data
+      medStaffId: $medStaffId
+      patientId: $patientId
+    ) {
+      id
+      date
+      visitType
+      patient {
+        id
+      }
+      medStaff {
+        id
+      }
+    }
+  }
+`
+
+export function useCreateAppointmentMutation() {
+  return Urql.useMutation<
+    CreateAppointmentMutation,
+    CreateAppointmentMutationVariables
+  >(CreateAppointmentDocument)
+}
+export const CreateAppointmentWithPatientDocument = gql`
+  mutation CreateAppointmentWithPatient(
+    $appointment: CreateAppointmentInput!
+    $patient: CreatePatientInput!
+    $medStaffId: Int!
+  ) {
+    createAppointmentWithPatient(
+      appointment: $appointment
+      patient: $patient
+      medStaffId: $medStaffId
+    ) {
+      id
+      date
+      visitType
+      status
+      patient {
+        firstName
+        lastName
+        sex
+        dateOfBirth
+        contactNum
+        address
+      }
+      medStaff {
+        id
+      }
+    }
+  }
+`
+
+export function useCreateAppointmentWithPatientMutation() {
+  return Urql.useMutation<
+    CreateAppointmentWithPatientMutation,
+    CreateAppointmentWithPatientMutationVariables
+  >(CreateAppointmentWithPatientDocument)
+}
 export const MedicalStaffQueryDocument = gql`
   query MedicalStaffQuery {
     medicalStaff {
@@ -370,6 +598,7 @@ export function useMedicalStaffQueryQuery(
     ...options,
   })
 }
+
 export const AppointmentQueryDocument = gql`
   query appointmentQuery {
     appointments {
@@ -378,9 +607,11 @@ export const AppointmentQueryDocument = gql`
       date
       status
       patient {
+        id
         fullName
       }
       medStaff {
+        id
         fullName
       }
     }
@@ -395,28 +626,49 @@ export function useAppointmentQueryQuery(
     ...options,
   })
 }
-export const MedicalStaffsQueryDocument = gql`
-  query medicalStaffsQuery {
-    medicalStaff {
+export const CreateBillDocument = gql`
+  mutation CreateBill($data: CreateHospitalBillInput!) {
+    createHospitalBill(data: $data) {
       id
-      fullName
-      schedules {
-        startTime
-        endTime
-        status
+      date
+      amount
+      status
+      deadlineDate
+      patient {
+        id
+      }
+      medStaff {
+        id
       }
     }
   }
 `
 
-export function useMedicalStaffsQueryQuery(
-  options?: Omit<Urql.UseQueryArgs<MedicalStaffsQueryQueryVariables>, 'query'>,
-) {
-  return Urql.useQuery<MedicalStaffsQueryQuery>({
-    query: MedicalStaffsQueryDocument,
-    ...options,
-  })
+export function useCreateBillMutation() {
+  return Urql.useMutation<CreateBillMutation, CreateBillMutationVariables>(
+    CreateBillDocument,
+  )
 }
+export const Document = gql`
+  {
+    hospitalBills {
+      id
+      date
+      amount
+      status
+      deadlineDate
+      patient {
+        id
+        fullName
+      }
+      medStaff {
+        id
+        fullName
+      }
+    }
+  }
+`
+
 export const PatientQueryDocument = gql`
   query patientQuery {
     patients {
@@ -442,4 +694,21 @@ export function usePatientQueryQuery(
     query: PatientQueryDocument,
     ...options,
   })
+}
+export const CreateSchedulesDocument = gql`
+  mutation CreateSchedules($data: [CreateScheduleInput!]!) {
+    createSchedules(data: $data) {
+      id
+      status
+      startTime
+      endTime
+    }
+  }
+`
+
+export function useCreateSchedulesMutation() {
+  return Urql.useMutation<
+    CreateSchedulesMutation,
+    CreateSchedulesMutationVariables
+  >(CreateSchedulesDocument)
 }

@@ -69,7 +69,7 @@ input CreateScheduleInput {
   endTime: DateTime!
   medStaffId: Int!
   startTime: DateTime!
-  status: ScheduleStatus
+  status: ScheduleStatus!
 }
 
 input CreateUserInput {
@@ -104,6 +104,13 @@ input EditPatientInput {
   id: Int
   lastName: String
   sex: Sex
+}
+
+input EditScheduleInput {
+  endTime: DateTime
+  medStaffId: Int
+  startTime: DateTime
+  status: ScheduleStatus
 }
 
 type HospitalBill {
@@ -146,11 +153,14 @@ type Mutation {
   createMedicalStaff(data: CreateMedicalStaffInput!): MedicalStaff
   createPatient(data: CreatePatientInput!): Patient
   createSchedule(data: CreateScheduleInput!): Schedule
+  createSchedules(data: [CreateScheduleInput!]!): [Schedule]
   createUser(data: CreateUserInput!): User
   deletePatient(id: Int!): Patient
+  deleteSchedule(id: Int!): Schedule
   editAppointment(data: EditAppointmentInput!, id: Int!): Appointment
   editHospitalBill(data: EditHospitalBillInput!, id: Int!): HospitalBill
   editPatient(data: EditPatientInput!, id: Int!): Patient
+  editSchedule(data: EditScheduleInput!, id: Int!): Schedule
 }
 
 type Patient {

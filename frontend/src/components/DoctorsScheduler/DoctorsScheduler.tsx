@@ -13,7 +13,6 @@ import { useQuery, gql } from 'urql'
 import './index.css'
 
 import ScheduleStack from './ScheduleStack'
-import { getDateOfLastMonday, getDateOfNextSunday } from '../../utils'
 import { ScheduleStatus } from '../../graphql/generated'
 
 interface Schedule {
@@ -63,26 +62,13 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
 }))
 
-function checkIfBetween(startTime: Date, endTime: Date, time: Date) {
-  return time >= startTime && time <= endTime
-}
-
-function validScheduleForWeek(time: Date) {
-  const startOfWeek = getDateOfLastMonday(new Date())
-  const endOfWeek = getDateOfNextSunday(new Date())
-  return checkIfBetween(startOfWeek, endOfWeek, time)
-}
-
 function validScheduleForDay(time: Date, day: number) {
   return time.getDay() === day
 }
 
 function validTimeIntervalForWeek(startTime: Date, endTime: Date, day: number) {
   return (
-    validScheduleForWeek(startTime) &&
-    validScheduleForWeek(endTime) &&
-    validScheduleForDay(startTime, day) &&
-    validScheduleForDay(endTime, day)
+    validScheduleForDay(startTime, day) && validScheduleForDay(endTime, day)
   )
 }
 
@@ -148,11 +134,12 @@ export default function DoctorsScheduler() {
                     <StyledTableCell>Dr. {fullName}</StyledTableCell>
                     {Array.from({ length: 7 }).map((_, i) => {
                       // filter out schedules that are not the same day of the week
+                      const day = i < 6 ? i + 1 : 0
                       const validSchedules = schedules.filter((schedule) =>
                         validTimeIntervalForWeek(
                           new Date(schedule.startTime),
                           new Date(schedule.endTime),
-                          i,
+                          day,
                         ),
                       )
                       // if there are no valid schedules, return a skeleton
