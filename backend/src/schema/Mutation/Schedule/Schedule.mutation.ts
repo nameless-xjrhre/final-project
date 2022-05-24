@@ -61,14 +61,14 @@ export const CreateSchedules = mutationField('createSchedules', {
       }),
     ),
   },
-  resolve: (_parent, args, context) => {
+  resolve: async (_parent, args, context) => {
     const schedules = args.data.map((schedule) => ({
       medStaffId: schedule.medStaffId,
       startTime: schedule.startTime,
       endTime: schedule.endTime,
       status: schedule.status,
     }))
-    context.prisma.schedule.createMany({
+    await context.prisma.schedule.createMany({
       data: schedules,
     })
     return context.prisma.schedule.findMany({

@@ -19,6 +19,7 @@
     "sourceType": "module"
   },
   "plugins": ["react", "@typescript-eslint", "jest"],
+  "ignorePatterns": ["cypress/**/*"],
   "rules": {
     "import/no-unresolved": "off",
     "import/extensions": "off",
@@ -35,5 +36,15 @@
     "import/export": "off",
     "no-restricted-exports": "off",
     "react/prop-types": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["src/**/*.test.ts", "src/**/*.test.tsx"],
+      "env": {
+        "jest": true
+      },
+      "extends": ["plugin:jest/recommended"],
+      "plugins": ["jest"]
+    }
+  ]
 }

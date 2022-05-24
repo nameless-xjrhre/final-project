@@ -7,4 +7,5 @@ module.exports = {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
   testEnvironment: 'jest-environment-jsdom',
+  testMatch: ['**/src/**/?(*.)+(spec|test).[jt]s?(x)'],
 }

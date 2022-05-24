@@ -10,12 +10,14 @@ beforeEach(async () => {
   await ctx.client.request(gql`
     mutation {
       createPatient(
-        firstName: "Hans"
-        lastName: "Daduya"
-        sex: MALE
-        dateOfBirth: "2022-04-27T07:38:00Z"
-        contactNum: "1234567890"
-        address: "Jaro"
+        data: {
+          firstName: "Hans"
+          lastName: "Daduya"
+          sex: MALE
+          dateOfBirth: "2022-04-27T07:38:00Z"
+          contactNum: "1234567890"
+          address: "Jaro"
+        }
       ) {
         firstName
         lastName
@@ -52,6 +54,6 @@ it('should query all patients', async () => {
 })
 
 afterEach(async () => {
-  const deletePatients = prisma.patient.deleteMany()
-  await prisma.$transaction([deletePatients])
+  await prisma.appointment.deleteMany()
+  await prisma.patient.deleteMany()
 })
