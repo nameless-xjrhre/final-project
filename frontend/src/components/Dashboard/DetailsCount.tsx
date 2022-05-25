@@ -17,7 +17,7 @@ export default function DetailsCount({ detailCards }: DetailsProps) {
     <Box>
       <Grid container spacing={2}>
         {detailCards.map((detailCard) => (
-          <Grid item xs={3}>
+          <Grid item xs={3} key={detailCard.title}>
             <DetailCard
               logo={detailCard.logo}
               title={detailCard.title}

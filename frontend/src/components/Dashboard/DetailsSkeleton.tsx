@@ -17,7 +17,7 @@ export default function DetailsSkeleton({ detailCards }: DetailsProps) {
     <Box>
       <Grid container spacing={2}>
         {detailCards.map((detailCard) => (
-          <Grid item xs={3}>
+          <Grid item xs={3} key={detailCard.title}>
             <DetailSkeletonCard
               logo={detailCard.logo}
               title={detailCard.title}

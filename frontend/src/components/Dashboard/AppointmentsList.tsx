@@ -7,14 +7,16 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Skeleton from '@mui/material/Skeleton'
-import { Button, Pagination } from '@mui/material'
-import { useQuery, gql } from 'urql'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
+import { Pagination } from '@mui/material'
+import { useQuery, useMutation, gql } from 'urql'
 import Typography from '@mui/material/Typography'
-import AddBillForm from '../BillForm/AddBillForm'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
+import Button from '@mui/material/Button'
+import Stack from '@mui/material/Stack'
+
 import { BillStatus } from '../../graphql/generated'
+import { showFailAlert, showSuccessAlert } from '../../utils'
 
 interface Appointment {
   id: number
@@ -35,8 +37,8 @@ interface AppointmentQuery {
   appointments: Appointment[]
 }
 
-const appointmentQueryDocument = gql`
-  query appointmentQuery {
+const AppointmentsQueryDocument = gql`
+  query Appointments {
     appointments {
       id
       visitType
@@ -48,6 +50,19 @@ const appointmentQueryDocument = gql`
       }
       medStaff {
         id
+        fullName
+      }
+    }
+  }
+`
+
+const CancelAppointmentMutationDocument = gql`
+  mutation CancelAppointment($id: Int!) {
+    editAppointment(id: $id, data: { status: CANCELED }) {
+      id
+      date
+      status
+      patient {
         fullName
       }
     }
@@ -70,37 +85,28 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }))
 
 export default function AppointmentList() {
-  const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
-  const open = Boolean(drop)
-  const [generateBillBtn, setGenerateBillBtn] = React.useState(false)
-  const handleOpenBillForm = () => setGenerateBillBtn(true)
-  const handleCloseBillForm = () => setGenerateBillBtn(false)
-  const [appt, setAppointment] = React.useState<Appointment>()
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-    setDropDown(event.currentTarget)
-  }
+  const [, setDropDown] = React.useState<null | HTMLElement>(null)
   const handleClose = () => {
     setDropDown(null)
   }
   const [appointment] = useQuery<AppointmentQuery>({
-    query: appointmentQueryDocument,
+    query: AppointmentsQueryDocument,
   })
+  const [, cancelAppointment] = useMutation(CancelAppointmentMutationDocument)
 
-  // const [page, setPage] = React.useState(0)
-  // const [rowsPerPage, setRowsPerPage] = React.useState(10)
-
-  // const handleChangePage = (event: unknown, newPage: number) => {
-  //   setPage(newPage)
-  // }
-
-  // const handleChangeRowsPerPage = (
-  //   event: React.ChangeEvent<HTMLInputElement>,
-  // ) => {
-  //   setRowsPerPage(+event.target.value)
-  //   setPage(0)
-  // }
+  const handleCancel = (id: number) => () => {
+    cancelAppointment({ id })
+      .then((result) => {
+        console.log(result, id)
+        if (result.error) {
+          showFailAlert()
+        } else {
+          showSuccessAlert()
+        }
+      })
+      .then(handleClose)
+      .catch((err) => console.error(err))
+  }
 
   const { data, fetching, error } = appointment
   if (fetching)
@@ -182,50 +188,34 @@ export default function AppointmentList() {
                 <StyledTableCell>Dr. {item.medStaff.fullName}</StyledTableCell>
                 <StyledTableCell>{item.status}</StyledTableCell>
                 <StyledTableCell>
-                  <Button
-                    id="basic-button"
-                    aria-controls={open ? 'basic-menu' : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={open ? 'true' : undefined}
-                    onClick={(e) => {
-                      handleClick(e)
-                      setAppointment(item)
-                    }}
-                    style={{ color: '#808080' }}
-                  >
-                    <MoreVertIcon />
-                  </Button>{' '}
-                  <Menu
-                    id="basic-menu"
-                    anchorEl={drop}
-                    open={open}
-                    onClose={handleClose}
-                    MenuListProps={{
-                      'aria-labelledby': 'basic-button',
-                    }}
-                  >
-                    <MenuItem onClick={handleClose}>Edit</MenuItem>
-                    <MenuItem onClick={handleClose}>View Notes</MenuItem>
-                    <MenuItem onClick={handleOpenBillForm}>
-                      Generate Bill
-                    </MenuItem>
-                    {generateBillBtn && (
-                      <AddBillForm
-                        handleClose={handleCloseBillForm}
-                        open={generateBillBtn}
-                        apppointment={appt!}
+                  <Stack direction="row" spacing={2}>
+                    <EditIcon />
+                    <Button
+                      id="basic-button"
+                      aria-haspopup="true"
+                      style={{ color: '#808080' }}
+                    >
+                      <DeleteIcon
+                        color="error"
+                        onClick={handleCancel(item.id)}
                       />
-                    )}
-                    <MenuItem onClick={handleClose} sx={{ color: 'red' }}>
-                      Cancel
-                    </MenuItem>
-                  </Menu>
+                    </Button>{' '}
+                  </Stack>
                 </StyledTableCell>
               </TableRow>
             ))}
         </TableBody>
       </Table>
-      <Pagination count={3} variant="outlined" shape="rounded" />
+      <Pagination
+        count={4}
+        variant="outlined"
+        shape="rounded"
+        color="primary"
+        sx={{
+          my: 2,
+          ml: 1,
+        }}
+      />
     </>
   )
 }
