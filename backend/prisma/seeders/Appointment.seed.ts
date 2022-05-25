@@ -23,6 +23,8 @@ async function seedAppointments() {
         date: faker.date.future(),
         visitType: randomVisitType(),
         status: randomAppointmentStatus(),
+        note: faker.lorem.paragraph(),
+        hospitalBillId: i + 1,
         medStaffId: i + 1,
         patientId: i + 1,
       },

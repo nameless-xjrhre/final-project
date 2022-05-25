@@ -5,13 +5,12 @@ name: integration-test
 
 on:
   push:
-    branches: [ main ]
+    branches: [main, integration_test_branch]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   integration-test:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -20,21 +19,21 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - name: 'Create env.test for backend'
-      run: |
-        cd backend
-        touch .env.test
-        echo "DATABASE_URL=postgresql://prisma:prisma@localhost:5433/tests" >> .env
-    - run: npm ci
-    - run: cd backend && npm ci
-    - name: Setup the database
-      run: cd backend && docker-compose up -d
-    - run: cd backend && npm run test-migrate:integration
-    - name: Teardown the database
-      run: cd backend && docker-compose down
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: 'Create env.test for backend'
+        run: |
+          cd backend
+          touch .env.test
+          echo "DATABASE_URL=postgresql://prisma:prisma@localhost:5433/tests" >> .env
+      - run: npm ci
+      - run: cd backend && npm ci
+      - name: Setup the database
+        run: cd backend && docker-compose up -d
+      - run: cd backend && npm run test-migrate:integration
+      - name: Teardown the database
+        run: cd backend && docker-compose down

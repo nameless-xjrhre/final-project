@@ -115,6 +115,7 @@ input EditScheduleInput {
 
 type HospitalBill {
   amount: Float!
+  appointment: Appointment
   date: DateTime!
   deadlineDate: DateTime
   id: Int!
@@ -182,8 +183,11 @@ type Patient {
 type Query {
   appointments: [Appointment!]!
   hospitalBills: [HospitalBill!]!
+  hospitalBillsByPatient(id: Int!): [HospitalBill]
   medicalRecords: [MedicalRecord!]!
+  medicalRecordsByPatient(id: Int!): [MedicalRecord]
   medicalStaff: [MedicalStaff!]!
+  pastAppointments: [Appointment]
   patient(id: Int!): Patient
   patients: [Patient!]!
   schedules: [Schedule!]!
@@ -193,6 +197,7 @@ type Query {
   totalBillUnpaid: Float
   totalDoneAppointments: Int
   totalPatients: Int
+  upcomingAppointments: [Appointment]
   users: [User!]!
 }
 

@@ -1,4 +1,4 @@
-import { queryField } from 'nexus'
+import { queryField, list, intArg, nonNull } from 'nexus'
 
 // get the total bill paid
 const QueryBillPaid = queryField('totalBillPaid', {
@@ -45,4 +45,23 @@ const QueryBillTotal = queryField('totalBill', {
       .then((bills) => bills._sum.amount),
 })
 
-export default [QueryBillPaid, QueryBillUnpaidTotal, QueryBillTotal]
+// get hospital bill by patient
+const QueryBillsByPatient = queryField('hospitalBillsByPatient', {
+  type: list('HospitalBill'),
+  args: {
+    id: nonNull(intArg()),
+  },
+  resolve: (_parent, args, context) =>
+    context.prisma.hospitalBill.findMany({
+      where: {
+        patientId: args.id,
+      },
+    }),
+})
+
+export default [
+  QueryBillPaid,
+  QueryBillUnpaidTotal,
+  QueryBillTotal,
+  QueryBillsByPatient,
+]
