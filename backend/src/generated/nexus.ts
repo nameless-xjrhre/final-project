@@ -3,18 +3,16 @@
  * Do not make changes to this file directly
  */
 
-import type { Context } from './../context'
-import type { ValidateResolver } from 'nexus-validate'
-import type { core } from 'nexus'
+
+import type { Context } from "./../context"
+import type { ValidateResolver } from "nexus-validate"
+import type { core } from "nexus"
 declare global {
   interface NexusGenCustomInputMethods<TypeName extends string> {
     /**
      * A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
      */
-    date<FieldName extends string>(
-      fieldName: FieldName,
-      opts?: core.CommonInputFieldConfig<TypeName, FieldName>,
-    ): void // "DateTime";
+    date<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "DateTime";
   }
 }
 declare global {
@@ -22,110 +20,97 @@ declare global {
     /**
      * A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
      */
-    date<FieldName extends string>(
-      fieldName: FieldName,
-      ...opts: core.ScalarOutSpread<TypeName, FieldName>
-    ): void // "DateTime";
+    date<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "DateTime";
   }
 }
+
 
 declare global {
   interface NexusGen extends NexusGenTypes {}
 }
 
 export interface NexusGenInputs {
-  CreateAppointmentInput: {
-    // input type
-    date: NexusGenScalars['DateTime'] // DateTime!
-    note?: string | null // String
-    status: NexusGenEnums['AppointmentStatus'] // AppointmentStatus!
-    visitType: NexusGenEnums['VisitType'] // VisitType!
+  CreateAppointmentInput: { // input type
+    date: NexusGenScalars['DateTime']; // DateTime!
+    note?: string | null; // String
+    status: NexusGenEnums['AppointmentStatus']; // AppointmentStatus!
+    visitType: NexusGenEnums['VisitType']; // VisitType!
   }
-  CreateHospitalBillInput: {
-    // input type
-    amount: number // Float!
-    date: NexusGenScalars['DateTime'] // DateTime!
-    deadlineDate?: NexusGenScalars['DateTime'] | null // DateTime
-    medStaffId?: number | null // Int
-    patientId: number // Int!
-    status: NexusGenEnums['BillStatus'] // BillStatus!
+  CreateHospitalBillInput: { // input type
+    amount: number; // Float!
+    date: NexusGenScalars['DateTime']; // DateTime!
+    deadlineDate?: NexusGenScalars['DateTime'] | null; // DateTime
+    medStaffId?: number | null; // Int
+    patientId: number; // Int!
+    status: NexusGenEnums['BillStatus']; // BillStatus!
   }
-  CreateMedicalRecordInput: {
-    // input type
-    date: NexusGenScalars['DateTime'] // DateTime!
-    diagnosis: string // String!
-    medStaffId?: number | null // Int
-    patientId: number // Int!
-    prescription: string // String!
+  CreateMedicalRecordInput: { // input type
+    date: NexusGenScalars['DateTime']; // DateTime!
+    diagnosis: string; // String!
+    medStaffId?: number | null; // Int
+    patientId: number; // Int!
+    prescription: string; // String!
   }
-  CreateMedicalStaffInput: {
-    // input type
-    address: string // String!
-    contactNum: string // String!
-    firstName: string // String!
-    lastName: string // String!
+  CreateMedicalStaffInput: { // input type
+    address: string; // String!
+    contactNum: string; // String!
+    firstName: string; // String!
+    lastName: string; // String!
   }
-  CreatePatientInput: {
-    // input type
-    address: string // String!
-    contactNum: string // String!
-    dateOfBirth: NexusGenScalars['DateTime'] // DateTime!
-    firstName: string // String!
-    lastName: string // String!
-    sex: NexusGenEnums['Sex'] // Sex!
+  CreatePatientInput: { // input type
+    address: string; // String!
+    contactNum: string; // String!
+    dateOfBirth: NexusGenScalars['DateTime']; // DateTime!
+    firstName: string; // String!
+    lastName: string; // String!
+    sex: NexusGenEnums['Sex']; // Sex!
   }
-  CreateScheduleInput: {
-    // input type
-    endTime: NexusGenScalars['DateTime'] // DateTime!
-    medStaffId: number // Int!
-    startTime: NexusGenScalars['DateTime'] // DateTime!
-    status: NexusGenEnums['ScheduleStatus'] // ScheduleStatus!
+  CreateScheduleInput: { // input type
+    endTime: NexusGenScalars['DateTime']; // DateTime!
+    medStaffId: number; // Int!
+    startTime: NexusGenScalars['DateTime']; // DateTime!
+    status: NexusGenEnums['ScheduleStatus']; // ScheduleStatus!
   }
-  CreateUserInput: {
-    // input type
-    password: string // String!
-    username: string // String!
+  CreateUserInput: { // input type
+    password: string; // String!
+    username: string; // String!
   }
-  EditAppointmentInput: {
-    // input type
-    date?: NexusGenScalars['DateTime'] | null // DateTime
-    note?: string | null // String
-    status?: NexusGenEnums['AppointmentStatus'] | null // AppointmentStatus
-    visitType?: NexusGenEnums['VisitType'] | null // VisitType
+  EditAppointmentInput: { // input type
+    date?: NexusGenScalars['DateTime'] | null; // DateTime
+    note?: string | null; // String
+    status?: NexusGenEnums['AppointmentStatus'] | null; // AppointmentStatus
+    visitType?: NexusGenEnums['VisitType'] | null; // VisitType
   }
-  EditHospitalBillInput: {
-    // input type
-    amount?: number | null // Int
-    date?: NexusGenScalars['DateTime'] | null // DateTime
-    deadlineDate?: NexusGenScalars['DateTime'] | null // DateTime
-    status?: NexusGenEnums['BillStatus'] | null // BillStatus
+  EditHospitalBillInput: { // input type
+    amount?: number | null; // Int
+    date?: NexusGenScalars['DateTime'] | null; // DateTime
+    deadlineDate?: NexusGenScalars['DateTime'] | null; // DateTime
+    status?: NexusGenEnums['BillStatus'] | null; // BillStatus
   }
-  EditPatientInput: {
-    // input type
-    address?: string | null // String
-    contactNum?: string | null // String
-    dateOfBirth?: NexusGenScalars['DateTime'] | null // DateTime
-    firstName?: string | null // String
-    id?: number | null // Int
-    lastName?: string | null // String
-    sex?: NexusGenEnums['Sex'] | null // Sex
+  EditPatientInput: { // input type
+    address?: string | null; // String
+    contactNum?: string | null; // String
+    dateOfBirth?: NexusGenScalars['DateTime'] | null; // DateTime
+    firstName?: string | null; // String
+    id?: number | null; // Int
+    lastName?: string | null; // String
+    sex?: NexusGenEnums['Sex'] | null; // Sex
   }
-  EditScheduleInput: {
-    // input type
-    endTime?: NexusGenScalars['DateTime'] | null // DateTime
-    medStaffId?: number | null // Int
-    startTime?: NexusGenScalars['DateTime'] | null // DateTime
-    status?: NexusGenEnums['ScheduleStatus'] | null // ScheduleStatus
+  EditScheduleInput: { // input type
+    endTime?: NexusGenScalars['DateTime'] | null; // DateTime
+    medStaffId?: number | null; // Int
+    startTime?: NexusGenScalars['DateTime'] | null; // DateTime
+    status?: NexusGenEnums['ScheduleStatus'] | null; // ScheduleStatus
   }
 }
 
 export interface NexusGenEnums {
-  AppointmentStatus: 'CANCELED' | 'DONE' | 'EXPIRED' | 'PENDING'
-  BillStatus: 'PAID' | 'UNPAID'
-  ScheduleStatus: 'CLOSED' | 'DONE' | 'NOT_AVAILABLE' | 'OPEN'
-  Sex: 'FEMALE' | 'MALE'
-  UserType: 'ADMIN' | 'USER'
-  VisitType: 'FOLLOWUP' | 'ROUTINE' | 'URGENT'
+  AppointmentStatus: "CANCELED" | "DONE" | "EXPIRED" | "PENDING"
+  BillStatus: "PAID" | "UNPAID"
+  ScheduleStatus: "CLOSED" | "DONE" | "NOT_AVAILABLE" | "OPEN"
+  Sex: "FEMALE" | "MALE"
+  UserType: "ADMIN" | "USER"
+  VisitType: "FOLLOWUP" | "ROUTINE" | "URGENT"
 }
 
 export interface NexusGenScalars {
@@ -138,200 +123,179 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
-  Appointment: {
-    // root type
-    date: NexusGenScalars['DateTime'] // DateTime!
-    id: number // Int!
-    note?: string | null // String
-    status?: NexusGenEnums['AppointmentStatus'] | null // AppointmentStatus
-    visitType?: NexusGenEnums['VisitType'] | null // VisitType
+  Appointment: { // root type
+    date: NexusGenScalars['DateTime']; // DateTime!
+    id: number; // Int!
+    note?: string | null; // String
+    status?: NexusGenEnums['AppointmentStatus'] | null; // AppointmentStatus
+    visitType?: NexusGenEnums['VisitType'] | null; // VisitType
   }
-  HospitalBill: {
-    // root type
-    amount: number // Float!
-    date: NexusGenScalars['DateTime'] // DateTime!
-    deadlineDate?: NexusGenScalars['DateTime'] | null // DateTime
-    id: number // Int!
-    patientId: number // Int!
-    status: NexusGenEnums['BillStatus'] // BillStatus!
+  HospitalBill: { // root type
+    amount: number; // Float!
+    date: NexusGenScalars['DateTime']; // DateTime!
+    deadlineDate?: NexusGenScalars['DateTime'] | null; // DateTime
+    id: number; // Int!
+    patientId: number; // Int!
+    status: NexusGenEnums['BillStatus']; // BillStatus!
   }
-  MedicalRecord: {
-    // root type
-    date: NexusGenScalars['DateTime'] // DateTime!
-    diagnosis: string // String!
-    id: number // Int!
-    prescription: string // String!
+  MedicalRecord: { // root type
+    date: NexusGenScalars['DateTime']; // DateTime!
+    diagnosis: string; // String!
+    id: number; // Int!
+    prescription: string; // String!
   }
-  MedicalStaff: {
-    // root type
-    address: string // String!
-    contactNum: string // String!
-    firstName: string // String!
-    id: number // Int!
-    lastName: string // String!
+  MedicalStaff: { // root type
+    address: string; // String!
+    contactNum: string; // String!
+    firstName: string; // String!
+    id: number; // Int!
+    lastName: string; // String!
   }
-  Mutation: {}
-  Patient: {
-    // root type
-    address: string // String!
-    contactNum: string // String!
-    dateOfBirth: NexusGenScalars['DateTime'] // DateTime!
-    firstName: string // String!
-    id: number // Int!
-    lastName: string // String!
-    sex: NexusGenEnums['Sex'] // Sex!
+  Mutation: {};
+  Patient: { // root type
+    address: string; // String!
+    contactNum: string; // String!
+    dateOfBirth: NexusGenScalars['DateTime']; // DateTime!
+    firstName: string; // String!
+    id: number; // Int!
+    lastName: string; // String!
+    sex: NexusGenEnums['Sex']; // Sex!
   }
-  Query: {}
-  Schedule: {
-    // root type
-    endTime: NexusGenScalars['DateTime'] // DateTime!
-    id: number // Int!
-    startTime: NexusGenScalars['DateTime'] // DateTime!
-    status?: NexusGenEnums['ScheduleStatus'] | null // ScheduleStatus
+  Query: {};
+  Schedule: { // root type
+    endTime: NexusGenScalars['DateTime']; // DateTime!
+    id: number; // Int!
+    startTime: NexusGenScalars['DateTime']; // DateTime!
+    status?: NexusGenEnums['ScheduleStatus'] | null; // ScheduleStatus
   }
-  User: {
-    // root type
-    id: number // Int!
-    password: string // String!
-    userType?: NexusGenEnums['UserType'] | null // UserType
-    username: string // String!
+  User: { // root type
+    id: number; // Int!
+    password: string; // String!
+    userType?: NexusGenEnums['UserType'] | null; // UserType
+    username: string; // String!
   }
 }
 
-export interface NexusGenInterfaces {}
+export interface NexusGenInterfaces {
+}
 
-export interface NexusGenUnions {}
+export interface NexusGenUnions {
+}
 
 export type NexusGenRootTypes = NexusGenObjects
 
-export type NexusGenAllTypes = NexusGenRootTypes &
-  NexusGenScalars &
-  NexusGenEnums
+export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
 export interface NexusGenFieldTypes {
-  Appointment: {
-    // field return type
-    date: NexusGenScalars['DateTime'] // DateTime!
-    hospitalBill: NexusGenRootTypes['HospitalBill'] | null // HospitalBill
-    id: number // Int!
-    medStaff: NexusGenRootTypes['MedicalStaff'] | null // MedicalStaff
-    note: string | null // String
-    patient: NexusGenRootTypes['Patient'] | null // Patient
-    status: NexusGenEnums['AppointmentStatus'] | null // AppointmentStatus
-    visitType: NexusGenEnums['VisitType'] | null // VisitType
+  Appointment: { // field return type
+    date: NexusGenScalars['DateTime']; // DateTime!
+    hospitalBill: NexusGenRootTypes['HospitalBill'] | null; // HospitalBill
+    id: number; // Int!
+    medStaff: NexusGenRootTypes['MedicalStaff'] | null; // MedicalStaff
+    note: string | null; // String
+    patient: NexusGenRootTypes['Patient'] | null; // Patient
+    status: NexusGenEnums['AppointmentStatus'] | null; // AppointmentStatus
+    visitType: NexusGenEnums['VisitType'] | null; // VisitType
   }
-  HospitalBill: {
-    // field return type
-    amount: number // Float!
-    appointment: NexusGenRootTypes['Appointment'] | null // Appointment
-    date: NexusGenScalars['DateTime'] // DateTime!
-    deadlineDate: NexusGenScalars['DateTime'] | null // DateTime
-    id: number // Int!
-    medStaff: NexusGenRootTypes['MedicalStaff'] | null // MedicalStaff
-    patient: NexusGenRootTypes['Patient'] | null // Patient
-    patientId: number // Int!
-    status: NexusGenEnums['BillStatus'] // BillStatus!
+  HospitalBill: { // field return type
+    amount: number; // Float!
+    appointment: NexusGenRootTypes['Appointment'] | null; // Appointment
+    date: NexusGenScalars['DateTime']; // DateTime!
+    deadlineDate: NexusGenScalars['DateTime'] | null; // DateTime
+    id: number; // Int!
+    medStaff: NexusGenRootTypes['MedicalStaff'] | null; // MedicalStaff
+    patient: NexusGenRootTypes['Patient'] | null; // Patient
+    patientId: number; // Int!
+    status: NexusGenEnums['BillStatus']; // BillStatus!
   }
-  MedicalRecord: {
-    // field return type
-    date: NexusGenScalars['DateTime'] // DateTime!
-    diagnosis: string // String!
-    id: number // Int!
-    medStaff: NexusGenRootTypes['MedicalStaff'] | null // MedicalStaff
-    patient: NexusGenRootTypes['Patient'] | null // Patient
-    prescription: string // String!
+  MedicalRecord: { // field return type
+    date: NexusGenScalars['DateTime']; // DateTime!
+    diagnosis: string; // String!
+    id: number; // Int!
+    medStaff: NexusGenRootTypes['MedicalStaff'] | null; // MedicalStaff
+    patient: NexusGenRootTypes['Patient'] | null; // Patient
+    prescription: string; // String!
   }
-  MedicalStaff: {
-    // field return type
-    address: string // String!
-    contactNum: string // String!
-    firstName: string // String!
-    fullName: string | null // String
-    hospitalBills: Array<NexusGenRootTypes['HospitalBill'] | null> | null // [HospitalBill]
-    id: number // Int!
-    lastName: string // String!
-    medicalRecords: Array<NexusGenRootTypes['MedicalRecord'] | null> | null // [MedicalRecord]
-    schedules: Array<NexusGenRootTypes['Schedule'] | null> | null // [Schedule]
+  MedicalStaff: { // field return type
+    address: string; // String!
+    contactNum: string; // String!
+    firstName: string; // String!
+    fullName: string | null; // String
+    hospitalBills: Array<NexusGenRootTypes['HospitalBill'] | null> | null; // [HospitalBill]
+    id: number; // Int!
+    lastName: string; // String!
+    medicalRecords: Array<NexusGenRootTypes['MedicalRecord'] | null> | null; // [MedicalRecord]
+    schedules: Array<NexusGenRootTypes['Schedule'] | null> | null; // [Schedule]
   }
-  Mutation: {
-    // field return type
-    createAppointment: NexusGenRootTypes['Appointment'] | null // Appointment
-    createAppointmentWithPatient: NexusGenRootTypes['Appointment'] | null // Appointment
-    createHospitalBill: NexusGenRootTypes['HospitalBill'] | null // HospitalBill
-    createMedicalRecord: NexusGenRootTypes['MedicalRecord'] | null // MedicalRecord
-    createMedicalStaff: NexusGenRootTypes['MedicalStaff'] | null // MedicalStaff
-    createPatient: NexusGenRootTypes['Patient'] | null // Patient
-    createSchedule: NexusGenRootTypes['Schedule'] | null // Schedule
-    createSchedules: Array<NexusGenRootTypes['Schedule'] | null> | null // [Schedule]
-    createUser: NexusGenRootTypes['User'] | null // User
-    deleteAppointment: NexusGenRootTypes['Appointment'] | null // Appointment
-    deletePatient: NexusGenRootTypes['Patient'] | null // Patient
-    deleteSchedule: NexusGenRootTypes['Schedule'] | null // Schedule
-    editAppointment: NexusGenRootTypes['Appointment'] | null // Appointment
-    editHospitalBill: NexusGenRootTypes['HospitalBill'] | null // HospitalBill
-    editPatient: NexusGenRootTypes['Patient'] | null // Patient
-    editSchedule: NexusGenRootTypes['Schedule'] | null // Schedule
+  Mutation: { // field return type
+    createAppointment: NexusGenRootTypes['Appointment'] | null; // Appointment
+    createAppointmentWithPatient: NexusGenRootTypes['Appointment'] | null; // Appointment
+    createHospitalBill: NexusGenRootTypes['HospitalBill'] | null; // HospitalBill
+    createMedicalRecord: NexusGenRootTypes['MedicalRecord'] | null; // MedicalRecord
+    createMedicalStaff: NexusGenRootTypes['MedicalStaff'] | null; // MedicalStaff
+    createPatient: NexusGenRootTypes['Patient'] | null; // Patient
+    createSchedule: NexusGenRootTypes['Schedule'] | null; // Schedule
+    createSchedules: Array<NexusGenRootTypes['Schedule'] | null> | null; // [Schedule]
+    createUser: NexusGenRootTypes['User'] | null; // User
+    deleteAppointment: NexusGenRootTypes['Appointment'] | null; // Appointment
+    deletePatient: NexusGenRootTypes['Patient'] | null; // Patient
+    deleteSchedule: NexusGenRootTypes['Schedule'] | null; // Schedule
+    editAppointment: NexusGenRootTypes['Appointment'] | null; // Appointment
+    editHospitalBill: NexusGenRootTypes['HospitalBill'] | null; // HospitalBill
+    editPatient: NexusGenRootTypes['Patient'] | null; // Patient
+    editSchedule: NexusGenRootTypes['Schedule'] | null; // Schedule
   }
-  Patient: {
-    // field return type
-    address: string // String!
-    appointments: NexusGenRootTypes['Appointment'][] // [Appointment!]!
-    contactNum: string // String!
-    dateOfBirth: NexusGenScalars['DateTime'] // DateTime!
-    firstName: string // String!
-    fullName: string | null // String
-    hospitalBills: NexusGenRootTypes['HospitalBill'][] // [HospitalBill!]!
-    id: number // Int!
-    lastName: string // String!
-    latestAppointment: NexusGenRootTypes['Appointment'] | null // Appointment
-    medicalRecords: NexusGenRootTypes['MedicalRecord'][] // [MedicalRecord!]!
-    sex: NexusGenEnums['Sex'] // Sex!
+  Patient: { // field return type
+    address: string; // String!
+    appointments: NexusGenRootTypes['Appointment'][]; // [Appointment!]!
+    contactNum: string; // String!
+    dateOfBirth: NexusGenScalars['DateTime']; // DateTime!
+    firstName: string; // String!
+    fullName: string | null; // String
+    hospitalBills: NexusGenRootTypes['HospitalBill'][]; // [HospitalBill!]!
+    id: number; // Int!
+    lastName: string; // String!
+    latestAppointment: NexusGenRootTypes['Appointment'] | null; // Appointment
+    medicalRecords: NexusGenRootTypes['MedicalRecord'][]; // [MedicalRecord!]!
+    sex: NexusGenEnums['Sex']; // Sex!
   }
-  Query: {
-    // field return type
-    appointments: NexusGenRootTypes['Appointment'][] // [Appointment!]!
-    hospitalBills: NexusGenRootTypes['HospitalBill'][] // [HospitalBill!]!
-    hospitalBillsByPatient: Array<
-      NexusGenRootTypes['HospitalBill'] | null
-    > | null // [HospitalBill]
-    medicalRecords: NexusGenRootTypes['MedicalRecord'][] // [MedicalRecord!]!
-    medicalRecordsByPatient: Array<
-      NexusGenRootTypes['MedicalRecord'] | null
-    > | null // [MedicalRecord]
-    medicalStaff: NexusGenRootTypes['MedicalStaff'][] // [MedicalStaff!]!
-    pastAppointments: Array<NexusGenRootTypes['Appointment'] | null> | null // [Appointment]
-    patient: NexusGenRootTypes['Patient'] | null // Patient
-    patients: NexusGenRootTypes['Patient'][] // [Patient!]!
-    schedules: NexusGenRootTypes['Schedule'][] // [Schedule!]!
-    totalAppointments: number | null // Int
-    totalBill: number | null // Float
-    totalBillPaid: number | null // Float
-    totalBillUnpaid: number | null // Float
-    totalDoneAppointments: number | null // Int
-    totalPatients: number | null // Int
-    upcomingAppointments: Array<NexusGenRootTypes['Appointment'] | null> | null // [Appointment]
-    users: NexusGenRootTypes['User'][] // [User!]!
+  Query: { // field return type
+    appointments: NexusGenRootTypes['Appointment'][]; // [Appointment!]!
+    hospitalBills: NexusGenRootTypes['HospitalBill'][]; // [HospitalBill!]!
+    hospitalBillsByPatient: Array<NexusGenRootTypes['HospitalBill'] | null> | null; // [HospitalBill]
+    medicalRecords: NexusGenRootTypes['MedicalRecord'][]; // [MedicalRecord!]!
+    medicalRecordsByPatient: Array<NexusGenRootTypes['MedicalRecord'] | null> | null; // [MedicalRecord]
+    medicalStaff: NexusGenRootTypes['MedicalStaff'][]; // [MedicalStaff!]!
+    pastAppointments: Array<NexusGenRootTypes['Appointment'] | null> | null; // [Appointment]
+    patient: NexusGenRootTypes['Patient'] | null; // Patient
+    patients: NexusGenRootTypes['Patient'][]; // [Patient!]!
+    schedules: NexusGenRootTypes['Schedule'][]; // [Schedule!]!
+    totalAppointments: number | null; // Int
+    totalBill: number | null; // Float
+    totalBillPaid: number | null; // Float
+    totalBillUnpaid: number | null; // Float
+    totalDoneAppointments: number | null; // Int
+    totalPatients: number | null; // Int
+    upcomingAppointments: Array<NexusGenRootTypes['Appointment'] | null> | null; // [Appointment]
+    users: NexusGenRootTypes['User'][]; // [User!]!
   }
-  Schedule: {
-    // field return type
-    endTime: NexusGenScalars['DateTime'] // DateTime!
-    id: number // Int!
-    medStaff: NexusGenRootTypes['MedicalStaff'] | null // MedicalStaff
-    startTime: NexusGenScalars['DateTime'] // DateTime!
-    status: NexusGenEnums['ScheduleStatus'] | null // ScheduleStatus
+  Schedule: { // field return type
+    endTime: NexusGenScalars['DateTime']; // DateTime!
+    id: number; // Int!
+    medStaff: NexusGenRootTypes['MedicalStaff'] | null; // MedicalStaff
+    startTime: NexusGenScalars['DateTime']; // DateTime!
+    status: NexusGenEnums['ScheduleStatus'] | null; // ScheduleStatus
   }
-  User: {
-    // field return type
-    id: number // Int!
-    password: string // String!
-    userType: NexusGenEnums['UserType'] | null // UserType
-    username: string // String!
+  User: { // field return type
+    id: number; // Int!
+    password: string; // String!
+    userType: NexusGenEnums['UserType'] | null; // UserType
+    username: string; // String!
   }
 }
 
 export interface NexusGenFieldTypeNames {
-  Appointment: {
-    // field return type name
+  Appointment: { // field return type name
     date: 'DateTime'
     hospitalBill: 'HospitalBill'
     id: 'Int'
@@ -341,8 +305,7 @@ export interface NexusGenFieldTypeNames {
     status: 'AppointmentStatus'
     visitType: 'VisitType'
   }
-  HospitalBill: {
-    // field return type name
+  HospitalBill: { // field return type name
     amount: 'Float'
     appointment: 'Appointment'
     date: 'DateTime'
@@ -353,8 +316,7 @@ export interface NexusGenFieldTypeNames {
     patientId: 'Int'
     status: 'BillStatus'
   }
-  MedicalRecord: {
-    // field return type name
+  MedicalRecord: { // field return type name
     date: 'DateTime'
     diagnosis: 'String'
     id: 'Int'
@@ -362,8 +324,7 @@ export interface NexusGenFieldTypeNames {
     patient: 'Patient'
     prescription: 'String'
   }
-  MedicalStaff: {
-    // field return type name
+  MedicalStaff: { // field return type name
     address: 'String'
     contactNum: 'String'
     firstName: 'String'
@@ -374,8 +335,7 @@ export interface NexusGenFieldTypeNames {
     medicalRecords: 'MedicalRecord'
     schedules: 'Schedule'
   }
-  Mutation: {
-    // field return type name
+  Mutation: { // field return type name
     createAppointment: 'Appointment'
     createAppointmentWithPatient: 'Appointment'
     createHospitalBill: 'HospitalBill'
@@ -393,8 +353,7 @@ export interface NexusGenFieldTypeNames {
     editPatient: 'Patient'
     editSchedule: 'Schedule'
   }
-  Patient: {
-    // field return type name
+  Patient: { // field return type name
     address: 'String'
     appointments: 'Appointment'
     contactNum: 'String'
@@ -408,8 +367,7 @@ export interface NexusGenFieldTypeNames {
     medicalRecords: 'MedicalRecord'
     sex: 'Sex'
   }
-  Query: {
-    // field return type name
+  Query: { // field return type name
     appointments: 'Appointment'
     hospitalBills: 'HospitalBill'
     hospitalBillsByPatient: 'HospitalBill'
@@ -429,16 +387,14 @@ export interface NexusGenFieldTypeNames {
     upcomingAppointments: 'Appointment'
     users: 'User'
   }
-  Schedule: {
-    // field return type name
+  Schedule: { // field return type name
     endTime: 'DateTime'
     id: 'Int'
     medStaff: 'MedicalStaff'
     startTime: 'DateTime'
     status: 'ScheduleStatus'
   }
-  User: {
-    // field return type name
+  User: { // field return type name
     id: 'Int'
     password: 'String'
     userType: 'UserType'
@@ -448,114 +404,97 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
-    createAppointment: {
-      // args
-      data: NexusGenInputs['CreateAppointmentInput'] // CreateAppointmentInput!
-      medStaffId: number // Int!
-      patientId: number // Int!
+    createAppointment: { // args
+      data: NexusGenInputs['CreateAppointmentInput']; // CreateAppointmentInput!
+      medStaffId: number; // Int!
+      patientId: number; // Int!
     }
-    createAppointmentWithPatient: {
-      // args
-      appointment: NexusGenInputs['CreateAppointmentInput'] // CreateAppointmentInput!
-      medStaffId: number // Int!
-      patient: NexusGenInputs['CreatePatientInput'] // CreatePatientInput!
+    createAppointmentWithPatient: { // args
+      appointment: NexusGenInputs['CreateAppointmentInput']; // CreateAppointmentInput!
+      medStaffId: number; // Int!
+      patient: NexusGenInputs['CreatePatientInput']; // CreatePatientInput!
     }
-    createHospitalBill: {
-      // args
-      data: NexusGenInputs['CreateHospitalBillInput'] // CreateHospitalBillInput!
+    createHospitalBill: { // args
+      data: NexusGenInputs['CreateHospitalBillInput']; // CreateHospitalBillInput!
     }
-    createMedicalRecord: {
-      // args
-      data: NexusGenInputs['CreateMedicalRecordInput'] // CreateMedicalRecordInput!
+    createMedicalRecord: { // args
+      data: NexusGenInputs['CreateMedicalRecordInput']; // CreateMedicalRecordInput!
     }
-    createMedicalStaff: {
-      // args
-      data: NexusGenInputs['CreateMedicalStaffInput'] // CreateMedicalStaffInput!
+    createMedicalStaff: { // args
+      data: NexusGenInputs['CreateMedicalStaffInput']; // CreateMedicalStaffInput!
     }
-    createPatient: {
-      // args
-      data: NexusGenInputs['CreatePatientInput'] // CreatePatientInput!
+    createPatient: { // args
+      data: NexusGenInputs['CreatePatientInput']; // CreatePatientInput!
     }
-    createSchedule: {
-      // args
-      data: NexusGenInputs['CreateScheduleInput'] // CreateScheduleInput!
+    createSchedule: { // args
+      data: NexusGenInputs['CreateScheduleInput']; // CreateScheduleInput!
     }
-    createSchedules: {
-      // args
-      data: NexusGenInputs['CreateScheduleInput'][] // [CreateScheduleInput!]!
+    createSchedules: { // args
+      data: NexusGenInputs['CreateScheduleInput'][]; // [CreateScheduleInput!]!
     }
-    createUser: {
-      // args
-      data: NexusGenInputs['CreateUserInput'] // CreateUserInput!
+    createUser: { // args
+      data: NexusGenInputs['CreateUserInput']; // CreateUserInput!
     }
-    deleteAppointment: {
-      // args
-      id: number // Int!
+    deleteAppointment: { // args
+      id: number; // Int!
     }
-    deletePatient: {
-      // args
-      id: number // Int!
+    deletePatient: { // args
+      id: number; // Int!
     }
-    deleteSchedule: {
-      // args
-      id: number // Int!
+    deleteSchedule: { // args
+      id: number; // Int!
     }
-    editAppointment: {
-      // args
-      data: NexusGenInputs['EditAppointmentInput'] // EditAppointmentInput!
-      id: number // Int!
+    editAppointment: { // args
+      data: NexusGenInputs['EditAppointmentInput']; // EditAppointmentInput!
+      id: number; // Int!
     }
-    editHospitalBill: {
-      // args
-      data: NexusGenInputs['EditHospitalBillInput'] // EditHospitalBillInput!
-      id: number // Int!
+    editHospitalBill: { // args
+      data: NexusGenInputs['EditHospitalBillInput']; // EditHospitalBillInput!
+      id: number; // Int!
     }
-    editPatient: {
-      // args
-      data: NexusGenInputs['EditPatientInput'] // EditPatientInput!
-      id: number // Int!
+    editPatient: { // args
+      data: NexusGenInputs['EditPatientInput']; // EditPatientInput!
+      id: number; // Int!
     }
-    editSchedule: {
-      // args
-      data: NexusGenInputs['EditScheduleInput'] // EditScheduleInput!
-      id: number // Int!
+    editSchedule: { // args
+      data: NexusGenInputs['EditScheduleInput']; // EditScheduleInput!
+      id: number; // Int!
     }
   }
   Query: {
-    hospitalBillsByPatient: {
-      // args
-      id: number // Int!
+    hospitalBillsByPatient: { // args
+      id: number; // Int!
     }
-    medicalRecordsByPatient: {
-      // args
-      id: number // Int!
+    medicalRecordsByPatient: { // args
+      id: number; // Int!
     }
-    patient: {
-      // args
-      id: number // Int!
+    patient: { // args
+      id: number; // Int!
     }
   }
 }
 
-export interface NexusGenAbstractTypeMembers {}
+export interface NexusGenAbstractTypeMembers {
+}
 
-export interface NexusGenTypeInterfaces {}
+export interface NexusGenTypeInterfaces {
+}
 
-export type NexusGenObjectNames = keyof NexusGenObjects
+export type NexusGenObjectNames = keyof NexusGenObjects;
 
-export type NexusGenInputNames = keyof NexusGenInputs
+export type NexusGenInputNames = keyof NexusGenInputs;
 
-export type NexusGenEnumNames = keyof NexusGenEnums
+export type NexusGenEnumNames = keyof NexusGenEnums;
 
-export type NexusGenInterfaceNames = never
+export type NexusGenInterfaceNames = never;
 
-export type NexusGenScalarNames = keyof NexusGenScalars
+export type NexusGenScalarNames = keyof NexusGenScalars;
 
-export type NexusGenUnionNames = never
+export type NexusGenUnionNames = never;
 
-export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = never
+export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = never;
 
-export type NexusGenAbstractsUsingStrategyResolveType = never
+export type NexusGenAbstractsUsingStrategyResolveType = never;
 
 export type NexusGenFeaturesConfig = {
   abstractTypeStrategies: {
@@ -566,57 +505,47 @@ export type NexusGenFeaturesConfig = {
 }
 
 export interface NexusGenTypes {
-  context: Context
-  inputTypes: NexusGenInputs
-  rootTypes: NexusGenRootTypes
-  inputTypeShapes: NexusGenInputs & NexusGenEnums & NexusGenScalars
-  argTypes: NexusGenArgTypes
-  fieldTypes: NexusGenFieldTypes
-  fieldTypeNames: NexusGenFieldTypeNames
-  allTypes: NexusGenAllTypes
-  typeInterfaces: NexusGenTypeInterfaces
-  objectNames: NexusGenObjectNames
-  inputNames: NexusGenInputNames
-  enumNames: NexusGenEnumNames
-  interfaceNames: NexusGenInterfaceNames
-  scalarNames: NexusGenScalarNames
-  unionNames: NexusGenUnionNames
-  allInputTypes:
-    | NexusGenTypes['inputNames']
-    | NexusGenTypes['enumNames']
-    | NexusGenTypes['scalarNames']
-  allOutputTypes:
-    | NexusGenTypes['objectNames']
-    | NexusGenTypes['enumNames']
-    | NexusGenTypes['unionNames']
-    | NexusGenTypes['interfaceNames']
-    | NexusGenTypes['scalarNames']
-  allNamedTypes:
-    | NexusGenTypes['allInputTypes']
-    | NexusGenTypes['allOutputTypes']
-  abstractTypes: NexusGenTypes['interfaceNames'] | NexusGenTypes['unionNames']
-  abstractTypeMembers: NexusGenAbstractTypeMembers
-  objectsUsingAbstractStrategyIsTypeOf: NexusGenObjectsUsingAbstractStrategyIsTypeOf
-  abstractsUsingStrategyResolveType: NexusGenAbstractsUsingStrategyResolveType
-  features: NexusGenFeaturesConfig
+  context: Context;
+  inputTypes: NexusGenInputs;
+  rootTypes: NexusGenRootTypes;
+  inputTypeShapes: NexusGenInputs & NexusGenEnums & NexusGenScalars;
+  argTypes: NexusGenArgTypes;
+  fieldTypes: NexusGenFieldTypes;
+  fieldTypeNames: NexusGenFieldTypeNames;
+  allTypes: NexusGenAllTypes;
+  typeInterfaces: NexusGenTypeInterfaces;
+  objectNames: NexusGenObjectNames;
+  inputNames: NexusGenInputNames;
+  enumNames: NexusGenEnumNames;
+  interfaceNames: NexusGenInterfaceNames;
+  scalarNames: NexusGenScalarNames;
+  unionNames: NexusGenUnionNames;
+  allInputTypes: NexusGenTypes['inputNames'] | NexusGenTypes['enumNames'] | NexusGenTypes['scalarNames'];
+  allOutputTypes: NexusGenTypes['objectNames'] | NexusGenTypes['enumNames'] | NexusGenTypes['unionNames'] | NexusGenTypes['interfaceNames'] | NexusGenTypes['scalarNames'];
+  allNamedTypes: NexusGenTypes['allInputTypes'] | NexusGenTypes['allOutputTypes']
+  abstractTypes: NexusGenTypes['interfaceNames'] | NexusGenTypes['unionNames'];
+  abstractTypeMembers: NexusGenAbstractTypeMembers;
+  objectsUsingAbstractStrategyIsTypeOf: NexusGenObjectsUsingAbstractStrategyIsTypeOf;
+  abstractsUsingStrategyResolveType: NexusGenAbstractsUsingStrategyResolveType;
+  features: NexusGenFeaturesConfig;
 }
 
+
 declare global {
-  interface NexusGenPluginTypeConfig<TypeName extends string> {}
-  interface NexusGenPluginInputTypeConfig<TypeName extends string> {}
-  interface NexusGenPluginFieldConfig<
-    TypeName extends string,
-    FieldName extends string,
-  > {
+  interface NexusGenPluginTypeConfig<TypeName extends string> {
+  }
+  interface NexusGenPluginInputTypeConfig<TypeName extends string> {
+  }
+  interface NexusGenPluginFieldConfig<TypeName extends string, FieldName extends string> {
     /**
      * Validate mutation arguments.
      */
     validate?: ValidateResolver<TypeName, FieldName>
   }
-  interface NexusGenPluginInputFieldConfig<
-    TypeName extends string,
-    FieldName extends string,
-  > {}
-  interface NexusGenPluginSchemaConfig {}
-  interface NexusGenPluginArgConfig {}
+  interface NexusGenPluginInputFieldConfig<TypeName extends string, FieldName extends string> {
+  }
+  interface NexusGenPluginSchemaConfig {
+  }
+  interface NexusGenPluginArgConfig {
+  }
 }

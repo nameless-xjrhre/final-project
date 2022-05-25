@@ -2,6 +2,6 @@
 frontend/dist
 backend/dist
 coverage
-*/.graphql
+*.graphql
 backend/schema.graphql
-*/nexus.ts
+backend/src/generated/nexus.ts
