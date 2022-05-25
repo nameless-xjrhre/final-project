@@ -16,6 +16,7 @@ export function createAppointment(
       visitType: appointment.visitType,
       date: appointment.date,
       status: appointment.status,
+      note: appointment.note,
       medStaffId,
       patientId,
     },
@@ -65,6 +66,14 @@ export async function editAppointment(
       note: appointment.note ?? undefined,
       date: appointment.date,
       status: appointment.status ?? undefined,
+    },
+  })
+}
+
+export async function deleteAppointment(id: number, ctx: Context) {
+  return ctx.prisma.appointment.delete({
+    where: {
+      id,
     },
   })
 }

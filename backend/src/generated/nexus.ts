@@ -263,6 +263,7 @@ export interface NexusGenFieldTypes {
     createSchedule: NexusGenRootTypes['Schedule'] | null // Schedule
     createSchedules: Array<NexusGenRootTypes['Schedule'] | null> | null // [Schedule]
     createUser: NexusGenRootTypes['User'] | null // User
+    deleteAppointment: NexusGenRootTypes['Appointment'] | null // Appointment
     deletePatient: NexusGenRootTypes['Patient'] | null // Patient
     deleteSchedule: NexusGenRootTypes['Schedule'] | null // Schedule
     editAppointment: NexusGenRootTypes['Appointment'] | null // Appointment
@@ -294,6 +295,12 @@ export interface NexusGenFieldTypes {
     patient: NexusGenRootTypes['Patient'] | null // Patient
     patients: NexusGenRootTypes['Patient'][] // [Patient!]!
     schedules: NexusGenRootTypes['Schedule'][] // [Schedule!]!
+    totalAppointments: number | null // Int
+    totalBill: number | null // Float
+    totalBillPaid: number | null // Float
+    totalBillUnpaid: number | null // Float
+    totalDoneAppointments: number | null // Int
+    totalPatients: number | null // Int
     users: NexusGenRootTypes['User'][] // [User!]!
   }
   Schedule: {
@@ -368,6 +375,7 @@ export interface NexusGenFieldTypeNames {
     createSchedule: 'Schedule'
     createSchedules: 'Schedule'
     createUser: 'User'
+    deleteAppointment: 'Appointment'
     deletePatient: 'Patient'
     deleteSchedule: 'Schedule'
     editAppointment: 'Appointment'
@@ -399,6 +407,12 @@ export interface NexusGenFieldTypeNames {
     patient: 'Patient'
     patients: 'Patient'
     schedules: 'Schedule'
+    totalAppointments: 'Int'
+    totalBill: 'Float'
+    totalBillPaid: 'Float'
+    totalBillUnpaid: 'Float'
+    totalDoneAppointments: 'Int'
+    totalPatients: 'Int'
     users: 'User'
   }
   Schedule: {
@@ -459,6 +473,10 @@ export interface NexusGenArgTypes {
     createUser: {
       // args
       data: NexusGenInputs['CreateUserInput'] // CreateUserInput!
+    }
+    deleteAppointment: {
+      // args
+      id: number // Int!
     }
     deletePatient: {
       // args

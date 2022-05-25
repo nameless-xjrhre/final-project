@@ -24,4 +24,10 @@ const QueryPatientById = queryField('patient', {
   },
 })
 
-export default [QueryPatientById]
+// get total number of patients
+const QueryPatientTotal = queryField('totalPatients', {
+  type: 'Int',
+  resolve: (_parent, _args, context) => context.prisma.patient.count(),
+})
+
+export default [QueryPatientById, QueryPatientTotal]
