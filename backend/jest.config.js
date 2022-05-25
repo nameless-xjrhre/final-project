@@ -11,6 +11,6 @@ module.exports = {
   },
   testEnvironment: 'node',
   testPathIgnorePatterns: ['dist'],
-  testMatch: ['**/integration.test.ts'],
+  testMatch: ['**/*.integration.test.ts'],
   testTimeout: 30000,
 }
