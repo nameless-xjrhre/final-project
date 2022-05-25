@@ -36,7 +36,7 @@ interface BillQueryData {
 }
 
 const billQueryDocument = gql`
-  query {
+  query HospitalBills {
     hospitalBills {
       id
       date
