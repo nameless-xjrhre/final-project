@@ -90,6 +90,8 @@ model Appointment {
   date           DateTime
   note           String?
   visitType      VisitType         @map("visit_type")
+  createdAt      DateTime          @default(now()) @map("created_at")
+  updatedAt      DateTime?         @updatedAt @map("updated_at")
   status         AppointmentStatus
   medStaff       MedicalStaff      @relation(fields: [medStaffId], references: [id])
   patient        Patient           @relation(fields: [patientId], references: [id])

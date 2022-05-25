@@ -223,6 +223,7 @@ export interface NexusGenFieldTypes {
   HospitalBill: {
     // field return type
     amount: number // Float!
+    appointment: NexusGenRootTypes['Appointment'] | null // Appointment
     date: NexusGenScalars['DateTime'] // DateTime!
     deadlineDate: NexusGenScalars['DateTime'] | null // DateTime
     id: number // Int!
@@ -290,8 +291,15 @@ export interface NexusGenFieldTypes {
     // field return type
     appointments: NexusGenRootTypes['Appointment'][] // [Appointment!]!
     hospitalBills: NexusGenRootTypes['HospitalBill'][] // [HospitalBill!]!
+    hospitalBillsByPatient: Array<
+      NexusGenRootTypes['HospitalBill'] | null
+    > | null // [HospitalBill]
     medicalRecords: NexusGenRootTypes['MedicalRecord'][] // [MedicalRecord!]!
+    medicalRecordsByPatient: Array<
+      NexusGenRootTypes['MedicalRecord'] | null
+    > | null // [MedicalRecord]
     medicalStaff: NexusGenRootTypes['MedicalStaff'][] // [MedicalStaff!]!
+    pastAppointments: Array<NexusGenRootTypes['Appointment'] | null> | null // [Appointment]
     patient: NexusGenRootTypes['Patient'] | null // Patient
     patients: NexusGenRootTypes['Patient'][] // [Patient!]!
     schedules: NexusGenRootTypes['Schedule'][] // [Schedule!]!
@@ -301,6 +309,7 @@ export interface NexusGenFieldTypes {
     totalBillUnpaid: number | null // Float
     totalDoneAppointments: number | null // Int
     totalPatients: number | null // Int
+    upcomingAppointments: Array<NexusGenRootTypes['Appointment'] | null> | null // [Appointment]
     users: NexusGenRootTypes['User'][] // [User!]!
   }
   Schedule: {
@@ -335,6 +344,7 @@ export interface NexusGenFieldTypeNames {
   HospitalBill: {
     // field return type name
     amount: 'Float'
+    appointment: 'Appointment'
     date: 'DateTime'
     deadlineDate: 'DateTime'
     id: 'Int'
@@ -402,8 +412,11 @@ export interface NexusGenFieldTypeNames {
     // field return type name
     appointments: 'Appointment'
     hospitalBills: 'HospitalBill'
+    hospitalBillsByPatient: 'HospitalBill'
     medicalRecords: 'MedicalRecord'
+    medicalRecordsByPatient: 'MedicalRecord'
     medicalStaff: 'MedicalStaff'
+    pastAppointments: 'Appointment'
     patient: 'Patient'
     patients: 'Patient'
     schedules: 'Schedule'
@@ -413,6 +426,7 @@ export interface NexusGenFieldTypeNames {
     totalBillUnpaid: 'Float'
     totalDoneAppointments: 'Int'
     totalPatients: 'Int'
+    upcomingAppointments: 'Appointment'
     users: 'User'
   }
   Schedule: {
@@ -508,6 +522,14 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    hospitalBillsByPatient: {
+      // args
+      id: number // Int!
+    }
+    medicalRecordsByPatient: {
+      // args
+      id: number // Int!
+    }
     patient: {
       // args
       id: number // Int!

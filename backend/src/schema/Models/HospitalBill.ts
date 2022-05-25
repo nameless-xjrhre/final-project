@@ -10,6 +10,7 @@ const HospitalBill = objectType({
     t.field(gqlTypes.HospitalBill.deadlineDate)
     t.field(gqlTypes.HospitalBill.amount)
     t.field(gqlTypes.HospitalBill.patientId)
+    t.field(gqlTypes.HospitalBill.appointment)
     t.nonNull.field('status', {
       type: BillStatusType,
     })
