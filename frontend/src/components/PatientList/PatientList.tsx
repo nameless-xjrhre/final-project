@@ -45,7 +45,7 @@ interface Patient {
 }
 
 const patientQueryDocument = gql`
-  query patientQuery {
+  query PatientDetails {
     patients {
       id
       fullName

@@ -11,15 +11,18 @@ import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import { useQuery } from 'urql'
 import Sidebar from '../../components/Sidebar'
 import HeaderDashboard from '../../components/Header/HeaderDashboard'
 import DetailsCount from '../../components/Dashboard/DetailsCount'
+import DetailsSkeleton from '../../components/Dashboard/DetailsSkeleton'
 import AppointmentsList from '../../components/Dashboard/AppointmentsList'
 
 import AppointmentLogo from '../../images/icons/AppointmentLogo.svg'
 import BankLogo from '../../images/icons/BankLogo.svg'
 import OperationsLogo from '../../images/icons/OperationsLogo.svg'
 import PatientLogo from '../../images/icons/PatientLogo.svg'
+import { getDashboardDetails, DashboardDetailsProps } from './DashboardQueries'
 
 interface DetailCardProps {
   logo: string
@@ -49,6 +52,41 @@ const detailCards: DetailCardProps[] = [
     amount: '₱ 12,174',
   },
 ]
+
+export const getDetailsCount = (index: number, data: DashboardDetailsProps) => {
+  switch (index) {
+    case 0:
+      return {
+        logo: AppointmentLogo,
+        title: 'Appointments',
+        amount: data.totalAppointments.toString(),
+      }
+    case 1:
+      return {
+        logo: PatientLogo,
+        title: 'New Patients',
+        amount: data.totalPatients.toString(),
+      }
+    case 2:
+      return {
+        logo: OperationsLogo,
+        title: 'Operations',
+        amount: data.totalDoneAppointments.toString(),
+      }
+    case 3:
+      return {
+        logo: BankLogo,
+        title: 'Earnings',
+        amount: `₱ ${data.totalBillPaid.toString()}`,
+      }
+    default:
+      return {
+        logo: AppointmentLogo,
+        title: 'Appointments',
+        amount: '213',
+      }
+  }
+}
 
 const drawerWidth: number = 240
 
@@ -81,10 +119,15 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme()
 
 function DashboardPage() {
+  const [dashboardDetails] = useQuery<DashboardDetailsProps>({
+    query: getDashboardDetails,
+  })
   const [open, setOpen] = React.useState(true)
   const toggleDrawer = () => {
     setOpen(!open)
   }
+
+  const { data, fetching } = dashboardDetails
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -122,7 +165,15 @@ function DashboardPage() {
                 mt: 4,
               }}
             >
-              <DetailsCount detailCards={detailCards} />
+              {!fetching && data ? (
+                <DetailsCount
+                  detailCards={detailCards.map((_, index) => ({
+                    ...getDetailsCount(index, data),
+                  }))}
+                />
+              ) : (
+                <DetailsSkeleton detailCards={detailCards} />
+              )}
             </Box>
             <Grid container spacing={3}>
               {/* Recent Orders */}

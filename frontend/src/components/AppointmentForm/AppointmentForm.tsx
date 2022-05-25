@@ -15,7 +15,7 @@ import {
   MedicalStaffQueryData,
   medicalStaffQueryDocument,
   PatientQueryData,
-  patientQueryDocument,
+  patientQueryNameDocument,
 } from './FormInputProps'
 
 interface CreateAppointmentFormProps {
@@ -38,7 +38,7 @@ export default function AppointmentForm({
   })
 
   const [patient] = useQuery<PatientQueryData>({
-    query: patientQueryDocument,
+    query: patientQueryNameDocument,
   })
 
   return (

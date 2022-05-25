@@ -24,8 +24,8 @@ export interface PatientQueryData {
   }[]
 }
 
-export const patientQueryDocument = gql`
-  query PatientQuery {
+export const patientQueryNameDocument = gql`
+  query PatientFullName {
     patients {
       id
       fullName
