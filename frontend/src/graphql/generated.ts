@@ -421,11 +421,15 @@ export type PatientFullNameQuery = {
   }>
 }
 
-export type AppointmentQueryQueryVariables = Exact<{ [key: string]: never }>
+export type AppointmentsListQueryVariables = Exact<{
+  start: Scalars['Int']
+  count: Scalars['Int']
+}>
 
-export type AppointmentQueryQuery = {
+export type AppointmentsListQuery = {
   __typename?: 'Query'
-  appointments: Array<{
+  totalAppointments?: number | null
+  appointmentsRange?: Array<{
     __typename?: 'Appointment'
     id: number
     visitType?: VisitType | null
@@ -441,7 +445,7 @@ export type AppointmentQueryQuery = {
       id: number
       fullName?: string | null
     } | null
-  }>
+  } | null> | null
 }
 
 export type CreateBillMutationVariables = Exact<{
@@ -708,9 +712,9 @@ export function usePatientFullNameQuery(
     ...options,
   })
 }
-export const AppointmentQueryDocument = gql`
-  query appointmentQuery {
-    appointments {
+export const AppointmentsListDocument = gql`
+  query AppointmentsList($start: Int!, $count: Int!) {
+    appointmentsRange(start: $start, count: $count) {
       id
       visitType
       date
@@ -724,14 +728,15 @@ export const AppointmentQueryDocument = gql`
         fullName
       }
     }
+    totalAppointments
   }
 `
 
-export function useAppointmentQueryQuery(
-  options?: Omit<Urql.UseQueryArgs<AppointmentQueryQueryVariables>, 'query'>,
+export function useAppointmentsListQuery(
+  options: Omit<Urql.UseQueryArgs<AppointmentsListQueryVariables>, 'query'>,
 ) {
-  return Urql.useQuery<AppointmentQueryQuery>({
-    query: AppointmentQueryDocument,
+  return Urql.useQuery<AppointmentsListQuery>({
+    query: AppointmentsListDocument,
     ...options,
   })
 }
