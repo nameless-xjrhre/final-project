@@ -7,7 +7,8 @@ import {
   MenuItem,
 } from '@mui/material'
 import TextField from '@mui/material/TextField'
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import { TimePicker } from '@mui/x-date-pickers/TimePicker'
 import {
   FormInputProps,
   FormInputSelectMedStaffProps,
@@ -18,6 +19,7 @@ export const FormInputSelectPatient = ({
   name,
   label,
   data,
+  onSavedValue,
   control,
   register,
   errors,
@@ -32,7 +34,7 @@ export const FormInputSelectPatient = ({
         <>
           <Select
             label={label}
-            value={value || ''}
+            value={value || onSavedValue}
             onChange={onChange}
             name={name}
           >
@@ -56,6 +58,7 @@ export const FormInputSelectMedStaff = ({
   name,
   label,
   data,
+  onSavedValue,
   control,
   register,
   errors,
@@ -70,7 +73,7 @@ export const FormInputSelectMedStaff = ({
         <>
           <Select
             label={label}
-            value={value || ''}
+            value={value || onSavedValue}
             onChange={onChange}
             name={name}
           >
@@ -93,6 +96,7 @@ export const FormInputSelectMedStaff = ({
 export const FormInputSelect = ({
   name,
   label,
+  onSavedValue,
   data,
   control,
   register,
@@ -108,7 +112,7 @@ export const FormInputSelect = ({
         <>
           <Select
             label={label}
-            value={value || ''}
+            value={value || onSavedValue}
             onChange={onChange}
             name={name}
           >
@@ -152,6 +156,7 @@ export const FormInputDate = ({
   label,
   placeholder,
   control,
+  onSavedValue,
   register,
   errors,
 }: FormInputProps) => (
@@ -160,12 +165,12 @@ export const FormInputDate = ({
     control={control}
     defaultValue={null}
     render={({ field: { onChange, value } }) => (
-      <DateTimePicker
+      <DatePicker
         disablePast
         label={label}
         openTo="year"
         views={['year', 'month', 'day']}
-        value={value}
+        value={value || onSavedValue}
         onChange={
           (date) => onChange(date.toLocaleDateString('en-CA')) // change format to 'YYYY-MM-DD'
         }
@@ -173,6 +178,41 @@ export const FormInputDate = ({
           <TextField
             sx={{ marginTop: -0.3, width: 250 }}
             placeholder={placeholder}
+            variant="outlined"
+            margin="dense"
+            {...params}
+            {...register(name)}
+            error={!!errors[name]}
+            helperText={errors[name]?.message}
+          />
+        )}
+      />
+    )}
+  />
+)
+
+export const FormInputTime = ({
+  name,
+  label,
+  control,
+  onSavedValue,
+  register,
+  errors,
+}: FormInputProps) => (
+  <Controller
+    name={name}
+    control={control}
+    defaultValue={null}
+    render={({ field: { onChange, value } }) => (
+      <TimePicker
+        ampm={false}
+        clearable
+        label={label}
+        value={value || onSavedValue}
+        onChange={(time) => onChange(time)}
+        renderInput={(params) => (
+          <TextField
+            sx={{ marginTop: -0.3, width: 250 }}
             variant="outlined"
             margin="dense"
             {...params}
