@@ -10,8 +10,9 @@ import Skeleton from '@mui/material/Skeleton'
 import { Pagination } from '@mui/material'
 import { useQuery, useMutation, gql } from 'urql'
 import Typography from '@mui/material/Typography'
-import DeleteIcon from '@mui/icons-material/Delete'
+import CancelIcon from '@mui/icons-material/Cancel'
 import Button from '@mui/material/Button'
+import Tooltip from '@mui/material/Tooltip'
 
 import { BillStatus } from '../../graphql/generated'
 import { showFailAlert, showSuccessAlert } from '../../utils'
@@ -197,7 +198,12 @@ export default function AppointmentList() {
                     aria-haspopup="true"
                     style={{ color: '#808080' }}
                   >
-                    <DeleteIcon color="error" onClick={handleCancel(item.id)} />
+                    <Tooltip title="Cancel Appointment">
+                      <CancelIcon
+                        color="error"
+                        onClick={handleCancel(item.id)}
+                      />
+                    </Tooltip>
                   </Button>{' '}
                 </StyledTableCell>
               </TableRow>
