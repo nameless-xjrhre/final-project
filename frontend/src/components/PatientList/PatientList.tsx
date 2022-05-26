@@ -12,29 +12,17 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import EditPatientForm from '../PatientForm/EditPatientForm'
-import DeletePatientForm from '../PatientForm/DeletePatientForm'
-
-interface PatientQueryData {
-  patients: {
-    id: number
-    fullName: string
-    sex: string
-    contactNum: string
-    latestAppointment: {
-      date: Date
-      visitType: string
-      medStaff: {
-        fullName: string
-      }
-    }
-  }[]
-}
+import DeletePatientDialog from '../PatientForm/DeletePatientDialog'
 
 interface Patient {
   id: number
   fullName: string
   sex: string
+  firstName: string
+  lastName: string
   contactNum: string
+  dateOfBirth: Date
+  address: string
   latestAppointment: {
     date: Date
     visitType: string
@@ -44,17 +32,26 @@ interface Patient {
   }
 }
 
+interface PatientQueryData {
+  patients: Patient[]
+}
+
 const patientQueryDocument = gql`
   query PatientDetails {
     patients {
       id
       fullName
       sex
+      firstName
+      lastName
       contactNum
+      dateOfBirth
+      address
       latestAppointment {
         date
         visitType
         medStaff {
+          id
           fullName
         }
       }
@@ -92,6 +89,7 @@ export default function PatientsList() {
   const open = Boolean(drop)
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) =>
     setDropDown(event.currentTarget)
+  const [currenPatient, setCurrentPatient] = React.useState<Patient>()
 
   const [patients] = useQuery<PatientQueryData>({
     query: patientQueryDocument,
@@ -166,7 +164,10 @@ export default function PatientsList() {
                     aria-controls={open ? 'basic-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
-                    onClick={handleClick}
+                    onClick={(e) => {
+                      handleClick(e)
+                      setCurrentPatient(patient)
+                    }}
                     style={{ color: '#808080' }}
                   >
                     <MoreVertIcon />
@@ -185,6 +186,7 @@ export default function PatientsList() {
                       <EditPatientForm
                         handleClose={handleCloseEditForm}
                         open={editPatientBtn}
+                        patient={currenPatient}
                       />
                     )}
                     <MenuItem onClick={handleDismissDropdown}>
@@ -192,7 +194,7 @@ export default function PatientsList() {
                     </MenuItem>
                     <MenuItem onClick={handleOpenDeleteForm}>Delete</MenuItem>
                     {deletePatientBtn && (
-                      <DeletePatientForm
+                      <DeletePatientDialog
                         handleClose={handleCloseDeleteForm}
                         open={deletePatientBtn}
                       />

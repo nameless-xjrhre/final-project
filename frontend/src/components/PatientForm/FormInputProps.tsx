@@ -5,6 +5,7 @@ export interface FormInputProps {
   name: string
   label: string
   placeholder?: string
+  onSavedValue?: string
   control?: Control<FieldValues, any>
   register: UseFormRegister<FieldValues>
   errors: FieldValues
