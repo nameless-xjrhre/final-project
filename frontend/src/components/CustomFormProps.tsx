@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { Control, FieldValues, UseFormRegister } from 'react-hook-form'
-import { BillStatus, VisitType } from '../graphql/generated'
+import { AppointmentStatus, VisitType } from '../graphql/generated'
 
 export interface Appointment {
   id: number
   visitType: VisitType
   date: Date
-  status: BillStatus
+  status: AppointmentStatus
   note: string
   patient: {
     id: number

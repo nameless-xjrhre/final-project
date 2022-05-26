@@ -13,9 +13,10 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import AddBillForm from '../BillForm/AddBillForm'
-import StatusButton from '../Buttons/StatusButton'
-import { AppointmentStatus } from '../../graphql/generated'
+// import StatusButton from '../Buttons/StatusButton'
+import { AppointmentStatus, VisitType } from '../../graphql/generated'
 import { capitalize } from '../../utils'
+import CreateAppointmentForm from '../AppointmentForm/CreateAppointmentForm'
 
 interface Appointment {
   id: number
