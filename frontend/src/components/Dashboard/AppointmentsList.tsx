@@ -10,10 +10,8 @@ import Skeleton from '@mui/material/Skeleton'
 import { Pagination } from '@mui/material'
 import { useQuery, useMutation, gql } from 'urql'
 import Typography from '@mui/material/Typography'
-import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import Button from '@mui/material/Button'
-import Stack from '@mui/material/Stack'
 
 import { BillStatus } from '../../graphql/generated'
 import { showFailAlert, showSuccessAlert } from '../../utils'
@@ -34,12 +32,13 @@ interface Appointment {
 }
 
 interface AppointmentQuery {
-  appointments: Appointment[]
+  appointmentsRange: Appointment[]
+  totalAppointments: number
 }
 
 const AppointmentsQueryDocument = gql`
-  query Appointments {
-    appointments {
+  query Appointments($start: Int!, $count: Int!) {
+    appointmentsRange(start: $start, count: $count) {
       id
       visitType
       date
@@ -53,6 +52,7 @@ const AppointmentsQueryDocument = gql`
         fullName
       }
     }
+    totalAppointments
   }
 `
 
@@ -86,18 +86,22 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export default function AppointmentList() {
   const [, setDropDown] = React.useState<null | HTMLElement>(null)
+  const [page, setPage] = React.useState(1)
   const handleClose = () => {
     setDropDown(null)
   }
   const [appointment] = useQuery<AppointmentQuery>({
     query: AppointmentsQueryDocument,
+    variables: {
+      start: (page - 1) * 10,
+      count: 10,
+    },
   })
   const [, cancelAppointment] = useMutation(CancelAppointmentMutationDocument)
 
   const handleCancel = (id: number) => () => {
     cancelAppointment({ id })
       .then((result) => {
-        console.log(result, id)
         if (result.error) {
           showFailAlert()
         } else {
@@ -173,7 +177,7 @@ export default function AppointmentList() {
         </TableHead>
         <TableBody>
           {data &&
-            data.appointments.map((item) => (
+            data.appointmentsRange.map((item) => (
               <TableRow key={item.id}>
                 <StyledTableCell>{item.patient.fullName}</StyledTableCell>
                 <StyledTableCell>{item.visitType}</StyledTableCell>
@@ -188,26 +192,23 @@ export default function AppointmentList() {
                 <StyledTableCell>Dr. {item.medStaff.fullName}</StyledTableCell>
                 <StyledTableCell>{item.status}</StyledTableCell>
                 <StyledTableCell>
-                  <Stack direction="row" spacing={2}>
-                    <EditIcon />
-                    <Button
-                      id="basic-button"
-                      aria-haspopup="true"
-                      style={{ color: '#808080' }}
-                    >
-                      <DeleteIcon
-                        color="error"
-                        onClick={handleCancel(item.id)}
-                      />
-                    </Button>{' '}
-                  </Stack>
+                  <Button
+                    id="basic-button"
+                    aria-haspopup="true"
+                    style={{ color: '#808080' }}
+                  >
+                    <DeleteIcon color="error" onClick={handleCancel(item.id)} />
+                  </Button>{' '}
                 </StyledTableCell>
               </TableRow>
             ))}
         </TableBody>
       </Table>
       <Pagination
-        count={4}
+        count={data ? Math.ceil(data.totalAppointments / 10) : 0}
+        onChange={(_, pageNum) => {
+          setPage(pageNum)
+        }}
         variant="outlined"
         shape="rounded"
         color="primary"

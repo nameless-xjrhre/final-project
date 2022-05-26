@@ -277,6 +277,7 @@ export type Patient = {
 export type Query = {
   __typename?: 'Query'
   appointments: Array<Appointment>
+  appointmentsRange?: Maybe<Array<Maybe<Appointment>>>
   hospitalBills: Array<HospitalBill>
   hospitalBillsByPatient?: Maybe<Array<Maybe<HospitalBill>>>
   medicalRecords: Array<MedicalRecord>
@@ -294,6 +295,11 @@ export type Query = {
   totalPatients?: Maybe<Scalars['Int']>
   upcomingAppointments?: Maybe<Array<Maybe<Appointment>>>
   users: Array<User>
+}
+
+export type QueryAppointmentsRangeArgs = {
+  count: Scalars['Int']
+  start: Scalars['Int']
 }
 
 export type QueryHospitalBillsByPatientArgs = {
@@ -480,11 +486,15 @@ export type HospitalBillsQuery = {
   }>
 }
 
-export type AppointmentsQueryVariables = Exact<{ [key: string]: never }>
+export type AppointmentsQueryVariables = Exact<{
+  start: Scalars['Int']
+  count: Scalars['Int']
+}>
 
 export type AppointmentsQuery = {
   __typename?: 'Query'
-  appointments: Array<{
+  totalAppointments?: number | null
+  appointmentsRange?: Array<{
     __typename?: 'Appointment'
     id: number
     visitType?: VisitType | null
@@ -500,7 +510,7 @@ export type AppointmentsQuery = {
       id: number
       fullName?: string | null
     } | null
-  }>
+  } | null> | null
 }
 
 export type CancelAppointmentMutationVariables = Exact<{
@@ -777,8 +787,8 @@ export function useHospitalBillsQuery(
   })
 }
 export const AppointmentsDocument = gql`
-  query Appointments {
-    appointments {
+  query Appointments($start: Int!, $count: Int!) {
+    appointmentsRange(start: $start, count: $count) {
       id
       visitType
       date
@@ -792,11 +802,12 @@ export const AppointmentsDocument = gql`
         fullName
       }
     }
+    totalAppointments
   }
 `
 
 export function useAppointmentsQuery(
-  options?: Omit<Urql.UseQueryArgs<AppointmentsQueryVariables>, 'query'>,
+  options: Omit<Urql.UseQueryArgs<AppointmentsQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<AppointmentsQuery>({
     query: AppointmentsDocument,
