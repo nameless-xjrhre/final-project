@@ -14,14 +14,15 @@ import CancelIcon from '@mui/icons-material/Cancel'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 
-import { BillStatus } from '../../graphql/generated'
+import { AppointmentStatus } from '../../graphql/generated'
+import StatusButton from '../Buttons/StatusButton'
 import { showFailAlert, showSuccessAlert } from '../../utils'
 
 interface Appointment {
   id: number
   visitType: string
   date: Date
-  status: BillStatus
+  status: AppointmentStatus
   patient: {
     id: number
     fullName: string
@@ -191,7 +192,9 @@ export default function AppointmentList() {
                   })}
                 </StyledTableCell>
                 <StyledTableCell>Dr. {item.medStaff.fullName}</StyledTableCell>
-                <StyledTableCell>{item.status}</StyledTableCell>
+                <StyledTableCell>
+                  <StatusButton status={item.status} />
+                </StyledTableCell>
                 <StyledTableCell>
                   <Button
                     id="basic-button"

@@ -8,4 +8,7 @@ module.exports = {
   },
   testEnvironment: 'jest-environment-jsdom',
   testMatch: ['**/src/**/?(*.)+(spec|test).[jt]s?(x)'],
+  transform: {
+    '^.+\\.(t|j)sx?$': ['@swc/jest'],
+  },
 }
