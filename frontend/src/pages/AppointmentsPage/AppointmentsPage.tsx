@@ -135,12 +135,16 @@ function DashboardContent() {
                     <CreateAppointmentForm
                       handleClose={handleAppointmentClose}
                       open={createAppointmentBtn}
+                      isNewAppointment={false}
+                      toUpdate={false}
                     />
                   )}
                   {createAppointmentWithPatientBtn && (
                     <CreateAppointmentWithPatientForm
                       handleClose={handleNewAppointmentClose}
                       open={createAppointmentWithPatientBtn}
+                      isNewAppointment
+                      toUpdate={false}
                     />
                   )}
                 </Paper>

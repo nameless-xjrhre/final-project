@@ -1,4 +1,5 @@
-import * as React from 'react'
+/* eslint-disable no-case-declarations */
+import React, { useState } from 'react'
 import {
   Grid,
   Typography,
@@ -13,20 +14,31 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { gql, useMutation } from 'urql'
 import CustomForm from '../CustomForm'
-import CustomFormProps from '../CustomFormProps'
+import { AppointmentFormProps } from '../CustomFormProps'
 import AppointmentForm from './AppointmentForm'
 import {
   AppointmentStatus,
   MutationCreateAppointmentArgs,
+  MutationEditAppointmentArgs,
 } from '../../graphql/generated'
 import { showFailAlert, showSuccessAlert } from '../../utils'
 
-const appointmentSchema = object().shape({
+const createAppointmentSchema = object().shape({
   visitType: string().required('Select type of visit.'),
   patient: string().required('Select patient.'),
   medicalStaff: string().required('Select preferred doctor.'),
   appointmentDate: string().nullable().required('Select appointment date.'),
+  appointmentTime: string().nullable().required('Select appointment time.'),
   note: string().required('Provide reason for appointment.'),
+})
+
+const updateAppointmentSchema = object().shape({
+  visitType: string(),
+  status: string(),
+  medicalStaff: string(),
+  appointmentDate: string().nullable(),
+  appointmentTime: string().nullable(),
+  note: string(),
 })
 
 const CreateAppointment = gql`
@@ -43,6 +55,7 @@ const CreateAppointment = gql`
       id
       date
       visitType
+      note
       patient {
         id
       }
@@ -53,13 +66,42 @@ const CreateAppointment = gql`
   }
 `
 
+const UpdateAppointment = gql`
+  mutation UpdateAppointment($id: Int!, $data: EditAppointmentInput!) {
+    editAppointment(id: $id, data: $data) {
+      id
+      date
+      note
+      visitType
+      status
+      patient {
+        id
+      }
+      medStaff {
+        id
+      }
+    }
+  }
+`
+
+const getCompleteDate = (date: Date, time: string) => {
+  const hour = new Date(time).getHours()
+  const min = new Date(time).getMinutes()
+
+  return new Date(date).setHours(hour, min)
+}
+
 export default function CreateAppointmentForm({
   open,
   handleClose,
-}: CustomFormProps) {
+  isNewAppointment,
+  appointment,
+  toUpdate,
+}: AppointmentFormProps) {
   const [, createAppointment] = useMutation(CreateAppointment)
-  const [complete, setComplete] = React.useState(false)
-  const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const [, updateAppointment] = useMutation(UpdateAppointment)
+  const [complete, setComplete] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const handleComplete = () => setComplete(true)
   const handleSubmitting = () => setIsSubmitting(true)
 
@@ -81,34 +123,66 @@ export default function CreateAppointmentForm({
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(appointmentSchema),
+    resolver: !toUpdate
+      ? yupResolver(createAppointmentSchema)
+      : yupResolver(updateAppointmentSchema),
   })
 
   const handleCreateAppointment = handleSubmit((data) => {
-    const input: MutationCreateAppointmentArgs = {
-      data: {
-        date: new Date(data.appointmentDate),
-        visitType: data.visitType,
-        status: AppointmentStatus.Pending,
-        // note: data.note
-      },
-      medStaffId: parseInt(data.medicalStaff, 10),
-      patientId: parseInt(data.patient, 10),
-    }
-
     handleSubmitting()
-    createAppointment(input)
-      .then((result) => {
-        if (result.error) {
-          handleClose(handleComplete)
-          showFailAlert()
-        } else {
-          console.log(result)
-          handleClose(handleComplete)
-          showSuccessAlert()
-        }
-      })
-      .catch((err) => console.error(err))
+    if (!toUpdate) {
+      const createInput: MutationCreateAppointmentArgs = {
+        data: {
+          date: new Date(
+            getCompleteDate(data.appointmentDate, data.appointmentTime),
+          ),
+          visitType: data.visitType,
+          status: AppointmentStatus.Pending,
+          note: data.note,
+        },
+        medStaffId: parseInt(data.medicalStaff, 10),
+        patientId: parseInt(data.patient, 10),
+      }
+      createAppointment(createInput)
+        .then((result) => {
+          if (result.error) {
+            console.log(result)
+            handleClose(handleComplete)
+            showFailAlert()
+          } else {
+            console.log(result)
+            handleClose(handleComplete)
+            showSuccessAlert()
+          }
+        })
+        .catch((err) => console.error(err))
+    } else {
+      const updateInput: MutationEditAppointmentArgs = {
+        id: appointment!.id,
+        data: {
+          date:
+            new Date(
+              getCompleteDate(data.appointmentDate, data.appointmentTime),
+            ) || appointment?.date,
+          visitType: data.visitType || appointment?.visitType,
+          status: data.status || appointment?.status,
+          note: data.note || appointment?.note,
+        },
+      }
+      updateAppointment(updateInput)
+        .then((result) => {
+          if (result.error) {
+            console.log(result)
+            handleClose(handleComplete)
+            showFailAlert()
+          } else {
+            console.log(result)
+            handleClose(handleComplete)
+            showSuccessAlert()
+          }
+        })
+        .catch((err) => console.error(err))
+    }
   })
 
   const handleSubmitForm = (
@@ -122,7 +196,9 @@ export default function CreateAppointmentForm({
     <CustomForm open={open}>
       <Grid container>
         <Typography variant="h6" color="GrayText">
-          Create Appointment
+          {!isNewAppointment && !toUpdate
+            ? 'Create Appointment'
+            : 'Edit Appointment'}
         </Typography>
         <IconButton
           aria-label="close"
@@ -134,19 +210,31 @@ export default function CreateAppointmentForm({
         </IconButton>
       </Grid>
       <Divider />
-      <AppointmentForm
-        control={control}
-        register={register}
-        errors={errors}
-        isNewAppointment={false}
-      />
+      {toUpdate ? (
+        <AppointmentForm
+          control={control}
+          register={register}
+          errors={errors}
+          isNewAppointment={false}
+          toUpdate
+          appointment={appointment}
+        />
+      ) : (
+        <AppointmentForm
+          control={control}
+          register={register}
+          errors={errors}
+          isNewAppointment={false}
+          toUpdate={false}
+        />
+      )}
       <Button
         onClick={(e) => handleSubmitForm(e)}
         disabled={isSubmitting}
         variant="contained"
         sx={buttonSx}
       >
-        Book Now
+        {!isNewAppointment && !toUpdate ? 'Book Now' : 'Save Changes'}
       </Button>
       {isSubmitting && (
         <CircularProgress
@@ -155,7 +243,7 @@ export default function CreateAppointmentForm({
             color: 'blue',
             position: 'absolute',
             marginTop: -3.5,
-            marginLeft: 62.5,
+            marginLeft: 62,
           }}
         />
       )}

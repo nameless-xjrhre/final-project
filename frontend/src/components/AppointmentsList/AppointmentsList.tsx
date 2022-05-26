@@ -13,13 +13,15 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import AddBillForm from '../BillForm/AddBillForm'
-import { BillStatus } from '../../graphql/generated'
+import { BillStatus, VisitType } from '../../graphql/generated'
+import CreateAppointmentForm from '../AppointmentForm/CreateAppointmentForm'
 
 interface Appointment {
   id: number
-  visitType: string
+  visitType: VisitType
   date: Date
   status: BillStatus
+  note: string
   patient: {
     id: number
     fullName: string
@@ -30,17 +32,18 @@ interface Appointment {
   }
 }
 
-interface AppointmentQuery {
+export interface AppointmentQuery {
   appointments: Appointment[]
 }
 
-const appointmentQueryDocument = gql`
+export const appointmentQueryDocument = gql`
   query appointmentQuery {
     appointments {
       id
       visitType
       date
       status
+      note
       patient {
         id
         fullName
@@ -72,8 +75,11 @@ export default function AppointmentList() {
   const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
   const open = Boolean(drop)
   const [generateBillBtn, setGenerateBillBtn] = React.useState(false)
-  const handleOpenBillForm = () => setGenerateBillBtn(true)
-  const handleCloseBillForm = () => setGenerateBillBtn(false)
+  const handleGenerateBillOpenForm = () => setGenerateBillBtn(true)
+  const handleGenerateCloseBillForm = () => setGenerateBillBtn(false)
+  const [editAppointmentBtn, setEditAppointmentBtn] = React.useState(false)
+  const handleEditApptOpenForm = () => setEditAppointmentBtn(true)
+  const handleEditApptCloseBillForm = () => setEditAppointmentBtn(false)
   const [appt, setAppointment] = React.useState<Appointment>()
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -160,7 +166,7 @@ export default function AppointmentList() {
                 </StyledTableCell>
                 <StyledTableCell>Dr. {item.medStaff.fullName}</StyledTableCell>
                 <StyledTableCell>{item.status}</StyledTableCell>
-                <StyledTableCell>
+                <StyledTableCell align="right">
                   <Button
                     id="basic-button"
                     aria-controls={open ? 'basic-menu' : undefined}
@@ -179,18 +185,28 @@ export default function AppointmentList() {
                     anchorEl={drop}
                     open={open}
                     onClose={handleClose}
+                    sx={{ boxShadow: 1 }}
                     MenuListProps={{
                       'aria-labelledby': 'basic-button',
                     }}
                   >
-                    <MenuItem onClick={handleClose}>Edit</MenuItem>
+                    <MenuItem onClick={handleEditApptOpenForm}>Edit</MenuItem>
+                    {editAppointmentBtn && (
+                      <CreateAppointmentForm
+                        handleClose={handleEditApptCloseBillForm}
+                        open={editAppointmentBtn}
+                        isNewAppointment={false}
+                        toUpdate
+                        appointment={appt!}
+                      />
+                    )}
                     <MenuItem onClick={handleClose}>View Notes</MenuItem>
-                    <MenuItem onClick={handleOpenBillForm}>
+                    <MenuItem onClick={handleGenerateBillOpenForm}>
                       Generate Bill
                     </MenuItem>
                     {generateBillBtn && (
                       <AddBillForm
-                        handleClose={handleCloseBillForm}
+                        handleClose={handleGenerateCloseBillForm}
                         open={generateBillBtn}
                         apppointment={appt!}
                       />
