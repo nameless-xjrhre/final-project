@@ -133,6 +133,7 @@ export type EditScheduleInput = {
 export type HospitalBill = {
   __typename?: 'HospitalBill'
   amount: Scalars['Float']
+  appointment?: Maybe<Appointment>
   date: Scalars['DateTime']
   deadlineDate?: Maybe<Scalars['DateTime']>
   id: Scalars['Int']
@@ -276,9 +277,13 @@ export type Patient = {
 export type Query = {
   __typename?: 'Query'
   appointments: Array<Appointment>
+  appointmentsRange?: Maybe<Array<Maybe<Appointment>>>
   hospitalBills: Array<HospitalBill>
+  hospitalBillsByPatient?: Maybe<Array<Maybe<HospitalBill>>>
   medicalRecords: Array<MedicalRecord>
+  medicalRecordsByPatient?: Maybe<Array<Maybe<MedicalRecord>>>
   medicalStaff: Array<MedicalStaff>
+  pastAppointments?: Maybe<Array<Maybe<Appointment>>>
   patient?: Maybe<Patient>
   patients: Array<Patient>
   schedules: Array<Schedule>
@@ -288,7 +293,21 @@ export type Query = {
   totalBillUnpaid?: Maybe<Scalars['Float']>
   totalDoneAppointments?: Maybe<Scalars['Int']>
   totalPatients?: Maybe<Scalars['Int']>
+  upcomingAppointments?: Maybe<Array<Maybe<Appointment>>>
   users: Array<User>
+}
+
+export type QueryAppointmentsRangeArgs = {
+  count: Scalars['Int']
+  start: Scalars['Int']
+}
+
+export type QueryHospitalBillsByPatientArgs = {
+  id: Scalars['Int']
+}
+
+export type QueryMedicalRecordsByPatientArgs = {
+  id: Scalars['Int']
 }
 
 export type QueryPatientArgs = {
@@ -465,6 +484,48 @@ export type HospitalBillsQuery = {
       fullName?: string | null
     } | null
   }>
+}
+
+export type AppointmentsQueryVariables = Exact<{
+  start: Scalars['Int']
+  count: Scalars['Int']
+}>
+
+export type AppointmentsQuery = {
+  __typename?: 'Query'
+  totalAppointments?: number | null
+  appointmentsRange?: Array<{
+    __typename?: 'Appointment'
+    id: number
+    visitType?: VisitType | null
+    date: any
+    status?: AppointmentStatus | null
+    patient?: {
+      __typename?: 'Patient'
+      id: number
+      fullName?: string | null
+    } | null
+    medStaff?: {
+      __typename?: 'MedicalStaff'
+      id: number
+      fullName?: string | null
+    } | null
+  } | null> | null
+}
+
+export type CancelAppointmentMutationVariables = Exact<{
+  id: Scalars['Int']
+}>
+
+export type CancelAppointmentMutation = {
+  __typename?: 'Mutation'
+  editAppointment?: {
+    __typename?: 'Appointment'
+    id: number
+    date: any
+    status?: AppointmentStatus | null
+    patient?: { __typename?: 'Patient'; fullName?: string | null } | null
+  } | null
 }
 
 export type CreateMedicalStaffMutationVariables = Exact<{
@@ -724,6 +785,53 @@ export function useHospitalBillsQuery(
     query: HospitalBillsDocument,
     ...options,
   })
+}
+export const AppointmentsDocument = gql`
+  query Appointments($start: Int!, $count: Int!) {
+    appointmentsRange(start: $start, count: $count) {
+      id
+      visitType
+      date
+      status
+      patient {
+        id
+        fullName
+      }
+      medStaff {
+        id
+        fullName
+      }
+    }
+    totalAppointments
+  }
+`
+
+export function useAppointmentsQuery(
+  options: Omit<Urql.UseQueryArgs<AppointmentsQueryVariables>, 'query'>,
+) {
+  return Urql.useQuery<AppointmentsQuery>({
+    query: AppointmentsDocument,
+    ...options,
+  })
+}
+export const CancelAppointmentDocument = gql`
+  mutation CancelAppointment($id: Int!) {
+    editAppointment(id: $id, data: { status: CANCELED }) {
+      id
+      date
+      status
+      patient {
+        fullName
+      }
+    }
+  }
+`
+
+export function useCancelAppointmentMutation() {
+  return Urql.useMutation<
+    CancelAppointmentMutation,
+    CancelAppointmentMutationVariables
+  >(CancelAppointmentDocument)
 }
 export const CreateMedicalStaffDocument = gql`
   mutation CreateMedicalStaff($data: CreateMedicalStaffInput!) {

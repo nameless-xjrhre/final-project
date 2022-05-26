@@ -182,6 +182,7 @@ type Patient {
 
 type Query {
   appointments: [Appointment!]!
+  appointmentsRange(count: Int!, start: Int!): [Appointment]
   hospitalBills: [HospitalBill!]!
   hospitalBillsByPatient(id: Int!): [HospitalBill]
   medicalRecords: [MedicalRecord!]!

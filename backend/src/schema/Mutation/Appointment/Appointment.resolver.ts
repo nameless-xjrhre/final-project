@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { Context } from '../../../context'
 import { NexusGenInputs } from '../../../generated/nexus'
 
@@ -57,16 +58,21 @@ export async function editAppointment(
   appointment: EditAppointmentType,
   ctx: Context,
 ) {
+  const data = _.pickBy(
+    {
+      visitType: appointment.visitType,
+      date: appointment.date,
+      note: appointment.note,
+      status: appointment.status,
+    },
+    _.identity,
+  )
+
   return ctx.prisma.appointment.update({
     where: {
       id,
     },
-    data: {
-      visitType: appointment.visitType ?? undefined,
-      note: appointment.note ?? undefined,
-      date: appointment.date,
-      status: appointment.status ?? undefined,
-    },
+    data,
   })
 }
 

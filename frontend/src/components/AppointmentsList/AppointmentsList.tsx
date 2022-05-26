@@ -13,13 +13,15 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import AddBillForm from '../BillForm/AddBillForm'
-import { BillStatus } from '../../graphql/generated'
+import StatusButton from '../Buttons/StatusButton'
+import { AppointmentStatus } from '../../graphql/generated'
+import { capitalize } from '../../utils'
 
 interface Appointment {
   id: number
   visitType: string
   date: Date
-  status: BillStatus
+  status: AppointmentStatus
   patient: {
     id: number
     fullName: string
@@ -149,7 +151,13 @@ export default function AppointmentList() {
             data.appointments.map((item) => (
               <TableRow key={item.id}>
                 <StyledTableCell>{item.patient.fullName}</StyledTableCell>
-                <StyledTableCell>{item.visitType}</StyledTableCell>
+                <StyledTableCell
+                  sx={{
+                    fontWeight: '800',
+                  }}
+                >
+                  {capitalize(item.visitType.toLowerCase())}
+                </StyledTableCell>
                 <StyledTableCell>
                   {new Date(item.date).toLocaleDateString('en-ZA')}
                 </StyledTableCell>
@@ -159,7 +167,9 @@ export default function AppointmentList() {
                   })}
                 </StyledTableCell>
                 <StyledTableCell>Dr. {item.medStaff.fullName}</StyledTableCell>
-                <StyledTableCell>{item.status}</StyledTableCell>
+                <StyledTableCell>
+                  <StatusButton status={item.status} />
+                </StyledTableCell>
                 <StyledTableCell>
                   <Button
                     id="basic-button"

@@ -1,8 +1,5 @@
 import '@testing-library/jest-dom'
-import { render, screen } from '@testing-library/react'
-import App from './App'
 
-it('Shows Sign In', () => {
-  render(<App />)
-  expect(screen.getByText('Sign In')).toBeInTheDocument()
+it('checks if 1 + 1 is 2', () => {
+  expect(1 + 1).toBe(2)
 })
