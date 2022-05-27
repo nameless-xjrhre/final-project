@@ -156,7 +156,9 @@ export default function PatientsList() {
                   {patient?.latestAppointment?.visitType}
                 </StyledTableCell>
                 <StyledTableCell>
-                  Dr. {patient?.latestAppointment?.medStaff?.fullName}
+                  {hasNoAppointments(patient)
+                    ? ''
+                    : `Dr. ${patient?.latestAppointment?.medStaff?.fullName}`}
                 </StyledTableCell>
                 <StyledTableCell>
                   <Button
