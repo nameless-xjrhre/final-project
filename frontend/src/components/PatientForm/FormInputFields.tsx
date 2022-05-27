@@ -32,7 +32,7 @@ export const FormInputText = ({
 export const FormInputDate = ({
   name,
   label,
-  placeholder,
+  onSavedValue,
   control,
   register,
   errors,
@@ -47,13 +47,12 @@ export const FormInputDate = ({
         label={label}
         openTo="year"
         views={['year', 'month', 'day']}
-        value={value}
+        value={value || onSavedValue}
         onChange={
           (date) => onChange(date.toLocaleDateString('en-CA')) // change format to 'YYYY-MM-DD'
         }
         renderInput={(params) => (
           <TextField
-            placeholder={placeholder}
             variant="outlined"
             margin="dense"
             {...params}

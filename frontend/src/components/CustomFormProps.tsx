@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Control, FieldValues, UseFormRegister } from 'react-hook-form'
-import { AppointmentStatus, VisitType } from '../graphql/generated'
+import { AppointmentStatus, Sex, VisitType } from '../graphql/generated'
 
 export interface Appointment {
   id: number
@@ -15,6 +15,24 @@ export interface Appointment {
   medStaff: {
     id: number
     fullName: string
+  }
+}
+
+export interface Patient {
+  id: number
+  fullName: string
+  sex: string
+  firstName: string
+  lastName: string
+  contactNum: string
+  dateOfBirth: Date
+  address: string
+  latestAppointment: {
+    date: Date
+    visitType: string
+    medStaff: {
+      fullName: string
+    }
   }
 }
 
@@ -35,6 +53,12 @@ export interface AppointmentFormProps {
   isNewAppointment: boolean
   toUpdate: boolean
   appointment?: Appointment
+}
+
+export interface PatientFormProps {
+  handleClose: (e: any) => void
+  open: boolean
+  patient?: Patient
 }
 
 export default interface CustomFormProps {
