@@ -13,7 +13,7 @@ import { useQuery, gql } from 'urql'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import AddBillForm from '../BillForm/AddBillForm'
+import CreateBillForm from '../BillForm/CreateBillForm'
 // import StatusButton from '../Buttons/StatusButton'
 import { AppointmentStatus, VisitType } from '../../graphql/generated'
 import { capitalize } from '../../utils'
@@ -245,10 +245,11 @@ export default function AppointmentList() {
                       Generate Bill
                     </MenuItem>
                     {generateBillBtn && (
-                      <AddBillForm
+                      <CreateBillForm
                         handleClose={handleGenerateCloseBillForm}
                         open={generateBillBtn}
-                        apppointment={currentAppointment!}
+                        appointment={currentAppointment!}
+                        toUpdate={false}
                       />
                     )}
                     <MenuItem

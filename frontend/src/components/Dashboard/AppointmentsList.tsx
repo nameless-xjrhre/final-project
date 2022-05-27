@@ -105,9 +105,9 @@ export default function AppointmentList() {
     cancelAppointment({ id })
       .then((result) => {
         if (result.error) {
-          showFailAlert()
+          showFailAlert('')
         } else {
-          showSuccessAlert()
+          showSuccessAlert('')
         }
       })
       .then(handleClose)
