@@ -41,6 +41,3 @@ export const showFailAlert = (message: string) =>
     text: message,
     icon: 'warning',
   })
-
-// text: 'Data has been saved.',
-// text: 'Data has not been saved.',

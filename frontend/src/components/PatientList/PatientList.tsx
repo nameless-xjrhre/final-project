@@ -192,7 +192,12 @@ export default function PatientsList() {
                     <MenuItem onClick={handleDismissDropdown}>
                       View Details
                     </MenuItem>
-                    <MenuItem onClick={handleOpenDeleteForm}>Delete</MenuItem>
+                    <MenuItem
+                      onClick={handleOpenDeleteForm}
+                      sx={{ color: 'red' }}
+                    >
+                      Delete
+                    </MenuItem>
                     {deletePatientBtn && (
                       <DeletePatientDialog
                         handleClose={handleCloseDeleteForm}
