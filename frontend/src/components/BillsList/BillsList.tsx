@@ -7,12 +7,13 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Skeleton from '@mui/material/Skeleton'
 import { Button, Pagination } from '@mui/material'
-import { useQuery, gql } from 'urql'
+import { useQuery, gql, useMutation } from 'urql'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { BillStatus } from '../../graphql/generated'
 import CreateBillForm from '../BillForm/CreateBillForm'
+import { showFailAlert, showSuccessAlert } from '../../utils'
 
 interface Bill {
   id: number
@@ -54,6 +55,15 @@ const billQueryDocument = gql`
   }
 `
 
+const UpdatStatusBill = gql`
+  mutation MarkAsPaidBill($id: Int!) {
+    editHospitalBill(id: $id, data: { status: PAID }) {
+      id
+      status
+    }
+  }
+`
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: '#E8E8E8',
@@ -79,10 +89,27 @@ export default function BillsList() {
   const open = Boolean(drop)
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) =>
     setDropDown(event.currentTarget)
+  const handleClose = () => setDropDown(null)
 
   const [bills] = useQuery<BillQueryData>({
     query: billQueryDocument,
   })
+
+  const [, markAsPaid] = useMutation(UpdatStatusBill)
+
+  const handleBillStatusUpdate = (id: number | undefined) => () => {
+    markAsPaid({ id })
+      .then((result) => {
+        if (result.error) {
+          handleClose()
+          showFailAlert('')
+        } else {
+          handleClose()
+          showSuccessAlert('')
+        }
+      })
+      .catch((err) => console.error(err))
+  }
 
   const { data, fetching, error } = bills
   if (fetching)
@@ -177,6 +204,9 @@ export default function BillsList() {
                         toUpdate
                       />
                     )}
+                    <MenuItem onClick={handleBillStatusUpdate(currentBill?.id)}>
+                      Mark as Paid
+                    </MenuItem>
                   </Menu>
                 </StyledTableCell>
               </TableRow>
