@@ -50,8 +50,8 @@ export interface FormInputProps {
 export interface AppointmentFormProps {
   handleClose: (e: any) => void
   open: boolean
-  isNewAppointment: boolean
-  toUpdate: boolean
+  isNewAppointment?: boolean
+  toUpdate?: boolean
   appointment?: Appointment
 }
 

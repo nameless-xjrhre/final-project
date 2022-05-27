@@ -17,6 +17,7 @@ import AddBillForm from '../BillForm/AddBillForm'
 import { AppointmentStatus, VisitType } from '../../graphql/generated'
 import { capitalize } from '../../utils'
 import CreateAppointmentForm from '../AppointmentForm/CreateAppointmentForm'
+import DeleteAppointmentDialog from '../AppointmentForm/DeleteAppointmentDialog'
 
 interface Appointment {
   id: number
@@ -82,6 +83,10 @@ export default function AppointmentList() {
   const [editAppointmentBtn, setEditAppointmentBtn] = React.useState(false)
   const handleEditApptOpenForm = () => setEditAppointmentBtn(true)
   const handleEditApptCloseBillForm = () => setEditAppointmentBtn(false)
+  const [deleteAppointmentBtn, setDeleteAppointmentBtn] = React.useState(false)
+  const handleOpenDeleteAppointmentDialog = () => setDeleteAppointmentBtn(true)
+  const handleCloseDeleteAppointmentDialog = () =>
+    setDeleteAppointmentBtn(false)
   const [currentAppointment, setCurrentAppointment] =
     React.useState<Appointment>()
 
@@ -224,9 +229,19 @@ export default function AppointmentList() {
                         apppointment={currentAppointment!}
                       />
                     )}
-                    <MenuItem onClick={handleClose} sx={{ color: 'red' }}>
-                      Cancel
+                    <MenuItem
+                      onClick={handleOpenDeleteAppointmentDialog}
+                      sx={{ color: 'red' }}
+                    >
+                      Delete
                     </MenuItem>
+                    {deleteAppointmentBtn && (
+                      <DeleteAppointmentDialog
+                        handleClose={handleCloseDeleteAppointmentDialog}
+                        open={deleteAppointmentBtn}
+                        appointment={currentAppointment}
+                      />
+                    )}
                   </Menu>
                 </StyledTableCell>
               </TableRow>
