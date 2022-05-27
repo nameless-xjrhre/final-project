@@ -12,9 +12,14 @@ import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { Typography, Avatar } from '@mui/material'
+import { useQuery, gql } from 'urql'
+import { useParams } from 'react-router-dom'
+import Stack from '@mui/material/Stack'
 import Sidebar from '../../components/Sidebar'
 import RightSideBar from '../../components/RightSideBar'
 import TabPanel from '../../components/TabPanel'
+
+import { capitalize } from '../../utils'
 
 import './ProfilePage.css'
 
@@ -49,6 +54,19 @@ export function stringAvatar(name: string) {
   }
 }
 
+const PatientDocumentQuery = gql`
+  query PatientDetails($id: Int!) {
+    patient(id: $id) {
+      id
+      fullName
+      sex
+      address
+      dateOfBirth
+      contactNum
+    }
+  }
+`
+
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
@@ -75,12 +93,28 @@ const Drawer = styled(MuiDrawer, {
   },
 }))
 
+const HeaderText = { mt: 3, color: '#646060', fontWeight: 700 }
+
 const mdTheme = createTheme()
 
 function DashboardContent() {
   const [open, setOpen] = React.useState(true)
   const toggleDrawer = () => {
     setOpen(!open)
+  }
+  const { id } = useParams()
+
+  const [{ data, fetching, error }] = useQuery({
+    query: PatientDocumentQuery,
+    variables: { id: parseInt(id!, 10) },
+  })
+
+  if (fetching) {
+    return <div>Loading...</div>
+  }
+
+  if (error) {
+    return <div>Error! {error.message}</div>
   }
 
   return (
@@ -118,52 +152,85 @@ function DashboardContent() {
               <Grid item xs={12} md={8} lg={9}>
                 <Paper
                   sx={{
-                    p: 2,
                     display: 'flex',
                     flexDirection: 'column',
                     height: 240,
+                    width: '100%',
                   }}
                 >
-                  <Avatar
-                    alt="Remy Sharp"
-                    src="/static/images/avatar/1.jpg"
+                  <Grid
+                    container
+                    width="100%"
                     sx={{
-                      top: 31,
-                      left: 60,
-                      width: 96,
-                      height: 96,
+                      fontFamily: 'Lato',
+                      marginTop: 4,
                     }}
-                  />
-                  <Typography variant="h6" noWrap component="div" mt={5} ml={5}>
-                    Renzo Laporno
-                  </Typography>
-                  <Typography ml={8} noWrap component="div">
-                    [ Patient ID ]
-                  </Typography>
-                  <Typography mt={-20} mx={35} noWrap component="div">
-                    Gender
-                  </Typography>
-                  <Typography mt={1} mx={35} noWrap component="div">
-                    Male
-                  </Typography>
-                  <Typography mt={5} mx={35} noWrap component="div">
-                    Address
-                  </Typography>
-                  <Typography mt={1} mx={35} noWrap component="div">
-                    Villa,Iloilo city{' '}
-                  </Typography>
-                  <Typography mt={-19} mx={52} component="div">
-                    Birthday
-                  </Typography>
-                  <Typography mt={1} ml={52} component="div">
-                    Jan 1, 2000 (22yrs old)
-                  </Typography>
-                  <Typography mt={-7} ml={80} component="div">
-                    Contact Number
-                  </Typography>
-                  <Typography mt={1} ml={80} component="div">
-                    09173553326
-                  </Typography>
+                  >
+                    <Grid
+                      item
+                      xs={3}
+                      sx={{
+                        ml: 4,
+                      }}
+                    >
+                      <Stack>
+                        <Avatar
+                          alt={data.patient.fullName}
+                          src="/static/images/avatar/1.jpg"
+                          sx={{
+                            width: 96,
+                            height: 96,
+                          }}
+                        />
+                        <Typography noWrap component="div" sx={HeaderText}>
+                          {data.patient.fullName}
+                        </Typography>
+                        <Typography noWrap component="div">
+                          {`Patient ID: ${data.patient.id}`}
+                        </Typography>
+                      </Stack>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Stack sx={{ marginBottom: 5 }}>
+                        <Typography
+                          sx={{ mb: 0.5, color: '#646060', fontWeight: 700 }}
+                        >
+                          Gender
+                        </Typography>
+                        <Typography>
+                          {capitalize(data.patient.sex.toLowerCase())}
+                        </Typography>
+                      </Stack>
+                      <Stack>
+                        <Typography
+                          sx={{ mb: 0.5, color: '#646060', fontWeight: 700 }}
+                        >
+                          Address
+                        </Typography>
+                        <Typography>{data.patient.address}</Typography>
+                      </Stack>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Stack sx={{ marginBottom: 5 }}>
+                        <Typography sx={{ color: '#646060', fontWeight: 700 }}>
+                          Birthday
+                        </Typography>
+                        <Typography>
+                          {new Date(
+                            data.patient.dateOfBirth,
+                          ).toLocaleDateString('en-ZA')}
+                        </Typography>
+                      </Stack>
+                      <Stack>
+                        <Typography
+                          sx={{ mb: 0.5, color: '#646060', fontWeight: 700 }}
+                        >
+                          Contact Number
+                        </Typography>
+                        <Typography>{data.patient.contactNum}</Typography>
+                      </Stack>
+                    </Grid>
+                  </Grid>
                 </Paper>
               </Grid>
               <Grid item xs={12} md={8} lg={9}>
