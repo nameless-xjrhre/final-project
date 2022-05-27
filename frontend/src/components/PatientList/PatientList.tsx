@@ -13,29 +13,17 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { useNavigate } from 'react-router-dom'
 import EditPatientForm from '../PatientForm/EditPatientForm'
-import DeletePatientForm from '../PatientForm/DeletePatientForm'
-
-interface PatientQueryData {
-  patients: {
-    id: number
-    fullName: string
-    sex: string
-    contactNum: string
-    latestAppointment: {
-      date: Date
-      visitType: string
-      medStaff: {
-        fullName: string
-      }
-    }
-  }[]
-}
+import DeletePatientDialog from '../PatientForm/DeletePatientDialog'
 
 interface Patient {
   id: number
   fullName: string
   sex: string
+  firstName: string
+  lastName: string
   contactNum: string
+  dateOfBirth: Date
+  address: string
   latestAppointment: {
     date: Date
     visitType: string
@@ -45,17 +33,26 @@ interface Patient {
   }
 }
 
+interface PatientQueryData {
+  patients: Patient[]
+}
+
 const patientQueryDocument = gql`
   query PatientDetails {
     patients {
       id
       fullName
       sex
+      firstName
+      lastName
       contactNum
+      dateOfBirth
+      address
       latestAppointment {
         date
         visitType
         medStaff {
+          id
           fullName
         }
       }
@@ -93,9 +90,12 @@ export default function PatientsList() {
   const handleCloseDeleteForm = () => setDeletePatientBtn(false)
   const handleDismissDropdown = () => setDropDown(null)
   const open = Boolean(drop)
+  const [currenPatient, setCurrentPatient] = React.useState<Patient>()
   const handleClick =
-    (id: number) => (event: React.MouseEvent<HTMLButtonElement>) => {
+    (id: number, patient: Patient) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
       setPatientId(id)
+      setCurrentPatient(patient)
       setDropDown(event.currentTarget)
     }
 
@@ -168,7 +168,9 @@ export default function PatientsList() {
                   {patient?.latestAppointment?.visitType}
                 </StyledTableCell>
                 <StyledTableCell>
-                  Dr. {patient?.latestAppointment?.medStaff?.fullName}
+                  {hasNoAppointments(patient)
+                    ? ''
+                    : `Dr. ${patient?.latestAppointment?.medStaff?.fullName}`}
                 </StyledTableCell>
                 <StyledTableCell>
                   <Button
@@ -176,7 +178,11 @@ export default function PatientsList() {
                     aria-controls={open ? 'basic-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
-                    onClick={handleClick(patient.id)}
+                    onClick={handleClick(patient.id, patient)}
+                    // onClick={(e) => {
+                    //   handleClick(e)
+                    //   setCurrentPatient(patient)
+                    // }}
                     style={{ color: '#808080' }}
                   >
                     <MoreVertIcon />
@@ -195,16 +201,23 @@ export default function PatientsList() {
                       <EditPatientForm
                         handleClose={handleCloseEditForm}
                         open={editPatientBtn}
+                        patient={currenPatient}
                       />
                     )}
                     <MenuItem onClick={clickDetails(patientId)}>
                       View Details
                     </MenuItem>
-                    <MenuItem onClick={handleOpenDeleteForm}>Delete</MenuItem>
+                    <MenuItem
+                      onClick={handleOpenDeleteForm}
+                      sx={{ color: 'red' }}
+                    >
+                      Delete
+                    </MenuItem>
                     {deletePatientBtn && (
-                      <DeletePatientForm
+                      <DeletePatientDialog
                         handleClose={handleCloseDeleteForm}
                         open={deletePatientBtn}
+                        patient={currenPatient}
                       />
                     )}
                   </Menu>

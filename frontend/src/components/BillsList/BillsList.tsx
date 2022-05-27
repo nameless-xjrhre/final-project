@@ -7,13 +7,13 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Skeleton from '@mui/material/Skeleton'
 import { Button, Pagination } from '@mui/material'
-import { useQuery, gql } from 'urql'
+import { useQuery, gql, useMutation } from 'urql'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import EditPatientForm from '../PatientForm/EditPatientForm'
-import DeletePatientForm from '../PatientForm/DeletePatientForm'
 import { BillStatus } from '../../graphql/generated'
+import CreateBillForm from '../BillForm/CreateBillForm'
+import { showFailAlert, showSuccessAlert } from '../../utils'
 
 interface Bill {
   id: number
@@ -55,6 +55,15 @@ const billQueryDocument = gql`
   }
 `
 
+const UpdatStatusBill = gql`
+  mutation MarkAsPaidBill($id: Int!) {
+    editHospitalBill(id: $id, data: { status: PAID }) {
+      id
+      status
+    }
+  }
+`
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: '#E8E8E8',
@@ -72,20 +81,35 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export default function BillsList() {
   const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
-  const [editPatientBtn, setEditPatientBtn] = React.useState(false)
-  const [deletePatientBtn, setDeletePatientBtn] = React.useState(false)
-  const handleOpenEditForm = () => setEditPatientBtn(true)
-  const handleCloseEditForm = () => setEditPatientBtn(false)
-  const handleOpenDeleteForm = () => setDeletePatientBtn(true)
-  const handleCloseDeleteForm = () => setDeletePatientBtn(false)
+  const [editBilltBtn, setEditBillBtn] = React.useState(false)
+  const handleOpenEditBillForm = () => setEditBillBtn(true)
+  const handleCloseEditBillForm = () => setEditBillBtn(false)
   const handleDismissDropdown = () => setDropDown(null)
+  const [currentBill, setCurrentBill] = React.useState<Bill>()
   const open = Boolean(drop)
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) =>
     setDropDown(event.currentTarget)
+  const handleClose = () => setDropDown(null)
 
   const [bills] = useQuery<BillQueryData>({
     query: billQueryDocument,
   })
+
+  const [, markAsPaid] = useMutation(UpdatStatusBill)
+
+  const handleBillStatusUpdate = (id: number | undefined) => () => {
+    markAsPaid({ id })
+      .then((result) => {
+        if (result.error) {
+          handleClose()
+          showFailAlert('')
+        } else {
+          handleClose()
+          showSuccessAlert('')
+        }
+      })
+      .catch((err) => console.error(err))
+  }
 
   const { data, fetching, error } = bills
   if (fetching)
@@ -154,7 +178,10 @@ export default function BillsList() {
                     aria-controls={open ? 'basic-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
-                    onClick={handleClick}
+                    onClick={(e) => {
+                      handleClick(e)
+                      setCurrentBill(bill)
+                    }}
                     style={{ color: '#808080' }}
                   >
                     <MoreVertIcon />
@@ -168,23 +195,18 @@ export default function BillsList() {
                       'aria-labelledby': 'basic-button',
                     }}
                   >
-                    <MenuItem onClick={handleOpenEditForm}>Edit</MenuItem>
-                    {editPatientBtn && (
-                      <EditPatientForm
-                        handleClose={handleCloseEditForm}
-                        open={editPatientBtn}
+                    <MenuItem onClick={handleOpenEditBillForm}>Edit</MenuItem>
+                    {editBilltBtn && (
+                      <CreateBillForm
+                        handleClose={handleCloseEditBillForm}
+                        open={editBilltBtn}
+                        bill={currentBill}
+                        toUpdate
                       />
                     )}
-                    <MenuItem onClick={handleDismissDropdown}>
-                      View Details
+                    <MenuItem onClick={handleBillStatusUpdate(currentBill?.id)}>
+                      Mark as Paid
                     </MenuItem>
-                    <MenuItem onClick={handleOpenDeleteForm}>Delete</MenuItem>
-                    {deletePatientBtn && (
-                      <DeletePatientForm
-                        handleClose={handleCloseDeleteForm}
-                        open={deletePatientBtn}
-                      />
-                    )}
                   </Menu>
                 </StyledTableCell>
               </TableRow>

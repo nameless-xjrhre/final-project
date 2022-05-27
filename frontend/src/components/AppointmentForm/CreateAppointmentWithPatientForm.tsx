@@ -17,7 +17,7 @@ import { string, object } from 'yup'
 import { gql, useMutation } from 'urql'
 import AddPatientForm from '../PatientForm'
 import CustomForm from '../CustomForm'
-import CustomFormProps from '../CustomFormProps'
+import { AppointmentFormProps } from '../CustomFormProps'
 import AppointmentForm from './AppointmentForm'
 import {
   AppointmentStatus,
@@ -50,6 +50,7 @@ const appointmentSchema = object().shape({
   visitType: string().required('Select type of visit.'),
   medicalStaff: string().required('Select preferred doctor.'),
   appointmentDate: string().nullable().required('Select appointment date.'),
+  appointmentTime: string().nullable().required('Select appointment time.'),
   note: string().required('Provide reason for appointment.'),
 })
 
@@ -83,10 +84,17 @@ const CreateAppointmentWithPatient = gql`
   }
 `
 
+const getCompleteDate = (date: Date, time: string) => {
+  const hour = new Date(time).getHours()
+  const min = new Date(time).getMinutes()
+
+  return new Date(date).setHours(hour, min)
+}
+
 export default function CreateAppointmentWithPatientForm({
   handleClose,
   open,
-}: CustomFormProps) {
+}: AppointmentFormProps) {
   const [, createAppointmentWithPatient] = useMutation(
     CreateAppointmentWithPatient,
   )
@@ -133,10 +141,12 @@ export default function CreateAppointmentWithPatientForm({
     if (isLastStep) {
       const input: MutationCreateAppointmentWithPatientArgs = {
         appointment: {
-          date: new Date(data.appointmentDate),
+          date: new Date(
+            getCompleteDate(data.appointmentDate, data.appointmentTime),
+          ),
           visitType: data.visitType,
           status: AppointmentStatus.Pending,
-          // note: data.note
+          note: data.note,
         },
         patient: {
           firstName: data.firstName,
@@ -154,11 +164,11 @@ export default function CreateAppointmentWithPatientForm({
         .then((result) => {
           if (result.error) {
             handleClose(handleComplete)
-            showFailAlert()
+            showFailAlert('Data has not been saved.')
           } else {
             console.log(result)
             handleClose(handleComplete)
-            showSuccessAlert()
+            showSuccessAlert('Data has been saved.')
           }
         })
         .catch((err) => console.error(err))
@@ -191,6 +201,7 @@ export default function CreateAppointmentWithPatientForm({
             register={register}
             errors={errors}
             isNewAppointment
+            toUpdate={false}
           />
         )
       default:
@@ -223,7 +234,7 @@ export default function CreateAppointmentWithPatientForm({
       <Grid container>
         {getStepsContent(activeStep)}
         {activeStep > 0 ? (
-          <Grid item>
+          <Grid item mt={3} mr={30}>
             <Button
               variant="contained"
               color="primary"

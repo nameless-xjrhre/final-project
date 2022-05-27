@@ -55,7 +55,7 @@ model HospitalBill {
   deadlineDate DateTime?
   amount       Float
   status       BillStatus    @default(UNPAID)
-  patient      Patient       @relation(fields: [patientId], references: [id])
+  patient      Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
   medStaff     MedicalStaff? @relation(fields: [medStaffId], references: [id])
   appointment  Appointment?
 
@@ -72,7 +72,7 @@ model MedicalRecord {
   date         DateTime
   diagnosis    String
   prescription String
-  patient      Patient       @relation(fields: [patientId], references: [id])
+  patient      Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
   medStaff     MedicalStaff? @relation(fields: [medStaffId], references: [id])
 
   @@map("medical_records")
@@ -94,7 +94,7 @@ model Appointment {
   updatedAt      DateTime?         @updatedAt @map("updated_at")
   status         AppointmentStatus
   medStaff       MedicalStaff      @relation(fields: [medStaffId], references: [id])
-  patient        Patient           @relation(fields: [patientId], references: [id])
+  patient        Patient           @relation(fields: [patientId], references: [id], onDelete: Cascade)
   hospitalBill   HospitalBill?     @relation(fields: [hospitalBillId], references: [id])
 
   @@map("appointments")

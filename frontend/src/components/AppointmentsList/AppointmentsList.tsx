@@ -7,21 +7,37 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Skeleton from '@mui/material/Skeleton'
-import { Button, Pagination } from '@mui/material'
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip'
+import { Button, Pagination, Typography } from '@mui/material'
 import { useQuery, gql } from 'urql'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import AddBillForm from '../BillForm/AddBillForm'
-import StatusButton from '../Buttons/StatusButton'
-import { AppointmentStatus } from '../../graphql/generated'
+import CreateBillForm from '../BillForm/CreateBillForm'
+// import StatusButton from '../Buttons/StatusButton'
+import { AppointmentStatus, VisitType } from '../../graphql/generated'
 import { capitalize } from '../../utils'
+import CreateAppointmentForm from '../AppointmentForm/CreateAppointmentForm'
+import DeleteAppointmentDialog from '../AppointmentForm/DeleteAppointmentDialog'
+
+const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: '#f5f5f9',
+    color: 'gray',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}))
 
 interface Appointment {
   id: number
-  visitType: string
+  visitType: VisitType
   date: Date
   status: AppointmentStatus
+  note: string
   patient: {
     id: number
     fullName: string
@@ -44,6 +60,7 @@ const AppointmentQueryDocument = gql`
       visitType
       date
       status
+      note
       patient {
         id
         fullName
@@ -77,9 +94,17 @@ export default function AppointmentList() {
   const [page, setPage] = React.useState(1)
   const open = Boolean(drop)
   const [generateBillBtn, setGenerateBillBtn] = React.useState(false)
-  const handleOpenBillForm = () => setGenerateBillBtn(true)
-  const handleCloseBillForm = () => setGenerateBillBtn(false)
-  const [appt, setAppointment] = React.useState<Appointment>()
+  const handleGenerateBillOpenForm = () => setGenerateBillBtn(true)
+  const handleGenerateCloseBillForm = () => setGenerateBillBtn(false)
+  const [editAppointmentBtn, setEditAppointmentBtn] = React.useState(false)
+  const handleEditApptOpenForm = () => setEditAppointmentBtn(true)
+  const handleEditApptCloseBillForm = () => setEditAppointmentBtn(false)
+  const [deleteAppointmentBtn, setDeleteAppointmentBtn] = React.useState(false)
+  const handleOpenDeleteAppointmentDialog = () => setDeleteAppointmentBtn(true)
+  const handleCloseDeleteAppointmentDialog = () =>
+    setDeleteAppointmentBtn(false)
+  const [currentAppointment, setCurrentAppointment] =
+    React.useState<Appointment>()
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -88,7 +113,7 @@ export default function AppointmentList() {
   const handleClose = () => {
     setDropDown(null)
   }
-  const [appointment] = useQuery<AppointmentQuery>({
+  const [appointments] = useQuery<AppointmentQuery>({
     query: AppointmentQueryDocument,
     variables: {
       start: (page - 1) * 10,
@@ -96,7 +121,8 @@ export default function AppointmentList() {
     },
   })
 
-  const { data, fetching, error } = appointment
+  const { data, fetching, error } = appointments
+
   if (fetching)
     return (
       <Table size="small">
@@ -141,29 +167,31 @@ export default function AppointmentList() {
         </TableHead>
         <TableBody>
           {data &&
-            data.appointmentsRange.map((item) => (
-              <TableRow key={item.id}>
-                <StyledTableCell>{item.patient.fullName}</StyledTableCell>
+            data.appointmentsRange.map((appointment) => (
+              <TableRow key={appointment.id}>
+                <StyledTableCell>
+                  {appointment.patient.fullName}
+                </StyledTableCell>
                 <StyledTableCell
                   sx={{
                     fontWeight: '800',
                   }}
                 >
-                  {capitalize(item.visitType.toLowerCase())}
+                  {capitalize(appointment.visitType.toLowerCase())}
                 </StyledTableCell>
                 <StyledTableCell>
-                  {new Date(item.date).toLocaleDateString('en-ZA')}
+                  {new Date(appointment.date).toLocaleDateString('en-ZA')}
                 </StyledTableCell>
                 <StyledTableCell>
-                  {new Date(item.date).toLocaleTimeString('en-US', {
+                  {new Date(appointment.date).toLocaleTimeString('en-US', {
                     hour12: false,
                   })}
                 </StyledTableCell>
-                <StyledTableCell>Dr. {item.medStaff.fullName}</StyledTableCell>
                 <StyledTableCell>
-                  <StatusButton status={item.status} />
+                  Dr. {appointment.medStaff.fullName}
                 </StyledTableCell>
-                <StyledTableCell>
+                <StyledTableCell>{appointment.status}</StyledTableCell>
+                <StyledTableCell align="right">
                   <Button
                     id="basic-button"
                     aria-controls={open ? 'basic-menu' : undefined}
@@ -171,7 +199,7 @@ export default function AppointmentList() {
                     aria-expanded={open ? 'true' : undefined}
                     onClick={(e) => {
                       handleClick(e)
-                      setAppointment(item)
+                      setCurrentAppointment(appointment)
                     }}
                     style={{ color: '#808080' }}
                   >
@@ -182,25 +210,55 @@ export default function AppointmentList() {
                     anchorEl={drop}
                     open={open}
                     onClose={handleClose}
+                    sx={{ boxShadow: 1 }}
                     MenuListProps={{
                       'aria-labelledby': 'basic-button',
                     }}
                   >
-                    <MenuItem onClick={handleClose}>Edit</MenuItem>
-                    <MenuItem onClick={handleClose}>View Notes</MenuItem>
-                    <MenuItem onClick={handleOpenBillForm}>
+                    <MenuItem onClick={handleEditApptOpenForm}>Edit</MenuItem>
+                    {editAppointmentBtn && (
+                      <CreateAppointmentForm
+                        handleClose={handleEditApptCloseBillForm}
+                        open={editAppointmentBtn}
+                        isNewAppointment={false}
+                        toUpdate
+                        appointment={currentAppointment!}
+                      />
+                    )}
+                    <CustomTooltip
+                      placement="left"
+                      title={
+                        <Typography color="inherit" variant="body1">
+                          {currentAppointment?.note}
+                        </Typography>
+                      }
+                    >
+                      <MenuItem onClick={handleClose}>View Note</MenuItem>
+                    </CustomTooltip>
+                    <MenuItem onClick={handleGenerateBillOpenForm}>
                       Generate Bill
                     </MenuItem>
                     {generateBillBtn && (
-                      <AddBillForm
-                        handleClose={handleCloseBillForm}
+                      <CreateBillForm
+                        handleClose={handleGenerateCloseBillForm}
                         open={generateBillBtn}
-                        apppointment={appt!}
+                        appointment={currentAppointment!}
+                        toUpdate={false}
                       />
                     )}
-                    <MenuItem onClick={handleClose} sx={{ color: 'red' }}>
-                      Cancel
+                    <MenuItem
+                      onClick={handleOpenDeleteAppointmentDialog}
+                      sx={{ color: 'red' }}
+                    >
+                      Delete
                     </MenuItem>
+                    {deleteAppointmentBtn && (
+                      <DeleteAppointmentDialog
+                        handleClose={handleCloseDeleteAppointmentDialog}
+                        open={deleteAppointmentBtn}
+                        appointment={currentAppointment}
+                      />
+                    )}
                   </Menu>
                 </StyledTableCell>
               </TableRow>
