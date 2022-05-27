@@ -82,5 +82,8 @@ export const DeletePatient = mutationField('deletePatient', {
     if (!patient) {
       throw new Error(`Patient does not exist`)
     }
+    return {
+      id: rules.number().integer(),
+    }
   },
 })

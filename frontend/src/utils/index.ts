@@ -28,16 +28,19 @@ export const capitalize = (s: string) => {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-export const showSuccessAlert = () =>
+export const showSuccessAlert = (message: string) =>
   swal({
     title: 'Success!',
-    text: 'Data has been saved.',
+    text: message,
     icon: 'success',
   })
 
-export const showFailAlert = () =>
+export const showFailAlert = (message: string) =>
   swal({
     title: 'Failed!',
-    text: 'Data has not been saved.',
+    text: message,
     icon: 'warning',
   })
+
+// text: 'Data has been saved.',
+// text: 'Data has not been saved.',

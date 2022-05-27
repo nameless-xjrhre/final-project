@@ -82,7 +82,8 @@ export default function AppointmentList() {
   const [editAppointmentBtn, setEditAppointmentBtn] = React.useState(false)
   const handleEditApptOpenForm = () => setEditAppointmentBtn(true)
   const handleEditApptCloseBillForm = () => setEditAppointmentBtn(false)
-  const [appt, setAppointment] = React.useState<Appointment>()
+  const [currentAppointment, setCurrentAppointment] =
+    React.useState<Appointment>()
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -91,7 +92,7 @@ export default function AppointmentList() {
   const handleClose = () => {
     setDropDown(null)
   }
-  const [appointment] = useQuery<AppointmentQuery>({
+  const [appointments] = useQuery<AppointmentQuery>({
     query: appointmentQueryDocument,
   })
 
@@ -109,7 +110,7 @@ export default function AppointmentList() {
   //   setPage(0)
   // }
 
-  const { data, fetching, error } = appointment
+  const { data, fetching, error } = appointments
   if (fetching)
     return (
       <Table size="small">
@@ -154,26 +155,30 @@ export default function AppointmentList() {
         </TableHead>
         <TableBody>
           {data &&
-            data.appointments.map((item) => (
-              <TableRow key={item.id}>
-                <StyledTableCell>{item.patient.fullName}</StyledTableCell>
+            data.appointments.map((appointment) => (
+              <TableRow key={appointment.id}>
+                <StyledTableCell>
+                  {appointment.patient.fullName}
+                </StyledTableCell>
                 <StyledTableCell
                   sx={{
                     fontWeight: '800',
                   }}
                 >
-                  {capitalize(item.visitType.toLowerCase())}
+                  {capitalize(appointment.visitType.toLowerCase())}
                 </StyledTableCell>
                 <StyledTableCell>
-                  {new Date(item.date).toLocaleDateString('en-ZA')}
+                  {new Date(appointment.date).toLocaleDateString('en-ZA')}
                 </StyledTableCell>
                 <StyledTableCell>
-                  {new Date(item.date).toLocaleTimeString('en-US', {
+                  {new Date(appointment.date).toLocaleTimeString('en-US', {
                     hour12: false,
                   })}
                 </StyledTableCell>
-                <StyledTableCell>Dr. {item.medStaff.fullName}</StyledTableCell>
-                <StyledTableCell>{item.status}</StyledTableCell>
+                <StyledTableCell>
+                  Dr. {appointment.medStaff.fullName}
+                </StyledTableCell>
+                <StyledTableCell>{appointment.status}</StyledTableCell>
                 <StyledTableCell align="right">
                   <Button
                     id="basic-button"
@@ -182,7 +187,7 @@ export default function AppointmentList() {
                     aria-expanded={open ? 'true' : undefined}
                     onClick={(e) => {
                       handleClick(e)
-                      setAppointment(item)
+                      setCurrentAppointment(appointment)
                     }}
                     style={{ color: '#808080' }}
                   >
@@ -205,7 +210,7 @@ export default function AppointmentList() {
                         open={editAppointmentBtn}
                         isNewAppointment={false}
                         toUpdate
-                        appointment={appt!}
+                        appointment={currentAppointment!}
                       />
                     )}
                     <MenuItem onClick={handleClose}>View Notes</MenuItem>
@@ -216,7 +221,7 @@ export default function AppointmentList() {
                       <AddBillForm
                         handleClose={handleGenerateCloseBillForm}
                         open={generateBillBtn}
-                        apppointment={appt!}
+                        apppointment={currentAppointment!}
                       />
                     )}
                     <MenuItem onClick={handleClose} sx={{ color: 'red' }}>

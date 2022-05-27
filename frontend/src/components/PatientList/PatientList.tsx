@@ -197,6 +197,7 @@ export default function PatientsList() {
                       <DeletePatientDialog
                         handleClose={handleCloseDeleteForm}
                         open={deletePatientBtn}
+                        patient={currenPatient}
                       />
                     )}
                   </Menu>
