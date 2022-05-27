@@ -11,9 +11,8 @@ import { useQuery, gql } from 'urql'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import EditPatientForm from '../PatientForm/EditPatientForm'
-import DeletePatientForm from '../PatientForm/DeletePatientForm'
 import { BillStatus } from '../../graphql/generated'
+import CreateBillForm from '../BillForm/CreateBillForm'
 
 interface Bill {
   id: number
@@ -72,13 +71,11 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export default function BillsList() {
   const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
-  const [editPatientBtn, setEditPatientBtn] = React.useState(false)
-  const [deletePatientBtn, setDeletePatientBtn] = React.useState(false)
-  const handleOpenEditForm = () => setEditPatientBtn(true)
-  const handleCloseEditForm = () => setEditPatientBtn(false)
-  const handleOpenDeleteForm = () => setDeletePatientBtn(true)
-  const handleCloseDeleteForm = () => setDeletePatientBtn(false)
+  const [editBilltBtn, setEditBillBtn] = React.useState(false)
+  const handleOpenEditBillForm = () => setEditBillBtn(true)
+  const handleCloseEditBillForm = () => setEditBillBtn(false)
   const handleDismissDropdown = () => setDropDown(null)
+  const [currentBill, setCurrentBill] = React.useState<Bill>()
   const open = Boolean(drop)
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) =>
     setDropDown(event.currentTarget)
@@ -154,7 +151,10 @@ export default function BillsList() {
                     aria-controls={open ? 'basic-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
-                    onClick={handleClick}
+                    onClick={(e) => {
+                      handleClick(e)
+                      setCurrentBill(bill)
+                    }}
                     style={{ color: '#808080' }}
                   >
                     <MoreVertIcon />
@@ -168,21 +168,13 @@ export default function BillsList() {
                       'aria-labelledby': 'basic-button',
                     }}
                   >
-                    <MenuItem onClick={handleOpenEditForm}>Edit</MenuItem>
-                    {editPatientBtn && (
-                      <EditPatientForm
-                        handleClose={handleCloseEditForm}
-                        open={editPatientBtn}
-                      />
-                    )}
-                    <MenuItem onClick={handleDismissDropdown}>
-                      View Details
-                    </MenuItem>
-                    <MenuItem onClick={handleOpenDeleteForm}>Delete</MenuItem>
-                    {deletePatientBtn && (
-                      <DeletePatientForm
-                        handleClose={handleCloseDeleteForm}
-                        open={deletePatientBtn}
+                    <MenuItem onClick={handleOpenEditBillForm}>Edit</MenuItem>
+                    {editBilltBtn && (
+                      <CreateBillForm
+                        handleClose={handleCloseEditBillForm}
+                        open={editBilltBtn}
+                        bill={currentBill}
+                        toUpdate
                       />
                     )}
                   </Menu>

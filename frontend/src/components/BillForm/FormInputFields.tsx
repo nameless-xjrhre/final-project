@@ -52,6 +52,7 @@ export const FormInputText = ({
   name,
   label,
   control,
+  placeholder,
   register,
   errors,
 }: FormInputProps) => (
@@ -66,10 +67,11 @@ export const FormInputText = ({
           <OutlinedInput
             value={value || ''}
             startAdornment={<InputAdornment position="start">₱</InputAdornment>}
+            placeholder={placeholder}
             label={label}
             {...register(name)}
             error={!!errors[name]}
-            sx={{ width: 235 }}
+            sx={{ width: 250 }}
           />
           <FormHelperText sx={{ color: '#d32f2f' }}>
             {errors[name]?.message}
