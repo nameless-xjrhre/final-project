@@ -11,6 +11,7 @@ import { useQuery, gql } from 'urql'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import { useNavigate } from 'react-router-dom'
 import EditPatientForm from '../PatientForm/EditPatientForm'
 import DeletePatientDialog from '../PatientForm/DeletePatientDialog'
 
@@ -37,7 +38,7 @@ interface PatientQueryData {
 }
 
 const patientQueryDocument = gql`
-  query PatientDetails {
+  query PatientFullDetails {
     patients {
       id
       fullName
@@ -78,22 +79,33 @@ const hasNoAppointments = (patient: Patient) =>
   patient.latestAppointment == null
 
 export default function PatientsList() {
+  const navigate = useNavigate()
   const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
   const [editPatientBtn, setEditPatientBtn] = React.useState(false)
   const [deletePatientBtn, setDeletePatientBtn] = React.useState(false)
+  const [patientId, setPatientId] = React.useState(0)
   const handleOpenEditForm = () => setEditPatientBtn(true)
   const handleCloseEditForm = () => setEditPatientBtn(false)
   const handleOpenDeleteForm = () => setDeletePatientBtn(true)
   const handleCloseDeleteForm = () => setDeletePatientBtn(false)
   const handleDismissDropdown = () => setDropDown(null)
   const open = Boolean(drop)
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) =>
-    setDropDown(event.currentTarget)
   const [currenPatient, setCurrentPatient] = React.useState<Patient>()
+  const handleClick =
+    (id: number, patient: Patient) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setPatientId(id)
+      setCurrentPatient(patient)
+      setDropDown(event.currentTarget)
+    }
 
   const [patients] = useQuery<PatientQueryData>({
     query: patientQueryDocument,
   })
+
+  const clickDetails = (id: number) => () => {
+    navigate(`/profile/${id}`)
+  }
 
   const { data, fetching, error } = patients
   if (fetching)
@@ -166,10 +178,11 @@ export default function PatientsList() {
                     aria-controls={open ? 'basic-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
-                    onClick={(e) => {
-                      handleClick(e)
-                      setCurrentPatient(patient)
-                    }}
+                    onClick={handleClick(patient.id, patient)}
+                    // onClick={(e) => {
+                    //   handleClick(e)
+                    //   setCurrentPatient(patient)
+                    // }}
                     style={{ color: '#808080' }}
                   >
                     <MoreVertIcon />
@@ -191,7 +204,7 @@ export default function PatientsList() {
                         patient={currenPatient}
                       />
                     )}
-                    <MenuItem onClick={handleDismissDropdown}>
+                    <MenuItem onClick={clickDetails(patientId)}>
                       View Details
                     </MenuItem>
                     <MenuItem

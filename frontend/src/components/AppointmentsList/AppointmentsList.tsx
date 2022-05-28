@@ -48,13 +48,14 @@ interface Appointment {
   }
 }
 
-export interface AppointmentQuery {
-  appointments: Appointment[]
+interface AppointmentQuery {
+  appointmentsRange: Appointment[]
+  totalAppointments: number
 }
 
-export const appointmentQueryDocument = gql`
-  query appointmentQuery {
-    appointments {
+const AppointmentQueryDocument = gql`
+  query AppointmentsList($start: Int!, $count: Int!) {
+    appointmentsRange(start: $start, count: $count) {
       id
       visitType
       date
@@ -69,6 +70,7 @@ export const appointmentQueryDocument = gql`
         fullName
       }
     }
+    totalAppointments
   }
 `
 
@@ -89,6 +91,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export default function AppointmentList() {
   const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
+  const [page, setPage] = React.useState(1)
   const open = Boolean(drop)
   const [generateBillBtn, setGenerateBillBtn] = React.useState(false)
   const handleGenerateBillOpenForm = () => setGenerateBillBtn(true)
@@ -111,24 +114,15 @@ export default function AppointmentList() {
     setDropDown(null)
   }
   const [appointments] = useQuery<AppointmentQuery>({
-    query: appointmentQueryDocument,
+    query: AppointmentQueryDocument,
+    variables: {
+      start: (page - 1) * 10,
+      count: 10,
+    },
   })
 
-  // const [page, setPage] = React.useState(0)
-  // const [rowsPerPage, setRowsPerPage] = React.useState(10)
-
-  // const handleChangePage = (event: unknown, newPage: number) => {
-  //   setPage(newPage)
-  // }
-
-  // const handleChangeRowsPerPage = (
-  //   event: React.ChangeEvent<HTMLInputElement>,
-  // ) => {
-  //   setRowsPerPage(+event.target.value)
-  //   setPage(0)
-  // }
-
   const { data, fetching, error } = appointments
+
   if (fetching)
     return (
       <Table size="small">
@@ -173,7 +167,7 @@ export default function AppointmentList() {
         </TableHead>
         <TableBody>
           {data &&
-            data.appointments.map((appointment) => (
+            data.appointmentsRange.map((appointment) => (
               <TableRow key={appointment.id}>
                 <StyledTableCell>
                   {appointment.patient.fullName}
@@ -271,7 +265,19 @@ export default function AppointmentList() {
             ))}
         </TableBody>
       </Table>
-      <Pagination count={3} variant="outlined" shape="rounded" />
+      <Pagination
+        count={data ? Math.ceil(data.totalAppointments / 10) : 0}
+        onChange={(_, pageNum) => {
+          setPage(pageNum)
+        }}
+        variant="outlined"
+        shape="rounded"
+        color="primary"
+        sx={{
+          my: 2,
+          ml: 1,
+        }}
+      />
     </>
   )
 }
