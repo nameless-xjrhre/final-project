@@ -5,11 +5,12 @@ export type HospitalBillInputType = NexusGenInputs['CreateHospitalBillInput']
 
 export type EditHospitalBillInputType = NexusGenInputs['EditHospitalBillInput']
 
-export function createHospitalBill(
+export async function createHospitalBill(
   hospitalBill: HospitalBillInputType,
+  appointmentId: number,
   ctx: Context,
 ) {
-  return ctx.prisma.hospitalBill.create({
+  const newHospitalBill = await ctx.prisma.hospitalBill.create({
     data: {
       medStaffId: hospitalBill.medStaffId,
       deadlineDate: hospitalBill.deadlineDate,
@@ -19,6 +20,15 @@ export function createHospitalBill(
       patientId: hospitalBill.patientId,
     },
   })
+  await ctx.prisma.appointment.update({
+    where: {
+      id: appointmentId,
+    },
+    data: {
+      hospitalBillId: newHospitalBill.id,
+    },
+  })
+  return newHospitalBill
 }
 
 export function editHospitalBill(

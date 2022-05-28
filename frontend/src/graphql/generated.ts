@@ -199,6 +199,7 @@ export type MutationCreateAppointmentWithPatientArgs = {
 }
 
 export type MutationCreateHospitalBillArgs = {
+  appointmentId: Scalars['Int']
   data: CreateHospitalBillInput
 }
 
@@ -480,6 +481,7 @@ export type AppointmentsListQuery = {
 
 export type CreateBillMutationVariables = Exact<{
   data: CreateHospitalBillInput
+  appointmentId: Scalars['Int']
 }>
 
 export type CreateBillMutation = {
@@ -926,8 +928,8 @@ export function useAppointmentsListQuery(
   })
 }
 export const CreateBillDocument = gql`
-  mutation CreateBill($data: CreateHospitalBillInput!) {
-    createHospitalBill(data: $data) {
+  mutation CreateBill($data: CreateHospitalBillInput!, $appointmentId: Int!) {
+    createHospitalBill(data: $data, appointmentId: $appointmentId) {
       id
       date
       amount

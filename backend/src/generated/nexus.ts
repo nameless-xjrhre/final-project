@@ -417,6 +417,7 @@ export interface NexusGenArgTypes {
       patient: NexusGenInputs['CreatePatientInput']; // CreatePatientInput!
     }
     createHospitalBill: { // args
+      appointmentId: number; // Int!
       data: NexusGenInputs['CreateHospitalBillInput']; // CreateHospitalBillInput!
     }
     createMedicalRecord: { // args

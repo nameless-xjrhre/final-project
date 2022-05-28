@@ -149,7 +149,7 @@ type MedicalStaff {
 type Mutation {
   createAppointment(data: CreateAppointmentInput!, medStaffId: Int!, patientId: Int!): Appointment
   createAppointmentWithPatient(appointment: CreateAppointmentInput!, medStaffId: Int!, patient: CreatePatientInput!): Appointment
-  createHospitalBill(data: CreateHospitalBillInput!): HospitalBill
+  createHospitalBill(appointmentId: Int!, data: CreateHospitalBillInput!): HospitalBill
   createMedicalRecord(data: CreateMedicalRecordInput!): MedicalRecord
   createMedicalStaff(data: CreateMedicalStaffInput!): MedicalStaff
   createPatient(data: CreatePatientInput!): Patient

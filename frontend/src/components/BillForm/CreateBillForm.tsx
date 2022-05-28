@@ -48,8 +48,8 @@ const updateBillSchema = object().shape({
 })
 
 const CreateBill = gql`
-  mutation CreateBill($data: CreateHospitalBillInput!) {
-    createHospitalBill(data: $data) {
+  mutation CreateBill($data: CreateHospitalBillInput!, $appointmentId: Int!) {
+    createHospitalBill(data: $data, appointmentId: $appointmentId) {
       id
       date
       amount
@@ -146,6 +146,7 @@ export default function CreateBillForm({
           medStaffId: appointment!.medStaff.id,
           status: BillStatus.Unpaid,
         },
+        appointmentId: appointment!.id,
       }
 
       createBill(input)
