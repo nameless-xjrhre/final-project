@@ -113,17 +113,19 @@ export default function DoctorsScheduler() {
   return (
     <div className="scheduler">
       <TableContainer component={Paper}>
-        <Table>
+        <Table style={{ width: 1600 }}>
           <TableHead>
             <TableRow>
-              <StyledTableCell>Doctor</StyledTableCell>
-              <StyledTableCell>Monday</StyledTableCell>
-              <StyledTableCell>Tuesday</StyledTableCell>
-              <StyledTableCell>Wednesday</StyledTableCell>
-              <StyledTableCell>Thursday</StyledTableCell>
-              <StyledTableCell>Friday</StyledTableCell>
-              <StyledTableCell>Saturday</StyledTableCell>
-              <StyledTableCell>Sunday</StyledTableCell>
+              <StyledTableCell style={{ width: 200 }}>Doctor</StyledTableCell>
+              <StyledTableCell style={{ width: 200 }}>Monday</StyledTableCell>
+              <StyledTableCell style={{ width: 200 }}>Tuesday</StyledTableCell>
+              <StyledTableCell style={{ width: 200 }}>
+                Wednesday
+              </StyledTableCell>
+              <StyledTableCell style={{ width: 200 }}>Thursday</StyledTableCell>
+              <StyledTableCell style={{ width: 200 }}>Friday</StyledTableCell>
+              <StyledTableCell style={{ width: 200 }}>Saturday</StyledTableCell>
+              <StyledTableCell style={{ width: 200 }}>Sunday</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>

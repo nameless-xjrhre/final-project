@@ -367,6 +367,26 @@ export type CreateAppointmentMutation = {
     id: number
     date: any
     visitType?: VisitType | null
+    note?: string | null
+    patient?: { __typename?: 'Patient'; id: number } | null
+    medStaff?: { __typename?: 'MedicalStaff'; id: number } | null
+  } | null
+}
+
+export type UpdateAppointmentMutationVariables = Exact<{
+  id: Scalars['Int']
+  data: EditAppointmentInput
+}>
+
+export type UpdateAppointmentMutation = {
+  __typename?: 'Mutation'
+  editAppointment?: {
+    __typename?: 'Appointment'
+    id: number
+    date: any
+    note?: string | null
+    visitType?: VisitType | null
+    status?: AppointmentStatus | null
     patient?: { __typename?: 'Patient'; id: number } | null
     medStaff?: { __typename?: 'MedicalStaff'; id: number } | null
   } | null
@@ -397,6 +417,15 @@ export type CreateAppointmentWithPatientMutation = {
     } | null
     medStaff?: { __typename?: 'MedicalStaff'; id: number } | null
   } | null
+}
+
+export type DeleteAppointmentMutationVariables = Exact<{
+  id: Scalars['Int']
+}>
+
+export type DeleteAppointmentMutation = {
+  __typename?: 'Mutation'
+  deleteAppointment?: { __typename?: 'Appointment'; id: number } | null
 }
 
 export type MedicalStaffQueryQueryVariables = Exact<{ [key: string]: never }>
@@ -435,6 +464,7 @@ export type AppointmentsListQuery = {
     visitType?: VisitType | null
     date: any
     status?: AppointmentStatus | null
+    note?: string | null
     patient?: {
       __typename?: 'Patient'
       id: number
@@ -466,6 +496,21 @@ export type CreateBillMutation = {
   } | null
 }
 
+export type EditHospitallBillMutationVariables = Exact<{
+  id: Scalars['Int']
+  data: EditHospitalBillInput
+}>
+
+export type EditHospitallBillMutation = {
+  __typename?: 'Mutation'
+  editHospitalBill?: {
+    __typename?: 'HospitalBill'
+    id: number
+    amount: number
+    deadlineDate?: any | null
+  } | null
+}
+
 export type HospitalBillsQueryVariables = Exact<{ [key: string]: never }>
 
 export type HospitalBillsQuery = {
@@ -488,6 +533,19 @@ export type HospitalBillsQuery = {
       fullName?: string | null
     } | null
   }>
+}
+
+export type MarkAsPaidBillMutationVariables = Exact<{
+  id: Scalars['Int']
+}>
+
+export type MarkAsPaidBillMutation = {
+  __typename?: 'Mutation'
+  editHospitalBill?: {
+    __typename?: 'HospitalBill'
+    id: number
+    status: BillStatus
+  } | null
 }
 
 export type AppointmentsQueryVariables = Exact<{
@@ -565,22 +623,55 @@ export type MedicalStaffsQueryQuery = {
   }>
 }
 
-export type PatientDetailsQueryVariables = Exact<{ [key: string]: never }>
+export type DeletePatientMutationVariables = Exact<{
+  id: Scalars['Int']
+}>
 
-export type PatientDetailsQuery = {
+export type DeletePatientMutation = {
+  __typename?: 'Mutation'
+  deletePatient?: { __typename?: 'Patient'; id: number } | null
+}
+
+export type UpdatePatientMutationVariables = Exact<{
+  id: Scalars['Int']
+  data: EditPatientInput
+}>
+
+export type UpdatePatientMutation = {
+  __typename?: 'Mutation'
+  editPatient?: {
+    __typename?: 'Patient'
+    id: number
+    firstName: string
+    lastName: string
+    sex: Sex
+    dateOfBirth: any
+    contactNum: string
+    address: string
+  } | null
+}
+
+export type PatientFullDetailsQueryVariables = Exact<{ [key: string]: never }>
+
+export type PatientFullDetailsQuery = {
   __typename?: 'Query'
   patients: Array<{
     __typename?: 'Patient'
     id: number
     fullName?: string | null
     sex: Sex
+    firstName: string
+    lastName: string
     contactNum: string
+    dateOfBirth: any
+    address: string
     latestAppointment?: {
       __typename?: 'Appointment'
       date: any
       visitType?: VisitType | null
       medStaff?: {
         __typename?: 'MedicalStaff'
+        id: number
         fullName?: string | null
       } | null
     } | null
@@ -602,6 +693,43 @@ export type CreateSchedulesMutation = {
   } | null> | null
 }
 
+export type PatientRecordsQueryVariables = Exact<{
+  id: Scalars['Int']
+}>
+
+export type PatientRecordsQuery = {
+  __typename?: 'Query'
+  patient?: {
+    __typename?: 'Patient'
+    id: number
+    medicalRecords: Array<{
+      __typename?: 'MedicalRecord'
+      date: any
+      diagnosis: string
+      prescription: string
+      medStaff?: {
+        __typename?: 'MedicalStaff'
+        fullName?: string | null
+      } | null
+    }>
+    hospitalBills: Array<{
+      __typename?: 'HospitalBill'
+      date: any
+      deadlineDate?: any | null
+      amount: number
+      status: BillStatus
+      medStaff?: {
+        __typename?: 'MedicalStaff'
+        fullName?: string | null
+      } | null
+      appointment?: {
+        __typename?: 'Appointment'
+        visitType?: VisitType | null
+      } | null
+    }>
+  } | null
+}
+
 export type DashboardDetailsQueryVariables = Exact<{ [key: string]: never }>
 
 export type DashboardDetailsQuery = {
@@ -610,6 +738,23 @@ export type DashboardDetailsQuery = {
   totalPatients?: number | null
   totalDoneAppointments?: number | null
   totalBillPaid?: number | null
+}
+
+export type PatientDetailsQueryVariables = Exact<{
+  id: Scalars['Int']
+}>
+
+export type PatientDetailsQuery = {
+  __typename?: 'Query'
+  patient?: {
+    __typename?: 'Patient'
+    id: number
+    fullName?: string | null
+    sex: Sex
+    address: string
+    dateOfBirth: any
+    contactNum: string
+  } | null
 }
 
 export const CreateAppointmentDocument = gql`
@@ -626,6 +771,7 @@ export const CreateAppointmentDocument = gql`
       id
       date
       visitType
+      note
       patient {
         id
       }
@@ -641,6 +787,30 @@ export function useCreateAppointmentMutation() {
     CreateAppointmentMutation,
     CreateAppointmentMutationVariables
   >(CreateAppointmentDocument)
+}
+export const UpdateAppointmentDocument = gql`
+  mutation UpdateAppointment($id: Int!, $data: EditAppointmentInput!) {
+    editAppointment(id: $id, data: $data) {
+      id
+      date
+      note
+      visitType
+      status
+      patient {
+        id
+      }
+      medStaff {
+        id
+      }
+    }
+  }
+`
+
+export function useUpdateAppointmentMutation() {
+  return Urql.useMutation<
+    UpdateAppointmentMutation,
+    UpdateAppointmentMutationVariables
+  >(UpdateAppointmentDocument)
 }
 export const CreateAppointmentWithPatientDocument = gql`
   mutation CreateAppointmentWithPatient(
@@ -677,6 +847,20 @@ export function useCreateAppointmentWithPatientMutation() {
     CreateAppointmentWithPatientMutation,
     CreateAppointmentWithPatientMutationVariables
   >(CreateAppointmentWithPatientDocument)
+}
+export const DeleteAppointmentDocument = gql`
+  mutation DeleteAppointment($id: Int!) {
+    deleteAppointment(id: $id) {
+      id
+    }
+  }
+`
+
+export function useDeleteAppointmentMutation() {
+  return Urql.useMutation<
+    DeleteAppointmentMutation,
+    DeleteAppointmentMutationVariables
+  >(DeleteAppointmentDocument)
 }
 export const MedicalStaffQueryDocument = gql`
   query MedicalStaffQuery {
@@ -719,6 +903,7 @@ export const AppointmentsListDocument = gql`
       visitType
       date
       status
+      note
       patient {
         id
         fullName
@@ -763,6 +948,22 @@ export function useCreateBillMutation() {
     CreateBillDocument,
   )
 }
+export const EditHospitallBillDocument = gql`
+  mutation EditHospitallBill($id: Int!, $data: EditHospitalBillInput!) {
+    editHospitalBill(id: $id, data: $data) {
+      id
+      amount
+      deadlineDate
+    }
+  }
+`
+
+export function useEditHospitallBillMutation() {
+  return Urql.useMutation<
+    EditHospitallBillMutation,
+    EditHospitallBillMutationVariables
+  >(EditHospitallBillDocument)
+}
 export const HospitalBillsDocument = gql`
   query HospitalBills {
     hospitalBills {
@@ -790,6 +991,21 @@ export function useHospitalBillsQuery(
     query: HospitalBillsDocument,
     ...options,
   })
+}
+export const MarkAsPaidBillDocument = gql`
+  mutation MarkAsPaidBill($id: Int!) {
+    editHospitalBill(id: $id, data: { status: PAID }) {
+      id
+      status
+    }
+  }
+`
+
+export function useMarkAsPaidBillMutation() {
+  return Urql.useMutation<
+    MarkAsPaidBillMutation,
+    MarkAsPaidBillMutationVariables
+  >(MarkAsPaidBillDocument)
 }
 export const AppointmentsDocument = gql`
   query Appointments($start: Int!, $count: Int!) {
@@ -878,17 +1094,56 @@ export function useMedicalStaffsQueryQuery(
     ...options,
   })
 }
-export const PatientDetailsDocument = gql`
-  query PatientDetails {
+export const DeletePatientDocument = gql`
+  mutation DeletePatient($id: Int!) {
+    deletePatient(id: $id) {
+      id
+    }
+  }
+`
+
+export function useDeletePatientMutation() {
+  return Urql.useMutation<
+    DeletePatientMutation,
+    DeletePatientMutationVariables
+  >(DeletePatientDocument)
+}
+export const UpdatePatientDocument = gql`
+  mutation UpdatePatient($id: Int!, $data: EditPatientInput!) {
+    editPatient(id: $id, data: $data) {
+      id
+      firstName
+      lastName
+      sex
+      dateOfBirth
+      contactNum
+      address
+    }
+  }
+`
+
+export function useUpdatePatientMutation() {
+  return Urql.useMutation<
+    UpdatePatientMutation,
+    UpdatePatientMutationVariables
+  >(UpdatePatientDocument)
+}
+export const PatientFullDetailsDocument = gql`
+  query PatientFullDetails {
     patients {
       id
       fullName
       sex
+      firstName
+      lastName
       contactNum
+      dateOfBirth
+      address
       latestAppointment {
         date
         visitType
         medStaff {
+          id
           fullName
         }
       }
@@ -896,11 +1151,11 @@ export const PatientDetailsDocument = gql`
   }
 `
 
-export function usePatientDetailsQuery(
-  options?: Omit<Urql.UseQueryArgs<PatientDetailsQueryVariables>, 'query'>,
+export function usePatientFullDetailsQuery(
+  options?: Omit<Urql.UseQueryArgs<PatientFullDetailsQueryVariables>, 'query'>,
 ) {
-  return Urql.useQuery<PatientDetailsQuery>({
-    query: PatientDetailsDocument,
+  return Urql.useQuery<PatientFullDetailsQuery>({
+    query: PatientFullDetailsDocument,
     ...options,
   })
 }
@@ -921,6 +1176,42 @@ export function useCreateSchedulesMutation() {
     CreateSchedulesMutationVariables
   >(CreateSchedulesDocument)
 }
+export const PatientRecordsDocument = gql`
+  query PatientRecords($id: Int!) {
+    patient(id: $id) {
+      id
+      medicalRecords {
+        date
+        medStaff {
+          fullName
+        }
+        diagnosis
+        prescription
+      }
+      hospitalBills {
+        date
+        medStaff {
+          fullName
+        }
+        appointment {
+          visitType
+        }
+        deadlineDate
+        amount
+        status
+      }
+    }
+  }
+`
+
+export function usePatientRecordsQuery(
+  options: Omit<Urql.UseQueryArgs<PatientRecordsQueryVariables>, 'query'>,
+) {
+  return Urql.useQuery<PatientRecordsQuery>({
+    query: PatientRecordsDocument,
+    ...options,
+  })
+}
 export const DashboardDetailsDocument = gql`
   query DashboardDetails {
     totalAppointments
@@ -935,6 +1226,27 @@ export function useDashboardDetailsQuery(
 ) {
   return Urql.useQuery<DashboardDetailsQuery>({
     query: DashboardDetailsDocument,
+    ...options,
+  })
+}
+export const PatientDetailsDocument = gql`
+  query PatientDetails($id: Int!) {
+    patient(id: $id) {
+      id
+      fullName
+      sex
+      address
+      dateOfBirth
+      contactNum
+    }
+  }
+`
+
+export function usePatientDetailsQuery(
+  options: Omit<Urql.UseQueryArgs<PatientDetailsQueryVariables>, 'query'>,
+) {
+  return Urql.useQuery<PatientDetailsQuery>({
+    query: PatientDetailsDocument,
     ...options,
   })
 }
