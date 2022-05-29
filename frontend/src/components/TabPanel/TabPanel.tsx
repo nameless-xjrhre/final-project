@@ -11,11 +11,10 @@ import {
   TableHead,
   TableRow,
   TableBody,
-  Button,
+  Skeleton,
 } from '@mui/material'
 import { gql, useQuery } from 'urql'
 import _ from 'lodash'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { HospitalBill, MedicalRecord } from '../../graphql/generated'
 
 interface TabPanelProps {
@@ -60,6 +59,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
     color: '#A9A9A9',
+    fontWeight: 700,
   },
   fontFamily: `'Lato', sans-serif`,
   paddingTop: theme.spacing(2),
@@ -83,6 +83,51 @@ function TabPanel(props: TabPanelProps) {
       )}
     </div>
   )
+}
+
+function displayVisitType(visitType: string) {
+  switch (visitType) {
+    case 'FOLLOWUP':
+      return (
+        <StyledTableCell
+          style={{
+            color: '#6562F0',
+          }}
+        >
+          Follow Up
+        </StyledTableCell>
+      )
+    case 'ROUTINE':
+      return (
+        <StyledTableCell
+          style={{
+            color: '#57E799',
+          }}
+        >
+          Routine
+        </StyledTableCell>
+      )
+    case 'URGENT':
+      return (
+        <StyledTableCell
+          style={{
+            color: '#F6CE3E',
+          }}
+        >
+          Urgent
+        </StyledTableCell>
+      )
+    default:
+      return (
+        <StyledTableCell
+          style={{
+            color: '#F85353',
+          }}
+        >
+          N/A
+        </StyledTableCell>
+      )
+  }
 }
 
 function a11yProps(index: number) {
@@ -146,9 +191,26 @@ export default function BasicTabs({ patientId }: BasicTabsProps) {
                 <StyledTableCell>Doctor</StyledTableCell>
                 <StyledTableCell>Diagnosis</StyledTableCell>
                 <StyledTableCell>Prescription</StyledTableCell>
-                <StyledTableCell align="right" />
               </TableRow>
             </TableHead>
+            <TableBody>
+              {_.times(3, (i) => (
+                <TableRow key={i}>
+                  <TableCell>
+                    <Skeleton variant="text" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton variant="text" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton variant="text" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton variant="text" />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
           </Table>
         </TabPanel>
         <TabPanel value={value} index={1}>
@@ -161,9 +223,32 @@ export default function BasicTabs({ patientId }: BasicTabsProps) {
                 <StyledTableCell>Due Date</StyledTableCell>
                 <StyledTableCell>Amount </StyledTableCell>
                 <StyledTableCell>Status</StyledTableCell>
-                <StyledTableCell align="right" />
               </TableRow>
             </TableHead>
+            <TableBody>
+              {_.times(3, (i) => (
+                <TableRow key={i}>
+                  <TableCell>
+                    <Skeleton variant="text" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton variant="text" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton variant="text" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton variant="text" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton variant="text" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton variant="text" />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
           </Table>
         </TabPanel>
       </Box>
@@ -209,7 +294,6 @@ export default function BasicTabs({ patientId }: BasicTabsProps) {
               <StyledTableCell>Doctor</StyledTableCell>
               <StyledTableCell>Diagnosis</StyledTableCell>
               <StyledTableCell>Prescription</StyledTableCell>
-              <StyledTableCell align="right" />
             </TableRow>
           </TableHead>
           <TableBody>
@@ -223,15 +307,6 @@ export default function BasicTabs({ patientId }: BasicTabsProps) {
                 </StyledTableCell>
                 <StyledTableCell>{record.diagnosis}</StyledTableCell>
                 <StyledTableCell>{record.prescription}</StyledTableCell>
-                <StyledTableCell align="right">
-                  <Button
-                    id="basic-button"
-                    aria-haspopup="true"
-                    style={{ color: '#808080' }}
-                  >
-                    <MoreVertIcon />
-                  </Button>
-                </StyledTableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -247,7 +322,6 @@ export default function BasicTabs({ patientId }: BasicTabsProps) {
               <StyledTableCell>Due Date</StyledTableCell>
               <StyledTableCell>Amount </StyledTableCell>
               <StyledTableCell>Status</StyledTableCell>
-              <StyledTableCell align="right" />
             </TableRow>
           </TableHead>
           <TableBody>
@@ -259,9 +333,9 @@ export default function BasicTabs({ patientId }: BasicTabsProps) {
                 <StyledTableCell>
                   {_.get(hospitalBill, 'medStaff.fullName', 'N/A')}
                 </StyledTableCell>
-                <StyledTableCell>
-                  {_.get(hospitalBill, 'appointment.visitType', 'N/A')}
-                </StyledTableCell>
+                {displayVisitType(
+                  _.get(hospitalBill, 'appointment.visitType', 'N/A'),
+                )}
                 <StyledTableCell>
                   {new Date(hospitalBill.deadlineDate).toLocaleDateString(
                     'en-ZA',
@@ -269,15 +343,6 @@ export default function BasicTabs({ patientId }: BasicTabsProps) {
                 </StyledTableCell>
                 <StyledTableCell>{hospitalBill.amount}</StyledTableCell>
                 <StyledTableCell>{hospitalBill.status}</StyledTableCell>
-                <StyledTableCell align="right">
-                  <Button
-                    id="basic-button"
-                    aria-haspopup="true"
-                    style={{ color: '#808080' }}
-                  >
-                    <MoreVertIcon />
-                  </Button>
-                </StyledTableCell>
               </TableRow>
             ))}
           </TableBody>

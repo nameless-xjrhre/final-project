@@ -9,8 +9,10 @@ export const CreateHospitalBill = mutationField('createHospitalBill', {
         type: 'CreateHospitalBillInput',
       }),
     ),
+    appointmentId: nonNull(intArg()),
   },
-  resolve: (parent, args, context) => createHospitalBill(args.data, context),
+  resolve: (parent, args, context) =>
+    createHospitalBill(args.data, args.appointmentId, context),
   validate: async (parent, args, context) => {
     // throw if patient does not exist
 

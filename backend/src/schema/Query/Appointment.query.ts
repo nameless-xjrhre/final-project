@@ -20,9 +20,13 @@ const QueryAppointmentDoneTotal = queryField('totalDoneAppointments', {
 // get past appointments
 const QueryAppointmentPast = queryField('pastAppointments', {
   type: list('Appointment'),
-  resolve: (_parent, _args, context) =>
+  args: {
+    id: nonNull(intArg()),
+  },
+  resolve: (_parent, args, context) =>
     context.prisma.appointment.findMany({
       where: {
+        patientId: args.id,
         date: {
           lt: new Date(),
         },
@@ -33,9 +37,13 @@ const QueryAppointmentPast = queryField('pastAppointments', {
 // get upcoming appointments
 const QueryAppointmentUpcoming = queryField('upcomingAppointments', {
   type: list('Appointment'),
-  resolve: (_parent, _args, context) =>
+  args: {
+    id: nonNull(intArg()),
+  },
+  resolve: (_parent, args, context) =>
     context.prisma.appointment.findMany({
       where: {
+        patientId: args.id,
         date: {
           gt: new Date(),
         },
