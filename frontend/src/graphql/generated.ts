@@ -311,7 +311,15 @@ export type QueryMedicalRecordsByPatientArgs = {
   id: Scalars['Int']
 }
 
+export type QueryPastAppointmentsArgs = {
+  id: Scalars['Int']
+}
+
 export type QueryPatientArgs = {
+  id: Scalars['Int']
+}
+
+export type QueryUpcomingAppointmentsArgs = {
   id: Scalars['Int']
 }
 
@@ -678,6 +686,28 @@ export type PatientFullDetailsQuery = {
       } | null
     } | null
   }>
+}
+
+export type AppointmentHistoryQueryVariables = Exact<{
+  id: Scalars['Int']
+}>
+
+export type AppointmentHistoryQuery = {
+  __typename?: 'Query'
+  upcomingAppointments?: Array<{
+    __typename?: 'Appointment'
+    id: number
+    date: any
+    visitType?: VisitType | null
+    medStaff?: { __typename?: 'MedicalStaff'; fullName?: string | null } | null
+  } | null> | null
+  pastAppointments?: Array<{
+    __typename?: 'Appointment'
+    id: number
+    date: any
+    visitType?: VisitType | null
+    medStaff?: { __typename?: 'MedicalStaff'; fullName?: string | null } | null
+  } | null> | null
 }
 
 export type CreateSchedulesMutationVariables = Exact<{
@@ -1158,6 +1188,35 @@ export function usePatientFullDetailsQuery(
 ) {
   return Urql.useQuery<PatientFullDetailsQuery>({
     query: PatientFullDetailsDocument,
+    ...options,
+  })
+}
+export const AppointmentHistoryDocument = gql`
+  query AppointmentHistory($id: Int!) {
+    upcomingAppointments(id: $id) {
+      id
+      date
+      visitType
+      medStaff {
+        fullName
+      }
+    }
+    pastAppointments(id: $id) {
+      id
+      date
+      visitType
+      medStaff {
+        fullName
+      }
+    }
+  }
+`
+
+export function useAppointmentHistoryQuery(
+  options: Omit<Urql.UseQueryArgs<AppointmentHistoryQueryVariables>, 'query'>,
+) {
+  return Urql.useQuery<AppointmentHistoryQuery>({
+    query: AppointmentHistoryDocument,
     ...options,
   })
 }

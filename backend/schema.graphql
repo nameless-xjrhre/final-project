@@ -188,7 +188,7 @@ type Query {
   medicalRecords: [MedicalRecord!]!
   medicalRecordsByPatient(id: Int!): [MedicalRecord]
   medicalStaff: [MedicalStaff!]!
-  pastAppointments: [Appointment]
+  pastAppointments(id: Int!): [Appointment]
   patient(id: Int!): Patient
   patients: [Patient!]!
   schedules: [Schedule!]!
@@ -198,7 +198,7 @@ type Query {
   totalBillUnpaid: Float
   totalDoneAppointments: Int
   totalPatients: Int
-  upcomingAppointments: [Appointment]
+  upcomingAppointments(id: Int!): [Appointment]
   users: [User!]!
 }
 

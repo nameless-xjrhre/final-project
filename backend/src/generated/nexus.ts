@@ -475,7 +475,13 @@ export interface NexusGenArgTypes {
     medicalRecordsByPatient: { // args
       id: number; // Int!
     }
+    pastAppointments: { // args
+      id: number; // Int!
+    }
     patient: { // args
+      id: number; // Int!
+    }
+    upcomingAppointments: { // args
       id: number; // Int!
     }
   }
