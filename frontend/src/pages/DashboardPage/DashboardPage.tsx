@@ -13,7 +13,6 @@ import Paper from '@mui/material/Paper'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { useQuery } from 'urql'
 import Sidebar from '../../components/Sidebar'
-import HeaderDashboard from '../../components/Header/HeaderDashboard'
 import DetailsCount from '../../components/Dashboard/DetailsCount'
 import DetailsSkeleton from '../../components/Dashboard/DetailsSkeleton'
 import AppointmentsList from '../../components/Dashboard/AppointmentsList'
@@ -159,7 +158,6 @@ function DashboardPage() {
           }}
         >
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <HeaderDashboard />
             <Box
               sx={{
                 mt: 4,

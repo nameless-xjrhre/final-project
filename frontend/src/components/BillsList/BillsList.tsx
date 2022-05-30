@@ -6,7 +6,7 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Skeleton from '@mui/material/Skeleton'
-import { Button, Pagination } from '@mui/material'
+import { Button } from '@mui/material'
 import { useQuery, gql, useMutation } from 'urql'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
@@ -141,79 +141,76 @@ export default function BillsList() {
     )
   if (error) return <p>Oh no... {error.message}</p>
   return (
-    <>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Name</StyledTableCell>
-            <StyledTableCell>Payment Date</StyledTableCell>
-            <StyledTableCell>Amount</StyledTableCell>
-            <StyledTableCell>Doctor</StyledTableCell>
-            <StyledTableCell>Due Date</StyledTableCell>
-            <StyledTableCell>Status</StyledTableCell>
-            <StyledTableCell align="right" />
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data &&
-            data.hospitalBills.map((bill) => (
-              <TableRow key={bill.id}>
-                <StyledTableCell>
-                  {bill.patient !== null ? bill.patient.fullName : ''}
-                </StyledTableCell>
-                <StyledTableCell>
-                  {new Date(bill.date).toLocaleDateString('en-ZA')}
-                </StyledTableCell>
-                <StyledTableCell>
-                  <strong>₱ {bill.amount.toFixed(2)}</strong>
-                </StyledTableCell>
-                <StyledTableCell>{bill.medStaff.fullName}</StyledTableCell>
-                <StyledTableCell>
-                  {new Date(bill.deadlineDate).toLocaleDateString('en-ZA')}
-                </StyledTableCell>
-                <StyledTableCell>{bill.status}</StyledTableCell>
-                <StyledTableCell align="right">
-                  <Button
-                    id="basic-button"
-                    aria-controls={open ? 'basic-menu' : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={open ? 'true' : undefined}
-                    onClick={(e) => {
-                      handleClick(e)
-                      setCurrentBill(bill)
-                    }}
-                    style={{ color: '#808080' }}
-                  >
-                    <MoreVertIcon />
-                  </Button>{' '}
-                  <Menu
-                    id="basic-menu"
-                    anchorEl={drop}
-                    open={open}
-                    onClose={handleDismissDropdown}
-                    MenuListProps={{
-                      'aria-labelledby': 'basic-button',
-                    }}
-                  >
-                    <MenuItem onClick={handleOpenEditBillForm}>Edit</MenuItem>
-                    {editBilltBtn && (
-                      <CreateBillForm
-                        handleClose={handleCloseEditBillForm}
-                        open={editBilltBtn}
-                        bill={currentBill}
-                        toUpdate
-                      />
-                    )}
-                    <MenuItem onClick={handleBillStatusUpdate(currentBill?.id)}>
-                      Mark as Paid
-                    </MenuItem>
-                  </Menu>
-                </StyledTableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </Table>
-      <Pagination count={3} variant="outlined" shape="rounded" />
-    </>
+    <Table size="small">
+      <TableHead>
+        <TableRow>
+          <StyledTableCell>Name</StyledTableCell>
+          <StyledTableCell>Payment Date</StyledTableCell>
+          <StyledTableCell>Amount</StyledTableCell>
+          <StyledTableCell>Doctor</StyledTableCell>
+          <StyledTableCell>Due Date</StyledTableCell>
+          <StyledTableCell>Status</StyledTableCell>
+          <StyledTableCell align="right" />
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {data &&
+          data.hospitalBills.map((bill) => (
+            <TableRow key={bill.id}>
+              <StyledTableCell>
+                {bill.patient !== null ? bill.patient.fullName : ''}
+              </StyledTableCell>
+              <StyledTableCell>
+                {new Date(bill.date).toLocaleDateString('en-ZA')}
+              </StyledTableCell>
+              <StyledTableCell>
+                <strong>₱ {bill.amount.toFixed(2)}</strong>
+              </StyledTableCell>
+              <StyledTableCell>{bill.medStaff.fullName}</StyledTableCell>
+              <StyledTableCell>
+                {new Date(bill.deadlineDate).toLocaleDateString('en-ZA')}
+              </StyledTableCell>
+              <StyledTableCell>{bill.status}</StyledTableCell>
+              <StyledTableCell align="right">
+                <Button
+                  id="basic-button"
+                  aria-controls={open ? 'basic-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                  onClick={(e) => {
+                    handleClick(e)
+                    setCurrentBill(bill)
+                  }}
+                  style={{ color: '#808080' }}
+                >
+                  <MoreVertIcon />
+                </Button>{' '}
+                <Menu
+                  id="basic-menu"
+                  anchorEl={drop}
+                  open={open}
+                  onClose={handleDismissDropdown}
+                  MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                  }}
+                >
+                  <MenuItem onClick={handleOpenEditBillForm}>Edit</MenuItem>
+                  {editBilltBtn && (
+                    <CreateBillForm
+                      handleClose={handleCloseEditBillForm}
+                      open={editBilltBtn}
+                      bill={currentBill}
+                      toUpdate
+                    />
+                  )}
+                  <MenuItem onClick={handleBillStatusUpdate(currentBill?.id)}>
+                    Mark as Paid
+                  </MenuItem>
+                </Menu>
+              </StyledTableCell>
+            </TableRow>
+          ))}
+      </TableBody>
+    </Table>
   )
 }
