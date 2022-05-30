@@ -26,21 +26,13 @@ jobs:
           cd backend
           touch .env
           echo "DATABASE_URL=postgresql://prisma:prisma@localhost:5433/tests" >> .env
-      - name: Install all dependencies
-        run: |
-          npm ci
-          cd frontend && npm ci
-          cd backend && npm ci
-      - name: Lint files
-        run: |
-          npx lint-staged
-          npm run lint:frontend
-          npm run lint:backend
-      - name: Run unit tests
-        run: |
-          npm run test:frontend
-          npm run test-unit:backend
-      - name: Build project
-        run: |
-          npm run build:frontend
-          npm run build:backend
+      - run: npm ci
+      - run: cd frontend && npm ci
+      - run: cd backend && npm ci
+      - run: npx lint-staged
+      - run: npm run lint:frontend
+      - run: npm run lint:backend
+      - run: npm run test:frontend
+      - run: npm run test-unit:backend
+      - run: npm run build:frontend
+      - run: npm run build:backend
