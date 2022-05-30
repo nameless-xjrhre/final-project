@@ -16,9 +16,10 @@ import ScheduleStack from './ScheduleStack'
 import { ScheduleStatus } from '../../graphql/generated'
 
 interface Schedule {
+  id: number
   startTime: Date
   endTime: Date
-  status: string
+  status: ScheduleStatus
 }
 
 interface MedicalStaff {
@@ -38,6 +39,7 @@ const medicalStaffQuery = gql`
       id
       fullName
       schedules {
+        id
         startTime
         endTime
         status
