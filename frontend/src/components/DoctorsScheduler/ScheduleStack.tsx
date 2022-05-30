@@ -1,15 +1,26 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-shadow */
 /* eslint-disable no-unused-vars */
-import Chip from '@mui/material/Chip'
-import Stack from '@mui/material/Stack'
+import React from 'react'
+import { Menu, MenuItem, Chip, Stack } from '@mui/material'
+import { gql, useMutation } from 'urql'
+import {
+  MutationEditScheduleArgs,
+  ScheduleStatus,
+} from '../../graphql/generated'
+import { showFailAlert, showSuccessAlert } from '../../utils'
 
-import { ScheduleStatus } from '../../graphql/generated'
+const scheduleStatus = [
+  ScheduleStatus.Open,
+  ScheduleStatus.Closed,
+  ScheduleStatus.NotAvailable,
+]
 
 interface Schedule {
+  id: number
   startTime: Date
   endTime: Date
-  status: string
+  status: ScheduleStatus
 }
 interface ScheduleStackProps {
   schedules: Schedule[]
@@ -37,23 +48,77 @@ function getChipColor(status: string) {
   }
 }
 
+const UpdateScheduleStatus = gql`
+  mutation UpdateScheduleStatus($id: Int!, $data: EditScheduleInput!) {
+    editSchedule(id: $id, data: $data) {
+      id
+      status
+    }
+  }
+`
+
 export default function ScheduleStack(props: ScheduleStackProps) {
+  const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
+  const open = Boolean(drop)
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) =>
+    setDropDown(event.currentTarget)
+  const handleDismissDropdown = () => setDropDown(null)
+  const [, updateStatus] = useMutation(UpdateScheduleStatus)
+
+  const handleUpdateScheduleStatus =
+    (id: number, status: ScheduleStatus) => () => {
+      const input: MutationEditScheduleArgs = {
+        id,
+        data: {
+          status,
+        },
+      }
+
+      updateStatus(input)
+        .then((result) => {
+          if (result.error) {
+            console.log(result)
+            handleDismissDropdown()
+            showFailAlert('')
+          } else {
+            console.log(result)
+            handleDismissDropdown()
+            showSuccessAlert('')
+          }
+        })
+        .catch((err) => console.error(err))
+    }
+
   const { schedules } = props
   return (
     <Stack direction="column" spacing={0.5}>
       {schedules.map((schedule, index) => (
-        <Chip
-          key={index}
-          label={`${new Date(schedule.startTime).toLocaleTimeString([], {
-            timeStyle: 'short',
-          })} - ${new Date(schedule.endTime).toLocaleTimeString([], {
-            timeStyle: 'short',
-          })}`}
-          sx={{
-            borderRadius: 1,
-            backgroundColor: getChipColor(schedule.status),
-          }}
-        />
+        <>
+          <Chip
+            onClick={handleClick}
+            key={index}
+            label={`${new Date(schedule.startTime).toLocaleTimeString([], {
+              timeStyle: 'short',
+            })} - ${new Date(schedule.endTime).toLocaleTimeString([], {
+              timeStyle: 'short',
+            })}`}
+            sx={{
+              borderRadius: 1,
+              backgroundColor: getChipColor(schedule.status),
+            }}
+          />
+          <Menu anchorEl={drop} open={open} onClose={handleDismissDropdown}>
+            {scheduleStatus?.map((status) => (
+              <MenuItem
+                value={status}
+                key={status}
+                onClick={handleUpdateScheduleStatus(schedule.id, status)}
+              >
+                {status}
+              </MenuItem>
+            ))}
+          </Menu>
+        </>
       ))}
     </Stack>
   )

@@ -110,24 +110,24 @@ export const EditSchedule = mutationField('editSchedule', {
     }
     // throw error if start time and end time is colliding with another schedule
     // also check if the schedule is for the same medstaff
-    const schedule = await context.prisma.schedule.findMany({
-      where: {
-        NOT: {
-          id: args.id,
-        },
-        AND: {
-          startTime: {
-            lte: args.data.startTime,
-          },
-          endTime: {
-            gte: args.data.endTime,
-          },
-        },
-      },
-    })
-    if (schedule.length > 0) {
-      throw new Error('Schedule is colliding with another schedule')
-    }
+    // const schedule = await context.prisma.schedule.findMany({
+    //   where: {
+    //     NOT: {
+    //       id: args.id,
+    //     },
+    //     AND: {
+    //       startTime: {
+    //         lte: args.data.startTime,
+    //       },
+    //       endTime: {
+    //         gte: args.data.endTime,
+    //       },
+    //     },
+    //   },
+    // })
+    // if (schedule.length > 0) {
+    //   throw new Error('Schedule is colliding with another schedule')
+    // }
   },
 })
 

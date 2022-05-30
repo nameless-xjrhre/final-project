@@ -81,11 +81,11 @@ export default function AddDoctorForm({ open, handleClose }: CustomFormProps) {
       .then((result) => {
         if (result.error) {
           handleClose(handleComplete)
-          showFailAlert()
+          showFailAlert('Data has not been saved.')
         } else {
           console.log(result)
           handleClose(handleComplete)
-          showSuccessAlert()
+          showSuccessAlert('Data has been saved.')
         }
       })
       .catch((err) => console.error(err))
