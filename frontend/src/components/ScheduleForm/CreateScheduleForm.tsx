@@ -38,38 +38,39 @@ const CreateSchedules = gql`
   }
 `
 
-const getDayIndex = (day: string) => {
-  switch (day) {
-    case 'M':
-      return 0
-    case 'T':
-      return 1
-    case 'W':
-      return 2
-    case 'Th':
-      return 3
-    case 'F':
-      return 4
-    case 'Sa':
-      return 5
-    case 'Su':
-      return 6
-    default:
-      return 0
-  }
+const currentDate = new Date()
+
+const daysOftheWeek: { [key: string]: number } = {
+  Su: 0,
+  M: 1,
+  T: 2,
+  W: 3,
+  Th: 4,
+  F: 5,
+  Sa: 6,
 }
 
-const getDate = (time: string, day: string) => {
-  const date = new Date(time)
-  const dayIndex = getDayIndex(day)
-  return new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate() + dayIndex,
-    date.getHours(),
-    date.getMinutes(),
-    date.getSeconds(),
-  ).toISOString()
+const firstDayOfTheWeek = currentDate.getDate() - currentDate.getDay()
+
+const getDay = (day: string) => firstDayOfTheWeek + daysOftheWeek[day]
+
+const setScheduleDate = (date: Date, day: string) =>
+  new Date(
+    date.setFullYear(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      getDay(day),
+    ),
+  )
+
+const getCompleteDate = (time: string, day: string) => {
+  const hour = new Date(time).getHours()
+  const min = new Date(time).getMinutes()
+
+  return new Date(new Date(setScheduleDate(new Date(), day))).setHours(
+    hour,
+    min,
+  )
 }
 
 export default function CreateScheduleForm({
@@ -108,19 +109,17 @@ export default function CreateScheduleForm({
     const dateInputs = days.map((day) => ({
       medStaffId: parseInt(data.medicalStaff, 10),
       status: ScheduleStatus.Open,
-      startTime: getDate(data.startTime, day),
-      endTime: getDate(data.endTime, day),
+      startTime: new Date(getCompleteDate(data.startTime, day)),
+      endTime: new Date(getCompleteDate(data.endTime, day)),
     }))
     const inputs: MutationCreateSchedulesArgs = {
       data: dateInputs,
     }
-
-    console.log(inputs)
-
     handleSubmitting()
     createSchedules(inputs)
       .then((result) => {
         if (result.error) {
+          console.log(result)
           handleClose(handleComplete)
           showFailAlert('Data has not been saved.')
         } else {
@@ -168,7 +167,7 @@ export default function CreateScheduleForm({
         variant="contained"
         sx={buttonSx}
       >
-        Add Schedule
+        Create Schedule
       </Button>
       {isSubmitting && (
         <CircularProgress
