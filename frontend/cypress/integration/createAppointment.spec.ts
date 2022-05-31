@@ -30,7 +30,7 @@ describe('Appointment Page - Create Appointment Test', () => {
         cy.get('[name=note]').click().type('Sore throat, red eyes')
     })
 
-    // it('should book appointment',()=>{
-    //     cy.get('[type=button]').contains('Book Now').click()
-    // })
+    it('should book appointment',()=>{
+        cy.get('[type=button]').contains('Book Now').click()
+    })
 })
