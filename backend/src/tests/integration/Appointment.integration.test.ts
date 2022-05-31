@@ -71,7 +71,47 @@ it('should create an appointment with new patient', async () => {
   `)
 })
 
-afterEach(async () => {
+it('should edit an appointment', async () => {
+  const appointmentId = await prisma.appointment
+    .findMany()
+    .then((appointments) => appointments[0].id)
+
+  const editAppointment = await ctx.client.request(
+    gql`
+      mutation ($appointmentId: Int!) {
+        editAppointment(
+          id: $appointmentId
+          data: {
+            visitType: FOLLOWUP
+            note: "This is a test appointment"
+            status: DONE
+          }
+        ) {
+          date
+          note
+          visitType
+          status
+        }
+      }
+    `,
+    {
+      appointmentId,
+    },
+  )
+
+  expect(editAppointment).toMatchInlineSnapshot(`
+    Object {
+      "editAppointment": Object {
+        "date": "2022-05-27T07:38:00.000Z",
+        "note": "This is a test appointment",
+        "status": "DONE",
+        "visitType": "FOLLOWUP",
+      },
+    }
+  `)
+})
+
+afterAll(async () => {
   await prisma.appointment.deleteMany({})
   await prisma.patient.deleteMany({})
   await prisma.medicalStaff.deleteMany({})
