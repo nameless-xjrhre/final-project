@@ -1,4 +1,4 @@
-import { Sex, Appointment } from '@prisma/client'
+import { Sex, Appointment, VisitType, AppointmentStatus } from '@prisma/client'
 import { MockContext, Context, createMockContext } from '../../../context'
 import { createPatient } from '../Patient/Patient.resolver'
 import { createMedicalStaff } from '../MedicalStaff/MedicalStaff.resolver'
@@ -46,11 +46,13 @@ test('should create an appointment by linking existing patient and medical staff
     id: 1,
     date: new Date('2020-01-01'),
     note: 'Rest More',
-    visitType: 'ROUTINE',
-    status: 'PENDING',
+    visitType: VisitType.ROUTINE,
+    status: AppointmentStatus.PENDING,
     medStaffId: 1,
     patientId: 1,
     hospitalBillId: 1,
+    createdAt: new Date('2020-01-01'),
+    updatedAt: new Date('2020-02-01'),
   }
 
   mockCtx.prisma.appointment.create.mockResolvedValue(expectedAppointment)

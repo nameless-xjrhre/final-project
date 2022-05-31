@@ -1,4 +1,5 @@
 import { mutationField, arg, nonNull, intArg, list } from 'nexus'
+import { createSchedule } from './Schedule.resolver'
 
 export const CreateSchedule = mutationField('createSchedule', {
   type: 'Schedule',
@@ -9,14 +10,7 @@ export const CreateSchedule = mutationField('createSchedule', {
       }),
     ),
   },
-  resolve: (_parent, args, context) =>
-    context.prisma.schedule.create({
-      data: {
-        medStaffId: args.data.medStaffId,
-        startTime: args.data.startTime,
-        endTime: args.data.endTime,
-      },
-    }),
+  resolve: (_parent, args, context) => createSchedule(args.data, context),
   validate: async (rules, args, context) => {
     // check if medStaffId exists
     const medStaff = await context.prisma.medicalStaff.findFirst({

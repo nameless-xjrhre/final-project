@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --no-notify --respawn --transpile-only src",
-    "start": "node dist/server",
+    "start": "node dist/index",
     "clean": "rm -rf dist",
     "build": "npm -s run clean && npm -s run generate && tsc",
     "lint": "eslint --fix --ext .ts,.tsx,.js,.jsx src",
