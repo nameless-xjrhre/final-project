@@ -9,7 +9,6 @@ import {
   faUserDoctor,
   faCreditCard,
   faWheelchair,
-  faUser,
 } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import './Sidebar.css'
