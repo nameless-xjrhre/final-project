@@ -241,6 +241,8 @@ export default function PermanentDrawerRight() {
                       marginBottom: 5,
                     }}
                   >
+                    <label>=================</label>
+                    <br></br>
                     {new Date(appointment.date).toLocaleTimeString('en-US', {
                       day: 'numeric',
                       month: 'long',
@@ -254,7 +256,11 @@ export default function PermanentDrawerRight() {
                       marginBottom: 5,
                     }}
                   >
-                    {displayVisitType(appointment.visitType)}
+                    <Typography>
+                      <label>=================</label>
+                      <br></br>
+                      {displayVisitType(appointment.visitType)}
+                    </Typography>
                   </Stack>
                   <Stack direction="row">
                     <Typography>{appointment.medStaff.fullName}</Typography>
