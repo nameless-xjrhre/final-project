@@ -1,13 +1,16 @@
 describe('Doctor Page - Create New Schedule Test', () => {
-  it('should select doctor', () => {
+  before(() => {
     cy.visit('http://localhost:3000/doctors')
-      .get('[aria-label="SpeedDial basic example"]')
+  })
+
+  it('should select doctor', () => {
+    cy.get('[aria-label="SpeedDial basic example"]')
       .trigger('mouseover')
       .get('[aria-label="Create New Schedule"]')
       .click()
       .get('[id=mui-component-select-medicalStaff]')
       .click()
-      .get('[data-value=5]')
+      .get('[data-value=7]')
       .click()
   })
 
@@ -27,13 +30,21 @@ describe('Doctor Page - Create New Schedule Test', () => {
   it('should input start and end time', () => {
     cy.get('[name=startTime]')
       .click()
-      .type('07:30')
+      .type('10:30')
       .get('[name=endTime]')
       .click()
-      .type('09:00')
+      .type('12:00')
   })
 
   it('should press add schedule button', () => {
-    cy.get('[type=submit]').contains('Create Schedule').click()
+    cy.get('[type=submit]').contains('Create Schedule').click().wait(5000)
+  })
+
+  it('should display confirmation message', () => {
+    cy.get('[class="swal-title"]')
+      .should('contain', 'Success')
+      .get('[class="swal-button swal-button--confirm"]')
+      .contains('OK')
+      .click()
   })
 })
