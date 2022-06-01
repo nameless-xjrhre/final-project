@@ -1,7 +1,10 @@
 describe('Patient Page - Edit Patient Info Test', () => {
-  it('should edit name of patient', () => {
+  before(() => {
     cy.visit('http://localhost:3000/patients')
-      .get('[id="basic-button"]')
+  })
+
+  it('should edit name of patient', () => {
+    cy.get('[id="basic-button"]')
       .eq(3)
       .click()
       .get('[role="menuitem"]')
@@ -10,11 +13,11 @@ describe('Patient Page - Edit Patient Info Test', () => {
       .get('[name=firstName]')
       .last()
       .click()
-      .type('Samuel')
+      .type('Remcon')
       .get('[name=lastName]')
       .last()
       .click()
-      .type('Crawshank')
+      .type('Baizhu')
   })
 
   it('should input contact number', () => {
@@ -26,7 +29,7 @@ describe('Patient Page - Edit Patient Info Test', () => {
   })
 
   it('should input address', () => {
-    cy.get('[name=address]').last().click().type('Toronto, Canada')
+    cy.get('[name=address]').last().click().type('Qingce, Liyue')
   })
 
   it('should input date of birth', () => {
@@ -39,6 +42,14 @@ describe('Patient Page - Edit Patient Info Test', () => {
   })
 
   it('should save changes', () => {
-    cy.get('[type=button]').last().contains('Save Changes').click()
+    cy.get('[type=button]').last().contains('Save Changes').click().wait(5000)
+  })
+
+  it('should display confirmation message', () => {
+    cy.get('[class="swal-title"]')
+      .should('contain', 'Success')
+      .get('[class="swal-button swal-button--confirm"]')
+      .contains('OK')
+      .click()
   })
 })
