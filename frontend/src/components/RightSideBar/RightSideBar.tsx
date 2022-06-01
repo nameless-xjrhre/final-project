@@ -254,7 +254,9 @@ export default function PermanentDrawerRight() {
                       marginBottom: 5,
                     }}
                   >
-                    {displayVisitType(appointment.visitType)}
+                    <Typography>
+                      {displayVisitType(appointment.visitType)}
+                    </Typography>
                   </Stack>
                   <Stack direction="row">
                     <Typography>{appointment.medStaff.fullName}</Typography>

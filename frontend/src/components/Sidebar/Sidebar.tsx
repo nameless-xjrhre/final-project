@@ -9,7 +9,6 @@ import {
   faUserDoctor,
   faCreditCard,
   faWheelchair,
-  faUser,
 } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import './Sidebar.css'
@@ -54,14 +53,6 @@ export const mainListItems = (
           <FontAwesomeIcon icon={faCreditCard} />
         </ListItemIcon>
         <ListItemText primary="Bills" />
-      </ListItemButton>
-    </Link>
-    <Link to="/sign-in" className="nav-link">
-      <ListItemButton sx={{ marginTop: 30 }}>
-        <ListItemIcon>
-          <FontAwesomeIcon icon={faUser} />
-        </ListItemIcon>
-        <ListItemText primary="Logout" />
       </ListItemButton>
     </Link>
   </>
