@@ -1,7 +1,10 @@
 describe('Appointment Page - Create Appointment Test', () => {
-  it('should select patient', () => {
+  before(() => {
     cy.visit('http://localhost:3000/appointments')
-      .get('[data-testid=AddIcon]')
+  })
+
+  it('should select patient', () => {
+    cy.get('[data-testid=AddIcon]')
       .last()
       .trigger('mouseover')
       .get('[data-testid=CalendarMonthIcon]')
@@ -43,6 +46,14 @@ describe('Appointment Page - Create Appointment Test', () => {
   })
 
   it('should book appointment', () => {
-    cy.get('[type=submit]').contains('Book Now').click()
+    cy.get('[type=submit]').contains('Book Now').click().wait(5000)
+  })
+
+  it('should display confirmation message', () => {
+    cy.get('[class="swal-title"]')
+      .should('contain', 'Success')
+      .get('[class="swal-button swal-button--confirm"]')
+      .contains('OK')
+      .click()
   })
 })
