@@ -36,13 +36,13 @@ enum ChipColors {
 function getChipColor(status: string) {
   switch (status) {
     case ScheduleStatus.Done:
-      return ChipColors.success
+      return ChipColors.warning
     case ScheduleStatus.Closed:
       return ChipColors.error
     case ScheduleStatus.NotAvailable:
       return ChipColors.info
     case ScheduleStatus.Open:
-      return ChipColors.warning
+      return ChipColors.success
     default:
       return ChipColors.warning
   }
