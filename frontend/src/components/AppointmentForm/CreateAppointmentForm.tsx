@@ -21,7 +21,7 @@ import {
   MutationCreateAppointmentArgs,
   MutationEditAppointmentArgs,
 } from '../../graphql/generated'
-import { showFailAlert, showSuccessAlert } from '../../utils'
+import { getCompleteDate, showFailAlert, showSuccessAlert } from '../../utils'
 
 const createAppointmentSchema = object().shape({
   visitType: string().required('Select type of visit.'),
@@ -83,13 +83,6 @@ const UpdateAppointment = gql`
     }
   }
 `
-
-const getCompleteDate = (date: Date, time: string) => {
-  const hour = new Date(time).getHours()
-  const min = new Date(time).getMinutes()
-
-  return new Date(date).setHours(hour, min)
-}
 
 export default function CreateAppointmentForm({
   open,
@@ -229,6 +222,7 @@ export default function CreateAppointmentForm({
         />
       )}
       <Button
+        type="submit"
         onClick={(e) => handleSubmitForm(e)}
         disabled={isSubmitting}
         variant="contained"

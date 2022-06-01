@@ -41,3 +41,17 @@ export const showFailAlert = (message: string) =>
     text: message,
     icon: 'warning',
   })
+
+export const getCompleteDate = (date: Date, time: string) => {
+  const hour = new Date(time).getHours()
+  const min = new Date(time).getMinutes()
+  const intHour = parseInt(time.split(':')[0], 10)
+  const intMin = parseInt(time.split(':')[1], 10)
+
+  // if staff did not select date and time; only typed as string
+  if (Number.isNaN(hour) && Number.isNaN(min)) {
+    return new Date(new Date(date).setHours(intHour, intMin))
+  }
+
+  return new Date(date).setHours(hour, min)
+}
