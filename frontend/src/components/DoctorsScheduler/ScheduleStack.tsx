@@ -122,6 +122,9 @@ export default function ScheduleStack(props: ScheduleStackProps) {
             })}`}
             sx={{
               borderRadius: 1,
+              fontSize: 11,
+              fontWeight: 400,
+              color: '#3E4040',
               backgroundColor: getChipColor(schedule.status),
             }}
           />
