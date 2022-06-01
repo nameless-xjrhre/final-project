@@ -2,13 +2,21 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-unused-vars */
 import React from 'react'
-import { Menu, MenuItem, Chip, Stack, CircularProgress } from '@mui/material'
+import {
+  Menu,
+  MenuItem,
+  Chip,
+  Stack,
+  Divider,
+  CircularProgress,
+} from '@mui/material'
 import { gql, useMutation } from 'urql'
 import {
   MutationEditScheduleArgs,
   ScheduleStatus,
 } from '../../graphql/generated'
 import { showFailAlert, showSuccessAlert } from '../../utils'
+import DeleteScheduleDialog from '../DoctorForm/DeleteScheduleDialog'
 
 const scheduleStatus = [
   ScheduleStatus.Open,
@@ -70,6 +78,9 @@ export default function ScheduleStack(props: ScheduleStackProps) {
     setDropDown(null)
   }
   const handleSubmitting = () => setIsSubmitting(true)
+  const [deleteScheduleBtn, setScheduleBtn] = React.useState(false)
+  const handleOpenDeleteScheduleDialog = () => setScheduleBtn(true)
+  const handleCloseDeleteScheduleDialog = () => setScheduleBtn(false)
   const [, updateStatus] = useMutation(UpdateScheduleStatus)
 
   const handleUpdateScheduleStatus =
@@ -134,6 +145,21 @@ export default function ScheduleStack(props: ScheduleStackProps) {
                   marginTop: -8,
                   position: 'absolute',
                 }}
+              />
+            )}
+            <Divider />
+            <MenuItem
+              sx={{ color: 'red' }}
+              onClick={handleOpenDeleteScheduleDialog}
+              disabled={isSubmitting}
+            >
+              Delete
+            </MenuItem>
+            {deleteScheduleBtn && (
+              <DeleteScheduleDialog
+                handleClose={handleCloseDeleteScheduleDialog}
+                open={deleteScheduleBtn}
+                id={schedule.id}
               />
             )}
           </Menu>

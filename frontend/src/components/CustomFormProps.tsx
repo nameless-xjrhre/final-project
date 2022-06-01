@@ -88,6 +88,12 @@ export interface BillFormProps {
   appointment?: Appointment
 }
 
+export interface ScheduleFormProps {
+  handleClose: (e: any) => void
+  open: boolean
+  id: number
+}
+
 export default interface CustomFormProps {
   handleClose: (e: any) => void
   open: boolean
