@@ -29,12 +29,12 @@ export const FormInputSelectPatient = ({
     <Controller
       name={name}
       control={control}
-      defaultValue=""
-      render={({ field: { onChange, value } }) => (
+      render={({ field: { onChange } }) => (
         <>
           <Select
+            defaultValue=""
             label={label}
-            value={value || onSavedValue}
+            value={onSavedValue}
             onChange={onChange}
             name={name}
           >
@@ -68,12 +68,12 @@ export const FormInputSelectMedStaff = ({
     <Controller
       name={name}
       control={control}
-      defaultValue=""
-      render={({ field: { onChange, value } }) => (
+      render={({ field: { onChange } }) => (
         <>
           <Select
+            defaultValue=""
             label={label}
-            value={value || onSavedValue}
+            value={onSavedValue}
             onChange={onChange}
             name={name}
           >
@@ -107,12 +107,12 @@ export const FormInputSelect = ({
     <Controller
       name={name}
       control={control}
-      defaultValue=""
-      render={({ field: { onChange, value } }) => (
+      render={({ field: { onChange } }) => (
         <>
           <Select
+            defaultValue=""
             label={label}
-            value={value || onSavedValue}
+            value={onSavedValue}
             onChange={onChange}
             name={name}
           >
@@ -154,7 +154,6 @@ export const FormInputText = ({
 export const FormInputDate = ({
   name,
   label,
-  placeholder,
   control,
   onSavedValue,
   register,
@@ -171,13 +170,10 @@ export const FormInputDate = ({
         openTo="year"
         views={['year', 'month', 'day']}
         value={value || onSavedValue}
-        onChange={
-          (date) => onChange(date.toLocaleDateString('en-CA')) // change format to 'YYYY-MM-DD'
-        }
+        onChange={onChange}
         renderInput={(params) => (
           <TextField
             sx={{ marginTop: -0.3, width: 250 }}
-            placeholder={placeholder}
             variant="outlined"
             margin="dense"
             {...params}

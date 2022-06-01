@@ -48,9 +48,7 @@ export const FormInputDate = ({
         openTo="year"
         views={['year', 'month', 'day']}
         value={value || onSavedValue}
-        onChange={
-          (date) => onChange(date.toLocaleDateString('en-CA')) // change format to 'YYYY-MM-DD'
-        }
+        onChange={onChange}
         renderInput={(params) => (
           <TextField
             variant="outlined"

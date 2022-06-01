@@ -23,7 +23,7 @@ import {
   AppointmentStatus,
   MutationCreateAppointmentWithPatientArgs,
 } from '../../graphql/generated'
-import { showFailAlert, showSuccessAlert } from '../../utils'
+import { getCompleteDate, showFailAlert, showSuccessAlert } from '../../utils'
 
 const steps = ['Patient Data', 'Create Appointment']
 
@@ -83,13 +83,6 @@ const CreateAppointmentWithPatient = gql`
     }
   }
 `
-
-const getCompleteDate = (date: Date, time: string) => {
-  const hour = new Date(time).getHours()
-  const min = new Date(time).getMinutes()
-
-  return new Date(date).setHours(hour, min)
-}
 
 export default function CreateAppointmentWithPatientForm({
   handleClose,
@@ -158,10 +151,10 @@ export default function CreateAppointmentWithPatientForm({
         },
         medStaffId: parseInt(data.medicalStaff, 10),
       }
-
       handleSubmitting()
       createAppointmentWithPatient(input)
         .then((result) => {
+          console.log(result)
           if (result.error) {
             handleClose(handleComplete)
             showFailAlert('Data has not been saved.')
