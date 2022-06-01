@@ -15,14 +15,12 @@ import { SpeedDial, SpeedDialAction } from '@mui/material'
 import { faUserDoctor } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import EditIcon from '@mui/icons-material/Edit'
 import AddIcon from '@mui/icons-material/Add'
 import DoctorsScheduler from '../../components/DoctorsScheduler'
 import Sidebar from '../../components/Sidebar'
 import Header from '../../components/Header'
 import AddDoctorIcon from './AddDoctorIcon'
 import CreateScheduleForm from '../../components/ScheduleForm/CreateScheduleForm'
-import CreateAppointmentForm from '../../components/AppointmentForm/CreateAppointmentForm'
 import AddDoctor from '../../components/DoctorForm/AddDoctorForm'
 
 const drawerWidth: number = 240
@@ -63,9 +61,6 @@ function DashboardContent() {
   const [createScheduleBtn, setCreateScheduleBtn] = React.useState(false)
   const handleCreateScheduleOpen = () => setCreateScheduleBtn(true)
   const handleCreateScheduleClose = () => setCreateScheduleBtn(false)
-  const [editScheduleBtn, setEditScheduleBtn] = React.useState(false)
-  const handleEditScheduleOpen = () => setEditScheduleBtn(true)
-  const handleEditScheduleClose = () => setEditScheduleBtn(false)
   const [addDoctorBtn, setCreateDoctorBtn] = React.useState(false)
   const handleCreateDoctorOpen = () => setCreateDoctorBtn(true)
   const handleAddDoctorClose = () => setCreateDoctorBtn(false)
@@ -77,10 +72,6 @@ function DashboardContent() {
     {
       icon: <AddIcon onClick={handleCreateScheduleOpen} />,
       name: 'Create New Schedule',
-    },
-    {
-      icon: <EditIcon onClick={handleEditScheduleOpen} />,
-      name: 'Edit Schedule',
     },
   ]
 
@@ -140,12 +131,6 @@ function DashboardContent() {
                       />
                     ))}
                   </SpeedDial>
-                  {editScheduleBtn && (
-                    <CreateAppointmentForm
-                      handleClose={handleEditScheduleClose}
-                      open={editScheduleBtn}
-                    />
-                  )}
                   {createScheduleBtn && (
                     <CreateScheduleForm
                       handleClose={handleCreateScheduleClose}
