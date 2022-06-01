@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { createClient, Provider } from 'urql'
 import { BrowserRouter } from 'react-router-dom'
-import serverUrl from './server-url'
+import serverUrl from './config'
 import App from './App'
 
 const client = createClient({
