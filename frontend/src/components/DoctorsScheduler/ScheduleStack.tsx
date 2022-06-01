@@ -2,13 +2,21 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-unused-vars */
 import React from 'react'
-import { Menu, MenuItem, Chip, Stack } from '@mui/material'
+import {
+  Menu,
+  MenuItem,
+  Chip,
+  Stack,
+  Divider,
+  CircularProgress,
+} from '@mui/material'
 import { gql, useMutation } from 'urql'
 import {
   MutationEditScheduleArgs,
   ScheduleStatus,
 } from '../../graphql/generated'
 import { showFailAlert, showSuccessAlert } from '../../utils'
+import DeleteScheduleDialog from '../DoctorForm/DeleteScheduleDialog'
 
 const scheduleStatus = [
   ScheduleStatus.Open,
@@ -36,13 +44,13 @@ enum ChipColors {
 function getChipColor(status: string) {
   switch (status) {
     case ScheduleStatus.Done:
-      return ChipColors.success
+      return ChipColors.warning
     case ScheduleStatus.Closed:
       return ChipColors.error
     case ScheduleStatus.NotAvailable:
       return ChipColors.info
     case ScheduleStatus.Open:
-      return ChipColors.warning
+      return ChipColors.success
     default:
       return ChipColors.warning
   }
@@ -62,7 +70,17 @@ export default function ScheduleStack(props: ScheduleStackProps) {
   const open = Boolean(drop)
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) =>
     setDropDown(event.currentTarget)
-  const handleDismissDropdown = () => setDropDown(null)
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const [, setComplete] = React.useState(false)
+  const handleComplete = () => {
+    setIsSubmitting(false)
+    setComplete(true)
+    setDropDown(null)
+  }
+  const handleSubmitting = () => setIsSubmitting(true)
+  const [deleteScheduleBtn, setScheduleBtn] = React.useState(false)
+  const handleOpenDeleteScheduleDialog = () => setScheduleBtn(true)
+  const handleCloseDeleteScheduleDialog = () => setScheduleBtn(false)
   const [, updateStatus] = useMutation(UpdateScheduleStatus)
 
   const handleUpdateScheduleStatus =
@@ -73,16 +91,16 @@ export default function ScheduleStack(props: ScheduleStackProps) {
           status,
         },
       }
-
+      handleSubmitting()
       updateStatus(input)
         .then((result) => {
           if (result.error) {
             console.log(result)
-            handleDismissDropdown()
+            handleComplete()
             showFailAlert('')
           } else {
             console.log(result)
-            handleDismissDropdown()
+            handleComplete()
             showSuccessAlert('')
           }
         })
@@ -107,16 +125,43 @@ export default function ScheduleStack(props: ScheduleStackProps) {
               backgroundColor: getChipColor(schedule.status),
             }}
           />
-          <Menu anchorEl={drop} open={open} onClose={handleDismissDropdown}>
+          <Menu anchorEl={drop} open={open} onClose={() => setDropDown(null)}>
             {scheduleStatus?.map((status) => (
               <MenuItem
                 value={status}
                 key={status}
+                disabled={isSubmitting}
                 onClick={handleUpdateScheduleStatus(schedule.id, status)}
               >
                 {status}
               </MenuItem>
             ))}
+            {isSubmitting && (
+              <CircularProgress
+                size={25}
+                sx={{
+                  color: 'blue',
+                  marginLeft: 8,
+                  marginTop: -8,
+                  position: 'absolute',
+                }}
+              />
+            )}
+            <Divider />
+            <MenuItem
+              sx={{ color: 'red' }}
+              onClick={handleOpenDeleteScheduleDialog}
+              disabled={isSubmitting}
+            >
+              Delete
+            </MenuItem>
+            {deleteScheduleBtn && (
+              <DeleteScheduleDialog
+                handleClose={handleCloseDeleteScheduleDialog}
+                open={deleteScheduleBtn}
+                id={schedule.id}
+              />
+            )}
           </Menu>
         </>
       ))}
