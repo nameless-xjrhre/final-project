@@ -56,14 +56,6 @@ export const mainListItems = (
         <ListItemText primary="Bills" />
       </ListItemButton>
     </Link>
-    <Link to="/sign-in" className="nav-link">
-      <ListItemButton sx={{ marginTop: 30 }}>
-        <ListItemIcon>
-          <FontAwesomeIcon icon={faUser} />
-        </ListItemIcon>
-        <ListItemText primary="Logout" />
-      </ListItemButton>
-    </Link>
   </>
 )
 
