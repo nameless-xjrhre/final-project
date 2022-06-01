@@ -115,19 +115,31 @@ export default function DoctorsScheduler() {
   return (
     <div className="scheduler">
       <TableContainer component={Paper}>
-        <Table style={{ width: 1600 }}>
+        <Table style={{ width: 1150 }}>
           <TableHead>
             <TableRow>
               <StyledTableCell style={{ width: 200 }}>Doctor</StyledTableCell>
-              <StyledTableCell style={{ width: 200 }}>Monday</StyledTableCell>
-              <StyledTableCell style={{ width: 200 }}>Tuesday</StyledTableCell>
-              <StyledTableCell style={{ width: 200 }}>
+              <StyledTableCell style={{ width: 180, textIndent: 30 }}>
+                Monday
+              </StyledTableCell>
+              <StyledTableCell style={{ width: 180, textIndent: 30 }}>
+                Tuesday
+              </StyledTableCell>
+              <StyledTableCell style={{ width: 180, textIndent: 25 }}>
                 Wednesday
               </StyledTableCell>
-              <StyledTableCell style={{ width: 200 }}>Thursday</StyledTableCell>
-              <StyledTableCell style={{ width: 200 }}>Friday</StyledTableCell>
-              <StyledTableCell style={{ width: 200 }}>Saturday</StyledTableCell>
-              <StyledTableCell style={{ width: 200 }}>Sunday</StyledTableCell>
+              <StyledTableCell style={{ width: 180, textIndent: 25 }}>
+                Thursday
+              </StyledTableCell>
+              <StyledTableCell style={{ width: 180, textIndent: 25 }}>
+                Friday
+              </StyledTableCell>
+              <StyledTableCell style={{ width: 180, textIndent: 30 }}>
+                Saturday
+              </StyledTableCell>
+              <StyledTableCell style={{ width: 180, textIndent: 30 }}>
+                Sunday
+              </StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
