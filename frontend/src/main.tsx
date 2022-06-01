@@ -2,10 +2,11 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { createClient, Provider } from 'urql'
 import { BrowserRouter } from 'react-router-dom'
+import serverUrl from './server-url'
 import App from './App'
 
 const client = createClient({
-  url: 'http://localhost:4000/graphql',
+  url: serverUrl,
 })
 
 ReactDOM.render(
