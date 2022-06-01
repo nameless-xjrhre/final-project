@@ -2,7 +2,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-unused-vars */
 import React from 'react'
-import { Menu, MenuItem, Chip, Stack } from '@mui/material'
+import { Menu, MenuItem, Chip, Stack, CircularProgress } from '@mui/material'
 import { gql, useMutation } from 'urql'
 import {
   MutationEditScheduleArgs,
@@ -62,7 +62,14 @@ export default function ScheduleStack(props: ScheduleStackProps) {
   const open = Boolean(drop)
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) =>
     setDropDown(event.currentTarget)
-  const handleDismissDropdown = () => setDropDown(null)
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const [, setComplete] = React.useState(false)
+  const handleComplete = () => {
+    setIsSubmitting(false)
+    setComplete(true)
+    setDropDown(null)
+  }
+  const handleSubmitting = () => setIsSubmitting(true)
   const [, updateStatus] = useMutation(UpdateScheduleStatus)
 
   const handleUpdateScheduleStatus =
@@ -73,16 +80,16 @@ export default function ScheduleStack(props: ScheduleStackProps) {
           status,
         },
       }
-
+      handleSubmitting()
       updateStatus(input)
         .then((result) => {
           if (result.error) {
             console.log(result)
-            handleDismissDropdown()
+            handleComplete()
             showFailAlert('')
           } else {
             console.log(result)
-            handleDismissDropdown()
+            handleComplete()
             showSuccessAlert('')
           }
         })
@@ -107,16 +114,28 @@ export default function ScheduleStack(props: ScheduleStackProps) {
               backgroundColor: getChipColor(schedule.status),
             }}
           />
-          <Menu anchorEl={drop} open={open} onClose={handleDismissDropdown}>
+          <Menu anchorEl={drop} open={open} onClose={() => setDropDown(null)}>
             {scheduleStatus?.map((status) => (
               <MenuItem
                 value={status}
                 key={status}
+                disabled={isSubmitting}
                 onClick={handleUpdateScheduleStatus(schedule.id, status)}
               >
                 {status}
               </MenuItem>
             ))}
+            {isSubmitting && (
+              <CircularProgress
+                size={25}
+                sx={{
+                  color: 'blue',
+                  marginLeft: 8,
+                  marginTop: -8,
+                  position: 'absolute',
+                }}
+              />
+            )}
           </Menu>
         </>
       ))}
