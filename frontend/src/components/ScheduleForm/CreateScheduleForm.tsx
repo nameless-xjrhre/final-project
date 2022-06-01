@@ -66,6 +66,16 @@ const setScheduleDate = (date: Date, day: string) =>
 const getCompleteDate = (time: string, day: string) => {
   const hour = new Date(time).getHours()
   const min = new Date(time).getMinutes()
+  const intHour = parseInt(time.split(':')[0], 10)
+  const intMin = parseInt(time.split(':')[1], 10)
+
+  // if staff did not select time; only typed as string
+  if (Number.isNaN(hour) && Number.isNaN(min)) {
+    return new Date(new Date(setScheduleDate(new Date(), day))).setHours(
+      intHour,
+      intMin,
+    )
+  }
 
   return new Date(new Date(setScheduleDate(new Date(), day))).setHours(
     hour,
@@ -162,6 +172,7 @@ export default function CreateScheduleForm({
         days={days}
       />
       <Button
+        type="submit"
         onClick={(e) => handleSubmitForm(e)}
         disabled={isSubmitting}
         variant="contained"
