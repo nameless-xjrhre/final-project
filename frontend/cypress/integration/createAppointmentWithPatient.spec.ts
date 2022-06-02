@@ -1,17 +1,20 @@
 describe('Appointment Page - Create Appointment With Patient Test', () => {
-  it('should input patient name', () => {
+  before(() => {
     cy.visit('http://localhost:3000/appointments')
-      .get('[data-testid=AddIcon]')
+  })
+
+  it('should input patient name', () => {
+    cy.get('[data-testid=AddIcon]')
       .last()
       .trigger('mouseover')
       .get('[data-testid=AddBoxSharpIcon]')
       .click()
       .get('[name=firstName]')
       .click()
-      .type('Edmel John')
+      .type('Ayato')
       .get('[name=lastName]')
       .click()
-      .type('Linaugo')
+      .type('Kamisato')
   })
 
   it('should input contact info', () => {
@@ -31,10 +34,18 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
   })
 
   it('should input address', () => {
-    cy.get('[name=address]').click().type('Lambunao, Iloilo')
+    cy.get('[name=address]').click().type('Narukami, Inazuma')
   })
 
   it('should click next button', () => {
+    cy.get('[type=submit]').contains('Next').click()
+  })
+
+  it('should click back button', () => {
+    cy.get('[type=button]').contains('Back').click().wait(5000)
+  })
+
+  it('should click next button again', () => {
     cy.get('[type=submit]').contains('Next').click()
   })
 
@@ -48,7 +59,7 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
   it('should select medical staff', () => {
     cy.get('[id=mui-component-select-medicalStaff]')
       .click()
-      .get('[data-value=5]')
+      .get('[data-value=6]')
       .click()
   })
 
@@ -61,14 +72,23 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
   })
 
   it('should input appointment time', () => {
-    cy.get('[name=appointmentTime]').click().type('08:30')
+    cy.get('[name=appointmentTime]').click().type('10:30')
   })
 
   it('should input note', () => {
-    cy.get('[name=note]').click().type('Sore throat, red eyes')
+    cy.get('[name=note]').click().type('Sleep deprived')
   })
 
   it('should book appointment', () => {
-    cy.get('[type=submit]').contains('Book Now').click()
+    cy.get('[type=submit]').contains('Book Now').click().wait(5000)
   })
+
+  it('should display confirmation message', () => {
+    cy.get('[class="swal-title"]')
+      .should('contain', 'Success')
+      .get('[class="swal-button swal-button--confirm"]')
+      .contains('OK')
+      .click()
+  })
+
 })
