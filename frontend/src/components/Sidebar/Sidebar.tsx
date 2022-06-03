@@ -18,12 +18,11 @@ export const mainListItems = (
   <>
     <Box
       component="img"
-      m={1}
       sx={{
-        height: 200,
+        height: 80,
         width: 250,
       }}
-      src="src/images/icons/NamelessLogo.png"
+      src="src/images/icons/Clinisync.png"
     />
     <Link to="/dashboard" className="nav-link">
       <ListItemButton>
