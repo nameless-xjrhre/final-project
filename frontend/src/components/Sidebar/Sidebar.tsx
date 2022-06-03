@@ -2,6 +2,7 @@ import * as React from 'react'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
+import { Box } from '@mui/material'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faColumns,
@@ -15,6 +16,14 @@ import './Sidebar.css'
 
 export const mainListItems = (
   <>
+    <Box
+      component="img"
+      sx={{
+        height: 80,
+        width: 250,
+      }}
+      src="src/images/icons/Clinisync.png"
+    />
     <Link to="/dashboard" className="nav-link">
       <ListItemButton>
         <ListItemIcon>
