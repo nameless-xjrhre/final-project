@@ -82,15 +82,16 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 export default function BillsList() {
   const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
   const [editBilltBtn, setEditBillBtn] = React.useState(false)
-  const handleOpenEditBillForm = () => setEditBillBtn(true)
-  const handleCloseEditBillForm = () => setEditBillBtn(false)
   const handleDismissDropdown = () => setDropDown(null)
+  const handleOpenEditBillForm = () => setEditBillBtn(true)
+  const handleCloseEditBillForm = () => {
+    setEditBillBtn(false)
+    handleDismissDropdown()
+  }
   const [currentBill, setCurrentBill] = React.useState<Bill>()
   const open = Boolean(drop)
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) =>
     setDropDown(event.currentTarget)
-  const handleClose = () => setDropDown(null)
-
   const [bills] = useQuery<BillQueryData>({
     query: billQueryDocument,
   })
@@ -101,14 +102,13 @@ export default function BillsList() {
     markAsPaid({ id })
       .then((result) => {
         if (result.error) {
-          handleClose()
           showFailAlert('')
         } else {
-          handleClose()
           showSuccessAlert('')
         }
       })
       .catch((err) => console.error(err))
+    handleDismissDropdown()
   }
 
   const { data, fetching, error } = bills
