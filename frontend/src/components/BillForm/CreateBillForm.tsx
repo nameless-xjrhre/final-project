@@ -20,7 +20,7 @@ import {
   MutationEditHospitalBillArgs,
 } from '../../graphql/generated'
 import {
-  getDeadlineDate,
+  getDueDateAfterUpdate,
   getDueDate,
   showFailAlert,
   showSuccessAlert,
@@ -125,10 +125,9 @@ export default function CreateBillForm({
         data: {
           amount: parseFloat(data.amount) || bill!.amount,
           date: new Date() || bill!.date,
-          deadlineDate: getDeadlineDate(
+          deadlineDate: getDueDateAfterUpdate(
             bill!.date,
             data.paymentTerm,
-            toUpdate,
             bill!.deadlineDate,
           ),
         },
@@ -149,7 +148,7 @@ export default function CreateBillForm({
         data: {
           amount: parseFloat(data.amount),
           date: new Date(),
-          deadlineDate: getDueDate(data.paymentTerm, !toUpdate, data.date),
+          deadlineDate: getDueDate(data.paymentTerm, new Date()),
           patientId: appointment!.patient.id,
           medStaffId: appointment!.medStaff.id,
           status: BillStatus.Unpaid,
