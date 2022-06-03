@@ -19,7 +19,12 @@ import {
   MutationCreateHospitalBillArgs,
   MutationEditHospitalBillArgs,
 } from '../../graphql/generated'
-import { getDueDate, showFailAlert, showSuccessAlert } from '../../utils'
+import {
+  getDeadlineDate,
+  getDueDate,
+  showFailAlert,
+  showSuccessAlert,
+} from '../../utils'
 import { BillFormProps } from '../CustomFormProps'
 
 export const terms = [
@@ -120,17 +125,20 @@ export default function CreateBillForm({
         data: {
           amount: parseFloat(data.amount) || bill!.amount,
           date: new Date() || bill!.date,
-          deadlineDate: getDueDate(data.paymentTerm) || bill!.deadlineDate,
+          deadlineDate: getDeadlineDate(
+            bill!.date,
+            data.paymentTerm,
+            toUpdate,
+            bill!.deadlineDate,
+          ),
         },
       }
       updateBill(input)
         .then((result) => {
           if (result.error) {
-            console.log(result)
             handleClose(handleComplete)
             showFailAlert('Data has not been saved.')
           } else {
-            console.log(result)
             handleClose(handleComplete)
             showSuccessAlert('Data has been saved.')
           }
@@ -141,7 +149,7 @@ export default function CreateBillForm({
         data: {
           amount: parseFloat(data.amount),
           date: new Date(),
-          deadlineDate: getDueDate(data.paymentTerm),
+          deadlineDate: getDueDate(data.paymentTerm, !toUpdate, data.date),
           patientId: appointment!.patient.id,
           medStaffId: appointment!.medStaff.id,
           status: BillStatus.Unpaid,
@@ -152,11 +160,9 @@ export default function CreateBillForm({
       createBill(input)
         .then((result) => {
           if (result.error) {
-            console.log(result)
             handleClose(handleComplete)
             showFailAlert('Data has not been saved.')
           } else {
-            console.log(result)
             handleClose(handleComplete)
             showSuccessAlert('Data has been saved.')
           }

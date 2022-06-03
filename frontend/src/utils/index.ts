@@ -16,12 +16,36 @@ export function getDateOfNextSunday(currentDate: Date) {
   return new Date(sunday.setHours(23, 59, 59, 0))
 }
 
-export const getDueDate = (paymentTerm: string) => {
+export const getDueDate = (
+  paymentTerm: string,
+  toUpdate: boolean,
+  date: Date,
+) => {
   const today = new Date()
   const day = parseInt(paymentTerm.split(' ')[0], 10)
 
+  if (toUpdate && !Number.isNaN(day)) {
+    return new Date(new Date(date).setDate(new Date(date).getDate() + day))
+  }
+
   return new Date(today.setDate(today.getDate() + day))
 }
+
+export const isValidDate = (
+  date: Date,
+  paymentTerm: string,
+  toUpdate: boolean,
+) => !Number.isNaN(getDueDate(paymentTerm, toUpdate, date).getTime())
+
+export const getDeadlineDate = (
+  date: Date,
+  paymentTerm: string,
+  toUpdate: boolean,
+  deadlineDate: Date,
+) =>
+  isValidDate(date, paymentTerm, toUpdate)
+    ? getDueDate(paymentTerm, toUpdate, date)
+    : new Date(deadlineDate)
 
 export const capitalize = (s: string) => {
   if (typeof s !== 'string') return ''
