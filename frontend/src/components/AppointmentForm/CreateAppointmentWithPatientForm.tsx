@@ -254,7 +254,7 @@ export default function CreateAppointmentWithPatientForm({
                 color: 'blue',
                 position: 'absolute',
                 marginTop: -3.5,
-                marginLeft: 62,
+                marginLeft: 5.5,
               }}
             />
           )}
