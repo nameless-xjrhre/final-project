@@ -80,7 +80,6 @@ it('should add a new hospital bill to an appointment', async () => {
     gql`
       mutation ($appointmentId: Int!, $data: CreateHospitalBillInput!) {
         createHospitalBill(appointmentId: $appointmentId, data: $data) {
-          id
           status
           date
           deadlineDate
@@ -99,24 +98,29 @@ it('should add a new hospital bill to an appointment', async () => {
         status: BillStatus.UNPAID,
         amount: 100,
         date: '2022-05-27T07:38:00Z',
-        deadlineDate: '2022-05-27T07:38:00Z',
+        deadlineDate: '2022-05-27T09:38:00Z',
         medStaffId,
         patientId,
       },
     },
   )
 
-  expect(hospitalBill).toMatchObject({
-    status: BillStatus.UNPAID,
-    date: '2022-05-27T07:38:00Z',
-    deadlineDate: '2022-05-27T07:38:00Z',
-    medStaff: {
-      fullName: 'Jose Rizal',
-    },
-    patient: {
-      fullName: 'Ralph Ayongao',
-    },
-  })
+  expect(hospitalBill).toMatchInlineSnapshot(`
+    Object {
+      "createHospitalBill": Object {
+        "amount": 100,
+        "date": "2022-05-27T07:38:00.000Z",
+        "deadlineDate": "2022-05-27T09:38:00.000Z",
+        "medStaff": Object {
+          "fullName": "Jose Rizal",
+        },
+        "patient": Object {
+          "fullName": "Ralph Ayongao",
+        },
+        "status": "UNPAID",
+      },
+    }
+  `)
 })
 
 afterEach(async () => {
