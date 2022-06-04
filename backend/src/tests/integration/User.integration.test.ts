@@ -89,6 +89,5 @@ it('queries all all the users', async () => {
 })
 
 afterEach(async () => {
-  const deleteUsers = prisma.user.deleteMany()
-  await prisma.$transaction([deleteUsers])
+  await prisma.user.deleteMany()
 })
