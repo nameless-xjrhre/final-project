@@ -84,11 +84,17 @@ export default function PatientsList() {
   const [editPatientBtn, setEditPatientBtn] = React.useState(false)
   const [deletePatientBtn, setDeletePatientBtn] = React.useState(false)
   const [patientId, setPatientId] = React.useState(0)
-  const handleOpenEditForm = () => setEditPatientBtn(true)
-  const handleCloseEditForm = () => setEditPatientBtn(false)
-  const handleOpenDeleteForm = () => setDeletePatientBtn(true)
-  const handleCloseDeleteForm = () => setDeletePatientBtn(false)
   const handleDismissDropdown = () => setDropDown(null)
+  const handleOpenEditForm = () => setEditPatientBtn(true)
+  const handleCloseEditForm = () => {
+    setEditPatientBtn(false)
+    handleDismissDropdown()
+  }
+  const handleOpenDeleteForm = () => setDeletePatientBtn(true)
+  const handleCloseDeleteForm = () => {
+    setDeletePatientBtn(false)
+    handleDismissDropdown()
+  }
   const open = Boolean(drop)
   const [currenPatient, setCurrentPatient] = React.useState<Patient>()
   const handleClick =
