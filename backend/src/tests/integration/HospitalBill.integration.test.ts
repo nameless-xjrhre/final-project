@@ -84,7 +84,7 @@ it('should add a new hospital bill to an appointment', async () => {
           status
           date
           deadlineDate
-          medicalStaff {
+          medStaff {
             fullName
           }
           patient {
@@ -109,7 +109,7 @@ it('should add a new hospital bill to an appointment', async () => {
     status: BillStatus.UNPAID,
     date: '2022-05-27T07:38:00Z',
     deadlineDate: '2022-05-27T07:38:00Z',
-    medicalStaff: {
+    medStaff: {
       fullName: 'Jose Rizal',
     },
     patient: {
