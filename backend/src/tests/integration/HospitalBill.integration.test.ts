@@ -97,6 +97,7 @@ it('should add a new hospital bill to an appointment', async () => {
       appointmentId,
       data: {
         status: BillStatus.UNPAID,
+        amount: 100,
         date: '2022-05-27T07:38:00Z',
         deadlineDate: '2022-05-27T07:38:00Z',
         medStaffId,
