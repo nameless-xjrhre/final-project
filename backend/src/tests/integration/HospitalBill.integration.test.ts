@@ -1,5 +1,4 @@
 import { gql } from 'graphql-request'
-import { BillStatus } from '@prisma/client'
 import { context } from '../../context'
 import { createTestContext } from '../__helpers'
 
@@ -95,7 +94,6 @@ it('should add a new hospital bill to an appointment', async () => {
     {
       appointmentId,
       data: {
-        status: BillStatus.UNPAID,
         amount: 100,
         date: '2022-05-27T07:38:00Z',
         deadlineDate: '2022-05-27T09:38:00Z',
@@ -117,7 +115,6 @@ it('should add a new hospital bill to an appointment', async () => {
         "patient": Object {
           "fullName": "Ralph Ayongao",
         },
-        "status": "UNPAID",
       },
     }
   `)
