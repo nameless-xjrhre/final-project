@@ -65,18 +65,27 @@ it('should add a new hospital bill to an appointment', async () => {
     .findMany()
     .then((appointments) => appointments[0].id)
 
+  const patientId = await prisma.appointment
+    .findMany()
+    .then((appointments) => appointments[0])
+    .then((appointment) => appointment.patientId)
+
+  const medStaffId = await prisma.appointment
+    .findMany()
+    .then((appointments) => appointments[0])
+    .then((appointment) => appointment.medStaffId)
+
   const hospitalBill = await ctx.client.request(
     gql`
       mutation ($appointmentId: Int!, $data: CreateHospitalBillInput!) {
-        createHospitalBill(data: $data, appointmentId: $appointmentId) {
-          deadlineDate
+        createHospitalBill(appointmentId: $appointmentId, data: $data) {
           amount
-          status
           date
-          patient {
+          deadlineDate
+          medStaff {
             fullName
           }
-          medStaff {
+          patient {
             fullName
           }
         }
@@ -85,26 +94,31 @@ it('should add a new hospital bill to an appointment', async () => {
     {
       appointmentId,
       data: {
-        deadlineDate: '2022-11-27T07:38:00Z',
+        status: 'UNPAID',
+        amount: 100,
         date: '2022-05-27T07:38:00Z',
-        amount: '1000',
-        status: 'UPDAID',
+        deadlineDate: '2022-05-27T09:38:00Z',
+        medStaffId,
+        patientId,
       },
     },
   )
 
-  expect(hospitalBill).toMatchObject({
-    deadlineDate: '2022-11-27T07:38:00Z',
-    amount: '1000',
-    status: 'UPDAID',
-    date: '2022-05-27T07:38:00Z',
-    patient: {
-      fullName: 'Ralph Ayongao',
-    },
-    medStaff: {
-      fullName: 'Jose Rizal',
-    },
-  })
+  expect(hospitalBill).toMatchInlineSnapshot(`
+    Object {
+      "createHospitalBill": Object {
+        "amount": 100,
+        "date": "2022-05-27T07:38:00.000Z",
+        "deadlineDate": "2022-05-27T09:38:00.000Z",
+        "medStaff": Object {
+          "fullName": "Jose Rizal",
+        },
+        "patient": Object {
+          "fullName": "Ralph Ayongao",
+        },
+      },
+    }
+  `)
 })
 
 afterEach(async () => {
