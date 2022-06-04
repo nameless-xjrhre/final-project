@@ -129,11 +129,9 @@ export default function CreateScheduleForm({
     createSchedules(inputs)
       .then((result) => {
         if (result.error) {
-          console.log(result)
           handleClose(handleComplete)
           showFailAlert('Data has not been saved.')
         } else {
-          console.log(result)
           handleClose(handleComplete)
           showSuccessAlert('Data has been saved.')
         }

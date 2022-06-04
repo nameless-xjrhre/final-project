@@ -57,11 +57,9 @@ export default function DeletePatientDialog({
     deletePatient(patientId)
       .then((result) => {
         if (result.error) {
-          console.log(result)
           handleClose(handleComplete)
           showFailAlert('Unsuccessful operation.')
         } else {
-          console.log(result)
           handleClose(handleComplete)
           showSuccessAlert('Succesfully deleted patient.')
         }

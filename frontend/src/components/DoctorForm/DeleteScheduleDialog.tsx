@@ -53,11 +53,9 @@ export default function DeleteScheduleDialog({
     deleteAppointment({ id })
       .then((result) => {
         if (result.error) {
-          console.log(result)
           handleClose(handleComplete)
           showFailAlert('Unsuccessful operation.')
         } else {
-          console.log(result)
           handleClose(handleComplete)
           showSuccessAlert('Succesfully deleted schedule.')
         }

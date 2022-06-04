@@ -40,7 +40,6 @@ export const FormInputDate = ({
   <Controller
     name={name}
     control={control}
-    defaultValue={null}
     render={({ field: { onChange, value } }) => (
       <DatePicker
         disableFuture

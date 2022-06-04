@@ -95,11 +95,9 @@ export default function ScheduleStack(props: ScheduleStackProps) {
       updateStatus(input)
         .then((result) => {
           if (result.error) {
-            console.log(result)
             handleComplete()
             showFailAlert('')
           } else {
-            console.log(result)
             handleComplete()
             showSuccessAlert('')
           }

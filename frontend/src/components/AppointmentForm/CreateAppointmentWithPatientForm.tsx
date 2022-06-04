@@ -154,12 +154,10 @@ export default function CreateAppointmentWithPatientForm({
       handleSubmitting()
       createAppointmentWithPatient(input)
         .then((result) => {
-          console.log(result)
           if (result.error) {
             handleClose(handleComplete)
             showFailAlert('Data has not been saved.')
           } else {
-            console.log(result)
             handleClose(handleComplete)
             showSuccessAlert('Data has been saved.')
           }
@@ -256,7 +254,7 @@ export default function CreateAppointmentWithPatientForm({
                 color: 'blue',
                 position: 'absolute',
                 marginTop: -3.5,
-                marginLeft: 62,
+                marginLeft: 5.5,
               }}
             />
           )}
