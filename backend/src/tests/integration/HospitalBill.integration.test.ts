@@ -79,35 +79,42 @@ it('should add a new hospital bill to an appointment', async () => {
   const hospitalBill = await ctx.client.request(
     gql`
       mutation ($appointmentId: Int!, $data: CreateHospitalBillInput!) {
-        createHospitalBill(data: $data, appointmentId: $appointmentId) {
+        createHospitalBill(appointmentId: $appointmentId, data: $data) {
           id
-          amount
-          deadlineDate
-          date
           status
+          date
+          deadlineDate
+          medicalStaff {
+            fullName
+          }
+          patient {
+            fullName
+          }
         }
       }
     `,
     {
       appointmentId,
       data: {
-        amount: 100,
-        deadlineDate: '2022-05-27T08:38:00Z',
-        date: '2022-05-27T07:38:00Z',
         status: BillStatus.UNPAID,
-        patientId,
+        date: '2022-05-27T07:38:00Z',
+        deadlineDate: '2022-05-27T07:38:00Z',
         medStaffId,
+        patientId,
       },
     },
   )
 
   expect(hospitalBill).toMatchObject({
-    amount: 100,
-    deadlineDate: '2022-05-27T08:38:00Z',
-    date: '2022-05-27T07:38:00Z',
     status: BillStatus.UNPAID,
-    patientId,
-    medStaffId,
+    date: '2022-05-27T07:38:00Z',
+    deadlineDate: '2022-05-27T07:38:00Z',
+    medicalStaff: {
+      fullName: 'Jose Rizal',
+    },
+    patient: {
+      fullName: 'Ralph Ayongao',
+    },
   })
 })
 
