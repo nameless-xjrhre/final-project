@@ -56,7 +56,7 @@ it('should create a new medical record', async () => {
 
   const createMedicalRecord = await ctx.client.request(
     gql`
-      mutation ($data: MedicalRecordCreateInput!) {
+      mutation ($data: CreateMedicalRecordInput!) {
         createMedicalRecord(data: $data) {
           diagnosis
           prescription
