@@ -166,9 +166,7 @@ export default function PatientsList() {
               <StyledTableCell>{patient.contactNum}</StyledTableCell>
               <StyledTableCell>
                 {displayVisitType(
-                  (patient?.latestAppointment?.visitType)
-                    .toString()
-                    .toUpperCase(),
+                  patient.latestAppointment.visitType?.toString().toUpperCase(),
                 )}
               </StyledTableCell>
               <StyledTableCell>
