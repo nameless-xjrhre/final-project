@@ -13,7 +13,8 @@
     "lint": "eslint --fix --ext .ts,.tsx,.js,.jsx src",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "cy:run": "cypress run"
   },
   "dependencies": {
     "@babel/core": ">=7.0.0 <8.0.0",

@@ -4,8 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "concurrently \"npm run frontend:prod\" \"npm run backend:prod\"",
     "frontend": "cd frontend && npm run dev",
     "backend": "cd backend && npm run dev",
+    "frontend:build": "cd frontend && npm run build",
+    "backend:build": "cd backend && npm run build",
+    "frontend:prod": "cd frontend && npm run preview",
+    "backend:prod": "cd backend && npm run start",
     "dev": "concurrently \"npm run frontend\" \"npm run backend\"",
     "prepare": "husky install",
     "lint:frontend": "cd frontend && npm run lint",
@@ -14,7 +19,8 @@
     "build:backend": "cd backend && npm run build",
     "test:frontend": "cd frontend && npm run test",
     "test:backend": "cd backend && npm run test",
-    "test-unit:backend": "cd backend && npm run test:unit"
+    "test-unit:backend": "cd backend && npm run test:unit",
+    "test:e2e": "cd frontend && npm run cy:run"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
