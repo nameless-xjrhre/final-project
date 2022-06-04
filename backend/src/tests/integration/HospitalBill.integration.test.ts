@@ -1,4 +1,5 @@
 import { gql } from 'graphql-request'
+import { BillStatus } from '@prisma/client'
 import { context } from '../../context'
 import { createTestContext } from '../__helpers'
 
@@ -65,45 +66,48 @@ it('should add a new hospital bill to an appointment', async () => {
     .findMany()
     .then((appointments) => appointments[0].id)
 
+  const patientId = await prisma.appointment
+    .findMany()
+    .then((appointments) => appointments[0])
+    .then((appointment) => appointment.patientId)
+
+  const medStaffId = await prisma.appointment
+    .findMany()
+    .then((appointments) => appointments[0])
+    .then((appointment) => appointment.medStaffId)
+
   const hospitalBill = await ctx.client.request(
     gql`
       mutation ($appointmentId: Int!, $data: CreateHospitalBillInput!) {
         createHospitalBill(data: $data, appointmentId: $appointmentId) {
-          deadlineDate
+          id
           amount
-          status
+          deadlineDate
           date
-          patient {
-            fullName
-          }
-          medStaff {
-            fullName
-          }
+          status
         }
       }
     `,
     {
       appointmentId,
       data: {
-        deadlineDate: '2022-11-27T07:38:00Z',
+        amount: 100,
+        deadlineDate: '2022-05-27T08:38:00Z',
         date: '2022-05-27T07:38:00Z',
-        amount: '1000',
-        status: 'UPDAID',
+        status: BillStatus.UNPAID,
+        patientId,
+        medStaffId,
       },
     },
   )
 
   expect(hospitalBill).toMatchObject({
-    deadlineDate: '2022-11-27T07:38:00Z',
-    amount: '1000',
-    status: 'UPDAID',
+    amount: 100,
+    deadlineDate: '2022-05-27T08:38:00Z',
     date: '2022-05-27T07:38:00Z',
-    patient: {
-      fullName: 'Ralph Ayongao',
-    },
-    medStaff: {
-      fullName: 'Jose Rizal',
-    },
+    status: BillStatus.UNPAID,
+    patientId,
+    medStaffId,
   })
 })
 
