@@ -22,7 +22,7 @@ export const mainListItems = (
         height: 80,
         width: 250,
       }}
-      src="src/images/icons/Clinisync.png"
+      src="../src/images/icons/Clinisync.png"
     />
     <Link to="/dashboard" className="nav-link">
       <ListItemButton>
