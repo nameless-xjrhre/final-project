@@ -139,11 +139,9 @@ export default function CreateAppointmentForm({
       createAppointment(createInput)
         .then((result) => {
           if (result.error) {
-            console.log(result)
             handleClose(handleComplete)
             showFailAlert('Data has not been saved.')
           } else {
-            console.log(result)
             handleClose(handleComplete)
             showSuccessAlert('Data has been saved.')
           }
@@ -157,19 +155,17 @@ export default function CreateAppointmentForm({
             new Date(
               getCompleteDate(data.appointmentDate, data.appointmentTime),
             ) || appointment?.date,
-          visitType: data.visitType || appointment?.visitType,
-          status: data.status || appointment?.status,
-          note: data.note || appointment?.note,
+          visitType: data.visitType || appointment!.visitType,
+          status: data.status || appointment!.status,
+          note: data.note || appointment!.note,
         },
       }
       updateAppointment(updateInput)
         .then((result) => {
           if (result.error) {
-            console.log(result)
             handleClose(handleComplete)
             showFailAlert('Data has not been saved.')
           } else {
-            console.log(result)
             handleClose(handleComplete)
             showSuccessAlert('Data has been saved.')
           }
