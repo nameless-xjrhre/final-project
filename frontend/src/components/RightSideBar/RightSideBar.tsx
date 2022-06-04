@@ -54,14 +54,14 @@ const AppointmentHistoryQueryDocument = gql`
   }
 `
 
-function displayVisitType(visitType: String) {
+export function displayVisitType(visitType: String) {
   switch (visitType) {
     case 'FOLLOWUP':
       return (
         <Typography
           style={{
             color: '#6562F0',
-            fontSize: '12px',
+            fontSize: '13px',
           }}
         >
           Follow Up
@@ -72,7 +72,7 @@ function displayVisitType(visitType: String) {
         <Typography
           style={{
             color: '#57E799',
-            fontSize: '12px',
+            fontSize: '13px',
           }}
         >
           Routine
@@ -83,7 +83,7 @@ function displayVisitType(visitType: String) {
         <Typography
           style={{
             color: '#F6CE3E',
-            fontSize: '12px',
+            fontSize: '13px',
           }}
         >
           Urgent
@@ -94,7 +94,7 @@ function displayVisitType(visitType: String) {
         <Typography
           style={{
             color: '#F85353',
-            fontSize: '12px',
+            fontSize: '13px',
           }}
         >
           N/A
