@@ -84,6 +84,7 @@ it('should create a new medical record', async () => {
   expect(createMedicalRecord).toMatchInlineSnapshot(`
     Object {
       "createMedicalRecord": Object {
+        "date": "2020-04-27T07:38:00.000Z",
         "diagnosis": "Diagnosis",
         "medStaff": Object {
           "fullName": "Jose Rizal",
@@ -92,7 +93,6 @@ it('should create a new medical record', async () => {
           "fullName": "Hans Daduya",
         },
         "prescription": "Prescription",
-        "date": "2020-04-27T07:38:00.000Z",
       },
     }
   `)
