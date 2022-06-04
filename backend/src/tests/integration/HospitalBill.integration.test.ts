@@ -79,7 +79,6 @@ it('should add a new hospital bill to an appointment', async () => {
     gql`
       mutation ($appointmentId: Int!, $data: CreateHospitalBillInput!) {
         createHospitalBill(appointmentId: $appointmentId, data: $data) {
-          status
           date
           deadlineDate
           medStaff {
@@ -94,6 +93,7 @@ it('should add a new hospital bill to an appointment', async () => {
     {
       appointmentId,
       data: {
+        status: 'UNPAID',
         amount: 100,
         date: '2022-05-27T07:38:00Z',
         deadlineDate: '2022-05-27T09:38:00Z',
