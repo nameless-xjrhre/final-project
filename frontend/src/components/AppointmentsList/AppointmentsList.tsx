@@ -190,7 +190,10 @@ export default function AppointmentList() {
                 <StyledTableCell>
                   Dr. {appointment.medStaff.fullName}
                 </StyledTableCell>
-                <StyledTableCell>{appointment.status}</StyledTableCell>
+                <StyledTableCell>
+                  {appointment.status.toString()[0] +
+                    appointment.status.toString().slice(1).toLowerCase()}
+                </StyledTableCell>
                 <StyledTableCell align="right">
                   <Button
                     id="basic-button"
