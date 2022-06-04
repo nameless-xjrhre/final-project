@@ -6,7 +6,10 @@ import getPort, { makeRange } from 'get-port'
 import { GraphQLClient } from 'graphql-request'
 import { join } from 'path'
 import { Server } from 'http'
+import { context } from '../context'
 import server from '../server'
+
+const { prisma } = context
 
 const db = new PrismaClient()
 
@@ -76,4 +79,24 @@ function prismaTestContext() {
       prismaClient?.$disconnect()
     },
   }
+}
+
+export async function deleteData() {
+  const deleteHospitalBills = prisma.hospitalBill.deleteMany()
+  const deleteMedicalRecords = prisma.medicalRecord.deleteMany()
+  const deleteAppointments = prisma.appointment.deleteMany()
+  const deleteSchedules = prisma.schedule.deleteMany()
+  const deleteMedicalStaffs = prisma.medicalStaff.deleteMany()
+  const deletePatients = prisma.patient.deleteMany()
+  const deleteUsers = prisma.user.deleteMany()
+
+  await prisma.$transaction([
+    deleteHospitalBills,
+    deleteMedicalRecords,
+    deleteAppointments,
+    deleteSchedules,
+    deleteMedicalStaffs,
+    deletePatients,
+    deleteUsers,
+  ])
 }
