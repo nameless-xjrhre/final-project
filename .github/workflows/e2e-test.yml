@@ -40,12 +40,6 @@ jobs:
         run: cd backend && npm run generate
       - name: Build frontend && backend
         run: npm run frontend:build && npm run backend:build
-      - name: Run app
-        run: npm run start
       - uses: cypress-io/github-action@v4
         with:
           browser: chrome
-      - name: Cypress run
-        run: cd frontend && npm run cypress:run
-      - name: Teardown the database
-        run: cd backend && docker-compose down
