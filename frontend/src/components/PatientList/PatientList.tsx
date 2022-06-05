@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { useNavigate } from 'react-router-dom'
 import EditPatientForm from '../PatientForm/EditPatientForm'
 import DeletePatientDialog from '../PatientForm/DeletePatientDialog'
+import { displayVisitType } from '../RightSideBar/RightSideBar'
 
 interface Patient {
   id: number
@@ -84,11 +85,17 @@ export default function PatientsList() {
   const [editPatientBtn, setEditPatientBtn] = React.useState(false)
   const [deletePatientBtn, setDeletePatientBtn] = React.useState(false)
   const [patientId, setPatientId] = React.useState(0)
-  const handleOpenEditForm = () => setEditPatientBtn(true)
-  const handleCloseEditForm = () => setEditPatientBtn(false)
-  const handleOpenDeleteForm = () => setDeletePatientBtn(true)
-  const handleCloseDeleteForm = () => setDeletePatientBtn(false)
   const handleDismissDropdown = () => setDropDown(null)
+  const handleOpenEditForm = () => setEditPatientBtn(true)
+  const handleCloseEditForm = () => {
+    setEditPatientBtn(false)
+    handleDismissDropdown()
+  }
+  const handleOpenDeleteForm = () => setDeletePatientBtn(true)
+  const handleCloseDeleteForm = () => {
+    setDeletePatientBtn(false)
+    handleDismissDropdown()
+  }
   const open = Boolean(drop)
   const [currenPatient, setCurrentPatient] = React.useState<Patient>()
   const handleClick =
@@ -164,7 +171,11 @@ export default function PatientsList() {
               <StyledTableCell>{patient.sex.toString()}</StyledTableCell>
               <StyledTableCell>{patient.contactNum}</StyledTableCell>
               <StyledTableCell>
-                {patient?.latestAppointment?.visitType}
+                {displayVisitType(
+                  patient.latestAppointment?.visitType
+                    ?.toString()
+                    .toUpperCase(),
+                )}
               </StyledTableCell>
               <StyledTableCell>
                 {hasNoAppointments(patient)

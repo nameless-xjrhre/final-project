@@ -6,8 +6,8 @@ describe('Doctor Page - Add Doctor Test', () => {
     it('should input name of doctor', () => {
         cy.get('[aria-label="SpeedDial basic example"]').trigger('mouseover')
             .get('[aria-label="Add Doctor"]').click()
-            .get('[name=firstName]').type('Shinobu')
-            .get('[name=lastName]').type('Kuki')
+            .get('[name=firstName]').type('Richie')
+            .get('[name=lastName]').type('Baizhu')
     })
 
     it('should input contact information', () => {
@@ -15,7 +15,7 @@ describe('Doctor Page - Add Doctor Test', () => {
     })
 
     it('should input address', () => {
-        cy.get('[name=address]').type('Naga, Camarines Sur')
+        cy.get('[name=address]').type('Liyue')
     })
 
     it('should click add doctor button', () => {

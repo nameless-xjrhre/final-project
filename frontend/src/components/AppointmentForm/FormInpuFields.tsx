@@ -29,12 +29,12 @@ export const FormInputSelectPatient = ({
     <Controller
       name={name}
       control={control}
-      render={({ field: { onChange } }) => (
+      render={({ field: { onChange, value } }) => (
         <>
           <Select
             defaultValue=""
             label={label}
-            value={onSavedValue}
+            value={value || onSavedValue}
             onChange={onChange}
             name={name}
           >
@@ -68,12 +68,12 @@ export const FormInputSelectMedStaff = ({
     <Controller
       name={name}
       control={control}
-      render={({ field: { onChange } }) => (
+      render={({ field: { onChange, value } }) => (
         <>
           <Select
             defaultValue=""
             label={label}
-            value={onSavedValue}
+            value={value || onSavedValue}
             onChange={onChange}
             name={name}
           >
@@ -107,12 +107,12 @@ export const FormInputSelect = ({
     <Controller
       name={name}
       control={control}
-      render={({ field: { onChange } }) => (
+      render={({ field: { onChange, value } }) => (
         <>
           <Select
             defaultValue=""
             label={label}
-            value={onSavedValue}
+            value={value || onSavedValue}
             onChange={onChange}
             name={name}
           >
@@ -162,7 +162,6 @@ export const FormInputDate = ({
   <Controller
     name={name}
     control={control}
-    defaultValue={null}
     render={({ field: { onChange, value } }) => (
       <DatePicker
         disablePast
@@ -198,7 +197,6 @@ export const FormInputTime = ({
   <Controller
     name={name}
     control={control}
-    defaultValue={null}
     render={({ field: { onChange, value } }) => (
       <TimePicker
         ampm={false}

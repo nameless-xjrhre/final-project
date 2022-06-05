@@ -4,12 +4,22 @@ describe('Doctors Page - Open A Schedule Test', () => {
     })
 
     it('should open a schedule', () => {
-        cy.get('[class=css-zgbp5c-MuiStack-root]').contains('7:40 AM - 10:15 AM')
+        cy.get('[class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-clickable MuiChip-clickableColorDefault MuiChip-filledDefault css-1n7jwnc-MuiButtonBase-root-MuiChip-root"]')
+            .last()
             .click()
             .get('[value="OPEN"]')
             .click()
             .wait(5000)
-            .get('[class="swal-title"]')
+            
+    })
+
+    it('should check change in color', ()=>{
+        cy.get('.css-j4zylg-MuiButtonBase-root-MuiChip-root')
+        .should('have.css', 'background-color', 'rgb(87, 231, 153)')
+    })
+
+    it('should displayed confirmation message', () => {
+        cy.get('[class="swal-title"]')
             .should('contain', 'Success')
             .get('[class="swal-button swal-button--confirm"]')
             .contains('OK')
