@@ -47,5 +47,7 @@ jobs:
         with:
           working-directory: frontend
           browser: chrome
+          wait-on: 'http://localhost:4173, http://localhost:4000'
+          config: pageLoadTimeout=100000,baseUrl=http://localhost:4173
       - name: Teardown the database
         run: cd backend && docker-compose down
