@@ -24,9 +24,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - uses: cypress-io/github-action@v4
-        with:
-          browser: chrome
       - name: 'Create env for backend'
         run: |
           cd backend
@@ -49,5 +46,6 @@ jobs:
         uses: cypress-io/github-action@v4
         with:
           working-directory: frontend
+          browser: chrome
       - name: Teardown the database
         run: cd backend && docker-compose down
