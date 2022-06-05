@@ -1,0 +1,48 @@
+name: e2e-test
+
+on:
+  push:
+    branches: [integration_test_branch]
+  pull_request:
+    branches: [integration_test_branch]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    # let's make sure our tests pass on Chrome browser
+    name: E2E on Chrome
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: 'Create env for backend'
+        run: |
+          cd backend
+          touch .env
+          echo "DATABASE_URL=postgresql://prisma:prisma@localhost:5433/tests" >> .env
+      - run: npm ci
+      - run: cd backend && npm ci
+      - run: cd frontend && npm ci
+      - name: Setup the database
+        run: cd backend && docker-compose up -d
+      - name: Run migration
+        run: cd backend && npm run db:migrate
+      - name: Run code generation
+        run: cd backend && npm run generate
+      - name: Build frontend && backend
+        run: npm run frontend:build && npm run backend:build
+      - name: Run app
+        run: npm run start &
+      - name: Run Cypress tests
+        run: cd frontend && npm run cy:run
+      - name: Teardown the database
+        run: cd backend && docker-compose down
