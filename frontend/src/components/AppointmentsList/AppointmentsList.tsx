@@ -94,16 +94,25 @@ export default function AppointmentList() {
   const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
   const [page, setPage] = React.useState(1)
   const open = Boolean(drop)
+  const handleDismissDropdown = () => setDropDown(null)
   const [generateBillBtn, setGenerateBillBtn] = React.useState(false)
   const handleGenerateBillOpenForm = () => setGenerateBillBtn(true)
-  const handleGenerateCloseBillForm = () => setGenerateBillBtn(false)
+  const handleGenerateCloseBillForm = () => {
+    setGenerateBillBtn(false)
+    handleDismissDropdown()
+  }
   const [editAppointmentBtn, setEditAppointmentBtn] = React.useState(false)
   const handleEditApptOpenForm = () => setEditAppointmentBtn(true)
-  const handleEditApptCloseBillForm = () => setEditAppointmentBtn(false)
+  const handleEditApptCloseBillForm = () => {
+    setEditAppointmentBtn(false)
+    handleDismissDropdown()
+  }
   const [deleteAppointmentBtn, setDeleteAppointmentBtn] = React.useState(false)
   const handleOpenDeleteAppointmentDialog = () => setDeleteAppointmentBtn(true)
-  const handleCloseDeleteAppointmentDialog = () =>
+  const handleCloseDeleteAppointmentDialog = () => {
     setDeleteAppointmentBtn(false)
+    handleDismissDropdown()
+  }
   const [currentAppointment, setCurrentAppointment] =
     React.useState<Appointment>()
 
@@ -111,9 +120,7 @@ export default function AppointmentList() {
     event.preventDefault()
     setDropDown(event.currentTarget)
   }
-  const handleClose = () => {
-    setDropDown(null)
-  }
+
   const [appointments] = useQuery<AppointmentQuery>({
     query: AppointmentQueryDocument,
     variables: {
@@ -212,7 +219,7 @@ export default function AppointmentList() {
                     id="basic-menu"
                     anchorEl={drop}
                     open={open}
-                    onClose={handleClose}
+                    onClose={handleDismissDropdown}
                     sx={{ boxShadow: 1 }}
                     MenuListProps={{
                       'aria-labelledby': 'basic-button',
@@ -236,7 +243,9 @@ export default function AppointmentList() {
                         </Typography>
                       }
                     >
-                      <MenuItem onClick={handleClose}>View Note</MenuItem>
+                      <MenuItem onClick={handleDismissDropdown}>
+                        View Note
+                      </MenuItem>
                     </CustomTooltip>
                     <MenuItem onClick={handleGenerateBillOpenForm}>
                       Generate Bill

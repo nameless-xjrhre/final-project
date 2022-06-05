@@ -12,6 +12,7 @@ import {
   faWheelchair,
 } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
+import Logo from '../../images/icons/Clinisync.png'
 import './Sidebar.css'
 
 export const mainListItems = (
@@ -22,7 +23,7 @@ export const mainListItems = (
         height: 80,
         width: 250,
       }}
-      src="../src/images/icons/Clinisync.png"
+      src={Logo}
     />
     <Link to="/dashboard" className="nav-link">
       <ListItemButton>
