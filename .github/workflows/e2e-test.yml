@@ -38,8 +38,8 @@ jobs:
         run: cd backend && npm run db:migrate
       - name: Run code generation
         run: cd backend && npm run generate
-      - name: Build frontend && backend
-        run: npm run frontend:build && npm run backend:build
       - uses: cypress-io/github-action@v4
         with:
+          build: npm run frontend:build && npm run backend:build
+          start: npm run start
           browser: chrome
