@@ -4,7 +4,7 @@ describe('Appointment Page - Edit Appointment Test', () => {
     })
 
     it('should click edit button', () => {
-        cy.get('[id="basic-button"]').eq(7)
+        cy.get('[id="basic-button"]').eq(5)
             .click()
             .get('[role="menuitem"]').contains('Edit').click({ force: true })
     })
@@ -24,7 +24,8 @@ describe('Appointment Page - Edit Appointment Test', () => {
     it('should select medical staff', () => {
         cy.get('[id=mui-component-select-medicalStaff]').last()
             .click()
-            .get('[data-value=3]')
+            .get('[name="medicalStaff"]')
+            .last()
             .click()
     })
 
