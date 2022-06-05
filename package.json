@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"npm run frontend:prod\" \"npm run backend:prod\"",
+    "start": "concurrently \"npm run frontend\" \"npm run backend:prod\"",
     "frontend": "cd frontend && npm run dev",
     "backend": "cd backend && npm run dev",
     "frontend:build": "cd frontend && npm run build",
