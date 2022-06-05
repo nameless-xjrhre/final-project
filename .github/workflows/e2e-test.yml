@@ -42,10 +42,7 @@ jobs:
         run: npm run frontend:build && npm run backend:build
       - name: Run app
         run: npm run start &
-      - name: Install Cypress and run tests
-        uses: cypress-io/github-action@v4
-        with:
-          working-directory: frontend
-          browser: chrome
+      - name: Run Cypress tests
+        run: cd frontend && npm run cy:run
       - name: Teardown the database
         run: cd backend && docker-compose down
