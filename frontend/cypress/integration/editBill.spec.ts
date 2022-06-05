@@ -1,8 +1,8 @@
 describe('Bills Page - Edit Bills Test', () => {
   before(() => {
     cy.visit('http://localhost:3000/bills')
-      .wait(5_000)
-      .get('[id=basic-button]')
+      .wait(5000)
+      .get('[id="basic-button"]')
       .eq(7)
       .click()
       .get('[role="menuitem"]')
@@ -16,7 +16,7 @@ describe('Bills Page - Edit Bills Test', () => {
     })
 
     it('should select payment term', () => {
-      cy.get('[id=mui-component-select-paymentTerm]')
+      cy.get('[id="mui-component-select-paymentTerm"]')
         .last()
         .click()
         .get('[data-value="15 days"]')
@@ -28,7 +28,7 @@ describe('Bills Page - Edit Bills Test', () => {
         .last()
         .contains('Save Changes')
         .click()
-        .wait(5_000)
+        .wait(5000)
     })
 
     it('should display confirmation message', () => {
