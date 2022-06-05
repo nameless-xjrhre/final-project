@@ -11,10 +11,10 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
       .click()
       .get('[name=firstName]')
       .click()
-      .type('Ayato')
+      .type('Rin')
       .get('[name=lastName]')
       .click()
-      .type('Kamisato')
+      .type('Onigawara')
   })
 
   it('should input contact info', () => {
@@ -22,7 +22,7 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
   })
 
   it('should select gender', () => {
-    cy.get('[value=MALE]').click()
+    cy.get('[value=FEMALE]').click()
   })
 
   it('should input date of birth', () => {
@@ -30,11 +30,11 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
       .click()
       .type('10/06/2000')
       .clear()
-      .type('09/28/2000')
+      .type('09/09/2000')
   })
 
   it('should input address', () => {
-    cy.get('[name=address]').click().type('Narukami, Inazuma')
+    cy.get('[name=address]').click().type('Watatsumi, Inazuma')
   })
 
   it('should click next button', () => {
@@ -59,7 +59,7 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
   it('should select medical staff', () => {
     cy.get('[id=mui-component-select-medicalStaff]')
       .click()
-      .get('[data-value=6]')
+      .get('[data-value=4]')
       .click()
   })
 
@@ -72,11 +72,11 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
   })
 
   it('should input appointment time', () => {
-    cy.get('[name=appointmentTime]').click().type('10:30')
+    cy.get('[name=appointmentTime]').click().type('09:30')
   })
 
   it('should input note', () => {
-    cy.get('[name=note]').click().type('Sleep deprived')
+    cy.get('[name=note]').click().type('Black eyes, droopy nose')
   })
 
   it('should book appointment', () => {

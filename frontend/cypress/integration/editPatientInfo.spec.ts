@@ -5,6 +5,7 @@ describe('Patient Page - Edit Patient Info Test', () => {
 
   it('should edit name of patient', () => {
     cy.get('[id="basic-button"]')
+      .wait(3000)
       .eq(3)
       .click()
       .get('[role="menuitem"]')
@@ -13,7 +14,7 @@ describe('Patient Page - Edit Patient Info Test', () => {
       .get('[name=firstName]')
       .last()
       .click()
-      .type('Remcon')
+      .type('Rinka')
       .get('[name=lastName]')
       .last()
       .click()
@@ -25,7 +26,7 @@ describe('Patient Page - Edit Patient Info Test', () => {
   })
 
   it('should select gender', () => {
-    cy.get('[value="MALE"]').last().click()
+    cy.get('[value="FEMALE"]').last().click()
   })
 
   it('should input address', () => {

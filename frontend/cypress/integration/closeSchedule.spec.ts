@@ -1,19 +1,29 @@
-describe('Doctors Page - Close A Schedule Test', ()=>{
-    before(()=>{
+describe('Doctors Page - Close A Schedule Test', () => {
+    before(() => {
         cy.visit('http://localhost:3000/doctors')
     })
 
     it('should close a schedule', () => {
-        cy.get('[class=css-zgbp5c-MuiStack-root]').contains('8:02 PM - 8:28 PM')
-         .click()
-         .get('[value="CLOSED"]')
-         .click()
-         .wait(5000)
-         .get('[class="swal-title"]')
-         .should('contain', 'Success')
-         .get('[class="swal-button swal-button--confirm"]')
-         .contains('OK')
-         .click()
+        cy.get('[class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-clickable MuiChip-clickableColorDefault MuiChip-filledDefault css-j4zylg-MuiButtonBase-root-MuiChip-root"]')
+            .last()
+            .click()
+            .get('[value="CLOSED"]').last()
+            .click()
+            .wait(5000)
+            
+    })
+
+    it('should check change in color', ()=>{
+        cy.get('.css-1l5e8fi-MuiButtonBase-root-MuiChip-root')
+        .should('have.css', 'background-color', 'rgb(254, 121, 129)')
+    })
+
+    it('should display confirmation message', () => {
+        cy.get('[class="swal-title"]')
+            .should('contain', 'Success')
+            .get('[class="swal-button swal-button--confirm"]')
+            .contains('OK')
+            .click()
     })
 
 
