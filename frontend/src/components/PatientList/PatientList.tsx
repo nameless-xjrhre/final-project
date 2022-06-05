@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { useNavigate } from 'react-router-dom'
 import EditPatientForm from '../PatientForm/EditPatientForm'
 import DeletePatientDialog from '../PatientForm/DeletePatientDialog'
+import { displayVisitType } from '../RightSideBar/RightSideBar'
 
 interface Patient {
   id: number
@@ -170,7 +171,9 @@ export default function PatientsList() {
               <StyledTableCell>{patient.sex.toString()}</StyledTableCell>
               <StyledTableCell>{patient.contactNum}</StyledTableCell>
               <StyledTableCell>
-                {patient?.latestAppointment?.visitType}
+                {displayVisitType(
+                  patient.latestAppointment.visitType.toString().toUpperCase(),
+                )}
               </StyledTableCell>
               <StyledTableCell>
                 {hasNoAppointments(patient)

@@ -16,6 +16,7 @@ import MenuItem from '@mui/material/MenuItem'
 import CreateBillForm from '../BillForm/CreateBillForm'
 // import StatusButton from '../Buttons/StatusButton'
 import { AppointmentStatus, VisitType } from '../../graphql/generated'
+import StatusButton from '../Buttons/StatusButton'
 import { capitalize } from '../../utils'
 import CreateAppointmentForm from '../AppointmentForm/CreateAppointmentForm'
 import DeleteAppointmentDialog from '../AppointmentForm/DeleteAppointmentDialog'
@@ -197,7 +198,9 @@ export default function AppointmentList() {
                 <StyledTableCell>
                   Dr. {appointment.medStaff.fullName}
                 </StyledTableCell>
-                <StyledTableCell>{appointment.status}</StyledTableCell>
+                <StyledTableCell>
+                  <StatusButton status={appointment.status} />
+                </StyledTableCell>
                 <StyledTableCell align="right">
                   <Button
                     id="basic-button"

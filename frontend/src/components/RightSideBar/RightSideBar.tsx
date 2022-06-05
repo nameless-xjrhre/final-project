@@ -1,5 +1,4 @@
 import * as React from 'react'
-import Box from '@mui/material/Box'
 import Drawer from '@mui/material/Drawer'
 import CssBaseline from '@mui/material/CssBaseline'
 import Typography from '@mui/material/Typography'
@@ -13,6 +12,7 @@ import TimelineDot from '@mui/lab/TimelineDot'
 import Stack from '@mui/material/Stack'
 import { gql, useQuery } from 'urql'
 import { useParams } from 'react-router-dom'
+import { Box } from '@mui/material'
 
 interface AppointmentHistoryQuery {
   upcomingAppointments: {
@@ -54,13 +54,14 @@ const AppointmentHistoryQueryDocument = gql`
   }
 `
 
-function displayVisitType(visitType: String) {
+export function displayVisitType(visitType: String) {
   switch (visitType) {
     case 'FOLLOWUP':
       return (
         <Typography
           style={{
             color: '#6562F0',
+            fontSize: '13px',
           }}
         >
           Follow Up
@@ -71,6 +72,7 @@ function displayVisitType(visitType: String) {
         <Typography
           style={{
             color: '#57E799',
+            fontSize: '13px',
           }}
         >
           Routine
@@ -81,6 +83,7 @@ function displayVisitType(visitType: String) {
         <Typography
           style={{
             color: '#F6CE3E',
+            fontSize: '13px',
           }}
         >
           Urgent
@@ -91,6 +94,7 @@ function displayVisitType(visitType: String) {
         <Typography
           style={{
             color: '#F85353',
+            fontSize: '13px',
           }}
         >
           N/A
@@ -168,8 +172,15 @@ export default function PermanentDrawerRight() {
                     style={{
                       marginRight: 10,
                       marginBottom: 5,
+                      fontSize: '12px',
                     }}
                   >
+                    <Box
+                      sx={{
+                        height: 0,
+                        width: 250,
+                      }}
+                    />
                     {new Date(appointment.date).toLocaleTimeString('en-US', {
                       day: 'numeric',
                       month: 'long',
@@ -181,12 +192,11 @@ export default function PermanentDrawerRight() {
                     direction="row"
                     style={{
                       marginBottom: 5,
+                      fontSize: '12px',
                     }}
                   >
                     {displayVisitType(appointment.visitType)}
-                  </Stack>
-                  <Stack direction="row">
-                    <Typography>{appointment.medStaff.fullName}</Typography>
+                    {',  Dr.' + appointment.medStaff.fullName}
                   </Stack>
                 </Stack>
               </TimelineContent>
@@ -239,8 +249,15 @@ export default function PermanentDrawerRight() {
                     style={{
                       marginRight: 10,
                       marginBottom: 5,
+                      fontSize: '12px',
                     }}
                   >
+                    <Box
+                      sx={{
+                        height: 0,
+                        width: 250,
+                      }}
+                    />
                     {new Date(appointment.date).toLocaleTimeString('en-US', {
                       day: 'numeric',
                       month: 'long',
@@ -252,14 +269,11 @@ export default function PermanentDrawerRight() {
                     direction="row"
                     style={{
                       marginBottom: 5,
+                      fontSize: '12px',
                     }}
                   >
-                    <Typography>
-                      {displayVisitType(appointment.visitType)}
-                    </Typography>
-                  </Stack>
-                  <Stack direction="row">
-                    <Typography>{appointment.medStaff.fullName}</Typography>
+                    {displayVisitType(appointment.visitType)}
+                    {',  Dr.' + appointment.medStaff.fullName}
                   </Stack>
                 </Stack>
               </TimelineContent>
