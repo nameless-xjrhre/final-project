@@ -1,4 +1,5 @@
 import { validatePassword } from './utils'
+import { validateUsername } from './utils'
 
 test('should fail if password is empty', async () => {
   const input = {
@@ -34,5 +35,12 @@ test('should fail if no capital, no number, and not 6 characters', async () => {
       'at least one capital letter',
       'at least one number',
     ],
+  })
+})
+
+test('should fail if username is not at least 6 characters', async () => {
+  expect(validateUsername('User1')).toEqual({
+    _tag: 'Left',
+    left: ['at least 6 characters'],
   })
 })
