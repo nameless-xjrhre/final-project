@@ -4,12 +4,23 @@ describe('Doctors Page - Nullify A Schedule Test', () => {
     })
 
     it('should nullify a schedule', () => {
-        cy.get('[class=css-zgbp5c-MuiStack-root]').contains('1:11 AM - 3:04 AM')
+        cy.get('[class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-clickable MuiChip-clickableColorDefault MuiChip-filledDefault css-1l5e8fi-MuiButtonBase-root-MuiChip-root"]')
+            .last()
             .click()
             .get('[value="NOT_AVAILABLE"]')
             .click()
             .wait(5000)
-            .get('[class="swal-title"]')
+            
+
+    })
+
+    it('should check change in color', ()=>{
+        cy.get('.css-1n7jwnc-MuiButtonBase-root-MuiChip-root')
+        .should('have.css', 'background-color', 'rgb(203, 203, 203)')
+    })
+
+    it('should display confirmation message', () => {
+        cy.get('[class="swal-title"]')
             .should('contain', 'Success')
             .get('[class="swal-button swal-button--confirm"]')
             .contains('OK')

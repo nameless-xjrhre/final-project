@@ -11,7 +11,8 @@ describe('Appointment Page - Create Appointment Test', () => {
       .click()
       .get('[id=mui-component-select-patient]')
       .click()
-      .get('[data-value=8]')
+      .get('[name=patient]')
+      .last()
       .click()
   })
 
@@ -25,7 +26,7 @@ describe('Appointment Page - Create Appointment Test', () => {
   it('should select medical staff', () => {
     cy.get('[id=mui-component-select-medicalStaff]')
       .click()
-      .get('[data-value=8]')
+      .get('[data-value=6]')
       .click()
   })
 
