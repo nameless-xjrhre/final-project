@@ -1,3 +1,13 @@
+import {
+  fakeDataRandomizer,
+  patientRandomizer,
+  statusRandomizer,
+  medStaffRandomizer,
+  visitTypeRandomizer,
+} from '../fixtures/randomizer'
+const fakeData = require('../fixtures/fakeData.json')
+const fakeDataProps = fakeData.listOfObjects
+
 describe('Appointment Page - Edit Appointment Test', () => {
   before(() => {
     cy.visit('http://localhost:3000/appointments')
@@ -5,8 +15,9 @@ describe('Appointment Page - Edit Appointment Test', () => {
 
   it('should click edit button', () => {
     cy.get('[id="basic-button"]')
-      .eq(5)
+      .eq(patientRandomizer())
       .click()
+      .wait(3000)
       .get('[role="menuitem"]')
       .contains('Edit')
       .click({ force: true })
@@ -16,7 +27,9 @@ describe('Appointment Page - Edit Appointment Test', () => {
     cy.get('[id=mui-component-select-visitType]')
       .last()
       .click()
-      .get('[data-value=FOLLOWUP]')
+      .wait(3000)
+      .get('[name=visitType]')
+      .contains(visitTypeRandomizer())
       .click()
   })
 
@@ -24,8 +37,9 @@ describe('Appointment Page - Edit Appointment Test', () => {
     cy.get('[id=mui-component-select-medicalStaff]')
       .last()
       .click()
-      .get('[name="medicalStaff"]')
-      .last()
+      .wait(3000)
+      .get('[role="option"]')
+      .eq(medStaffRandomizer())
       .click()
   })
 
@@ -33,25 +47,39 @@ describe('Appointment Page - Edit Appointment Test', () => {
     cy.get('[name=appointmentDate]')
       .last()
       .click()
-      .type('10/06/2022')
+      .type(fakeDataProps[fakeDataRandomizer()].appointmentDate)
       .clear()
-      .type('10/31/2022')
+      .type(fakeDataProps[fakeDataRandomizer()].appointmentDate)
   })
 
   it('should input time', () => {
-    cy.get('[name=appointmentTime]').last().click().clear().type('16:30')
+    cy.get('[name=appointmentTime]')
+      .last()
+      .click()
+      .clear()
+      .type(fakeDataProps[fakeDataRandomizer()].startTime)
   })
 
   it('should input note', () => {
-    cy.get('[name=note]').last().click().type('Sore throat, red eyes')
+    cy.get('[name=note]')
+      .last()
+      .click()
+      .type('Sore throat, red eyes')
+      .wait(2000)
   })
 
   it('should book appointment', () => {
-    cy.get('[type=submit]').last().contains('Save Changes').click().wait(5000)
+    cy.get('[type=submit]')
+      .wait(3000)
+      .last()
+      .contains('Save Changes')
+      .click()
+      .wait(5000)
   })
 
   it('should display confirmation message', () => {
     cy.get('[class="swal-title"]')
+      .wait(2000)
       .should('contain', 'Success')
       .get('[class="swal-button swal-button--confirm"]')
       .contains('OK')

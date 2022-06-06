@@ -2,8 +2,9 @@
   "compilerOptions": {
     "target": "es5",
     "lib": ["es5", "dom"],
-    "types": ["cypress", "@testing-library/cypress"],
-    "typeRoots": ["../node_modules/@types"]
+    "types": ["cypress", "@testing-library/cypress", "node"],
+    "typeRoots": ["../node_modules/@types"],
+    "resolveJsonModule": true
   },
   "include": ["**/*.ts"]
 }
