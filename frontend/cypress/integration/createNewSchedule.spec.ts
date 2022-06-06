@@ -1,3 +1,7 @@
+import { fakeDataRandomizer, daysRandomizer, medStaffRandomizer} from "../fixtures/randomizer"
+const fakeData = require('../fixtures/fakeData.json')
+const fakeDataProps = fakeData.listOfObjects
+
 describe('Doctor Page - Create New Schedule Test', () => {
   before(() => {
     cy.visit('http://localhost:3000/doctors')
@@ -10,30 +14,32 @@ describe('Doctor Page - Create New Schedule Test', () => {
       .click()
       .get('[id=mui-component-select-medicalStaff]')
       .click()
-      .get('[data-value=7]')
+      .get('[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]')
+      .eq(medStaffRandomizer())
       .click()
   })
 
   it('should select days', () => {
     cy.get('[class=" css-1kwwvb1-ValueContainer2"]')
       .click()
-      .type('Mon{enter}')
-      .get('[aria-label="Remove Mon"]')
+      .type(daysRandomizer() + '{enter}')
+      .click()
+      .get('[class="css-xb97g8"]')
       .click()
       .get('[class=" css-1kwwvb1-ValueContainer2"]')
       .click()
-      .type('Wed{enter}')
-      .type('Fri{enter}')
+      .type(daysRandomizer() + '{enter}')
+      .type(daysRandomizer() + '{enter}')
       .click()
   })
 
   it('should input start and end time', () => {
     cy.get('[name=startTime]')
       .click()
-      .type('10:30')
+      .type(fakeDataProps[fakeDataRandomizer()].startTime)
       .get('[name=endTime]')
       .click()
-      .type('12:00')
+      .type(fakeDataProps[fakeDataRandomizer()].endTime)
   })
 
   it('should press add schedule button', () => {
