@@ -1,4 +1,3 @@
-import { getUserId } from './utils'
 import { getDateOfLastMonday } from './utils'
 import { getDateOfNextSunday } from './utils'
 
