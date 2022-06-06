@@ -2,6 +2,7 @@ import * as React from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Typography from '@mui/material/Typography'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Box from '@mui/material/Box'
 import {
   styled,
@@ -12,10 +13,16 @@ import {
   TableRow,
   TableBody,
   Skeleton,
+  Button,
+  Menu,
+  MenuItem,
 } from '@mui/material'
 import { gql, useQuery } from 'urql'
 import _ from 'lodash'
-import { HospitalBill, MedicalRecord } from '../../graphql/generated'
+import { HospitalBill } from '../../graphql/generated'
+import CreateMedicalRecordForm from '../MedicalRecordForm/CreateMedicalRecordForm'
+import { MedicalRecord } from '../CustomFormProps'
+import DeleteRecordDialog from '../MedicalRecordForm/DeleteRecordDialog'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -30,6 +37,7 @@ const PatientRecordsQuery = gql`
       medicalRecords {
         date
         medStaff {
+          id
           fullName
         }
         diagnosis
@@ -65,6 +73,17 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   paddingTop: theme.spacing(2),
   paddingBottom: theme.spacing(2),
 }))
+
+const buttonSx = {
+  ...{
+    color: 'white',
+    bgcolor: '#336CFB',
+    '&:hover': {
+      bgcolor: '#336CFB',
+    },
+  },
+}
+
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props
 
@@ -144,6 +163,29 @@ interface BasicTabsProps {
 
 export default function BasicTabs({ patientId }: BasicTabsProps) {
   const [value, setValue] = React.useState(0)
+  const [createRecordBtn, setAddRecordBtn] = React.useState(false)
+  const handleAddRecordOpenForm = () => setAddRecordBtn(true)
+  const handleCreateRecordCloseForm = () => {
+    setAddRecordBtn(false)
+  }
+  const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
+  const [editRecordBtn, setEdiRcordBtn] = React.useState(false)
+  const handleDismissDropdown = () => setDropDown(null)
+  const handleOpenEditBillForm = () => setEdiRcordBtn(true)
+  const handleCloseEditBillForm = () => {
+    setEdiRcordBtn(false)
+    handleDismissDropdown()
+  }
+  const [deleteRecordBtn, setDeleteAppointmentBtn] = React.useState(false)
+  const handleOpenDeleteAppointmentDialog = () => setDeleteAppointmentBtn(true)
+  const handleCloseDeleteRecordDialog = () => {
+    setDeleteAppointmentBtn(false)
+    handleDismissDropdown()
+  }
+  const [currentRecord, setCurrentRecord] = React.useState<MedicalRecord>()
+  const open = Boolean(drop)
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) =>
+    setDropDown(event.currentTarget)
   const [patientRecords] = useQuery({
     query: PatientRecordsQuery,
     variables: { id: patientId },
@@ -294,6 +336,19 @@ export default function BasicTabs({ patientId }: BasicTabsProps) {
               <StyledTableCell>Doctor</StyledTableCell>
               <StyledTableCell>Diagnosis</StyledTableCell>
               <StyledTableCell>Prescription</StyledTableCell>
+              <StyledTableCell>
+                <Button sx={buttonSx} onClick={handleAddRecordOpenForm}>
+                  ADD
+                </Button>{' '}
+                {createRecordBtn && (
+                  <CreateMedicalRecordForm
+                    handleClose={handleCreateRecordCloseForm}
+                    open={createRecordBtn}
+                    patientId={data.patient.id}
+                    toUpdate={false}
+                  />
+                )}
+              </StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -307,6 +362,53 @@ export default function BasicTabs({ patientId }: BasicTabsProps) {
                 </StyledTableCell>
                 <StyledTableCell>{record.diagnosis}</StyledTableCell>
                 <StyledTableCell>{record.prescription}</StyledTableCell>
+                <StyledTableCell align="right">
+                  <Button
+                    id="basic-button"
+                    aria-controls={open ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={(e) => {
+                      handleClick(e)
+                      setCurrentRecord(record)
+                    }}
+                    style={{ color: '#808080' }}
+                  >
+                    <MoreVertIcon />
+                  </Button>{' '}
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={drop}
+                    open={open}
+                    onClose={handleDismissDropdown}
+                    MenuListProps={{
+                      'aria-labelledby': 'basic-button',
+                    }}
+                  >
+                    <MenuItem onClick={handleOpenEditBillForm}>Edit</MenuItem>
+                    {editRecordBtn && (
+                      <CreateMedicalRecordForm
+                        handleClose={handleCloseEditBillForm}
+                        open={editRecordBtn}
+                        medicalRecord={currentRecord}
+                        toUpdate
+                      />
+                    )}
+                    <MenuItem
+                      onClick={handleOpenDeleteAppointmentDialog}
+                      sx={{ color: 'red' }}
+                    >
+                      Delete
+                    </MenuItem>
+                    {deleteRecordBtn && (
+                      <DeleteRecordDialog
+                        handleClose={handleCloseDeleteRecordDialog}
+                        open={deleteRecordBtn}
+                        medicalRecord={currentRecord}
+                      />
+                    )}
+                  </Menu>
+                </StyledTableCell>
               </TableRow>
             ))}
           </TableBody>
