@@ -53,11 +53,11 @@ describe('Appointment Page - Edit Appointment Test', () => {
     })
 
     it('should input note', () => {
-        cy.get('[name=note]').last().click().type('Sore throat, red eyes')
+        cy.get('[name=note]').last().click().type('Sore throat, red eyes').wait(2000)
     })
 
     it('should book appointment', () => {
-        cy.get('[type=submit]').last().contains('Save Changes').click().wait(5000)
+        cy.get('[type=submit]').wait(3000).last().contains('Save Changes').click().wait(5000)
     })
 
     it('should display confirmation message', () => {

@@ -8,10 +8,10 @@ describe('Doctors Page - Nullify A Schedule Test', () => {
             .last()
             .click()
             .get('[value="NOT_AVAILABLE"]')
+            .last()
             .click()
             .wait(5000)
             
-
     })
 
     it('should check change in color', ()=>{
