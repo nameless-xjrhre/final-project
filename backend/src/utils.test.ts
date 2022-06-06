@@ -8,7 +8,7 @@ test('should fail if date is not date of last monday', async () => {
     .mockImplementation(() => nowDateObject.getDate())
   const monday = getDateOfLastMonday(nowDateObject)
   spy.mockRestore()
-  const testMonday = new Date('2022-06-05T16:00:00.000Z')
+  const testMonday = new Date('2022-06-06T16:00:00.000Z')
   expect(monday).toEqual(new Date(testMonday.setHours(0, 0, 0, 0)))
 })
 
@@ -19,5 +19,6 @@ test('should fail if date is not date of next sunday', async () => {
     .mockImplementation(() => nowDateObject.getDate())
   const sunday = getDateOfNextSunday(nowDateObject)
   spy.mockRestore()
-  expect(sunday).toEqual(new Date('2022-06-12T15:59:59.000Z'))
+  const testSunday = new Date('2022-06-06T16:00:00.000Z')
+  expect(sunday).toEqual(new Date(testSunday.setHours(23, 59, 59, 0)))
 })
