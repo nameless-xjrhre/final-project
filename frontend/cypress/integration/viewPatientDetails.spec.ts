@@ -1,4 +1,4 @@
-import { last } from "cypress/types/lodash"
+import {patientRandomizer} from "../fixtures/randomizer"
 
 describe('Patient Page - View Patient Details Test', () => {
     before(() => {
@@ -6,7 +6,7 @@ describe('Patient Page - View Patient Details Test', () => {
     })
 
     it('should view patient details', () => {
-        cy.get('[id="basic-button"]').eq(5).click()
+        cy.get('[id="basic-button"]').eq(patientRandomizer()).click()
             .get('[role="menuitem"]').contains('View Details')
             .last().click({ force: true })
     })
