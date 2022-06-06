@@ -4,7 +4,7 @@ describe('Patient Page - Delete Patient Test', () => {
     })
 
     it('should delete patient', () => {
-        cy.get('[id="basic-button"]').eq(6).click()
+        cy.get('[id="basic-button"]').eq(0).click()
             .get('[role="menuitem"]').last().contains('Delete').click()
             .get('[type=button]').last().contains('Yes').click()
             .wait(5000)

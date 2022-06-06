@@ -1,3 +1,4 @@
+import {patientRandomizer} from "../fixtures/randomizer"
 
 describe('Bills Page - Mark as Paid Test', () => {
     before(() => {
@@ -5,7 +6,7 @@ describe('Bills Page - Mark as Paid Test', () => {
     })
 
     it('should mark patient as paid', () => {
-        cy.get('[id=basic-button]').eq(3).click()
+        cy.get('[id=basic-button]').eq(patientRandomizer()).click()
             .get('[role="menuitem"]').last().contains('Mark as Paid').click().wait(5000)
     })
 

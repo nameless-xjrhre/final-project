@@ -1,3 +1,7 @@
+import { fakeDataRandomizer } from "../fixtures/randomizer"
+const fakeData = require('../fixtures/fakeData.json')
+const fakeDataProps = fakeData.listOfObjects
+
 describe('Doctor Page - Add Doctor Test', () => {
     before(() => {
         cy.visit('http://localhost:3000/doctors')
@@ -6,16 +10,16 @@ describe('Doctor Page - Add Doctor Test', () => {
     it('should input name of doctor', () => {
         cy.get('[aria-label="SpeedDial basic example"]').trigger('mouseover')
             .get('[aria-label="Add Doctor"]').click()
-            .get('[name=firstName]').type('Richie')
-            .get('[name=lastName]').type('Baizhu')
+            .get('[name=firstName]').type(fakeDataProps[fakeDataRandomizer()].firstName)
+            .get('[name=lastName]').type(fakeDataProps[fakeDataRandomizer()].lastName)
     })
 
     it('should input contact information', () => {
-        cy.get('[name=contactNum]').type('09273877110')
+        cy.get('[name=contactNum]').type(fakeDataProps[fakeDataRandomizer()].contactNum)
     })
 
     it('should input address', () => {
-        cy.get('[name=address]').type('Liyue')
+        cy.get('[name=address]').type(fakeDataProps[fakeDataRandomizer()].address)
     })
 
     it('should click add doctor button', () => {

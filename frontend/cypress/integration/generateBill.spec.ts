@@ -1,10 +1,13 @@
+import {patientRandomizer, amountRandomizer, paymentTermRandomizer} from "../fixtures/randomizer"
+
+
 describe('Appointment Page - Generate Bill Test', () => {
     before(() => {
         cy.visit('http://localhost:3000/appointments')
     })
 
     it('should click generate bill button', () => {
-        cy.get('[id="basic-button"]').eq(7)
+        cy.get('[id="basic-button"]').eq(patientRandomizer())
             .click()
             .get('[role="menuitem"]')
             .contains('Generate Bill')
@@ -12,12 +15,16 @@ describe('Appointment Page - Generate Bill Test', () => {
     })
 
     it('should input amount', () => {
-        cy.get('[name=amount]').last().click().type('4269')
+        cy.get('[name=amount]').last().click().type(amountRandomizer().toString())
     })
 
     it('should input payment term', () => {
-        cy.get('[id=mui-component-select-paymentTerm]').last().click()
-            .get('[data-value="30 days"]').click()
+        cy.get('[id="mui-component-select-paymentTerm"]')
+        .last()
+        .click()
+        .get('[name=paymentTerm]')
+        .contains(paymentTermRandomizer())
+        .click()
     })
 
     it('should save changes', () => {
