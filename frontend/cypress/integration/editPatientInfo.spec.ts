@@ -1,3 +1,7 @@
+import { fakeDataRandomizer, patientRandomizer, genderStringRandomizer} from "../fixtures/randomizer"
+const fakeData = require('../fixtures/fakeData.json')
+const fakeDataProps = fakeData.listOfObjects
+
 describe('Patient Page - Edit Patient Info Test', () => {
   before(() => {
     cy.visit('http://localhost:3000/patients')
@@ -6,7 +10,7 @@ describe('Patient Page - Edit Patient Info Test', () => {
   it('should edit name of patient', () => {
     cy.get('[id="basic-button"]')
       .wait(3000)
-      .eq(3)
+      .eq(patientRandomizer())
       .click()
       .get('[role="menuitem"]')
       .contains('Edit')
@@ -14,32 +18,35 @@ describe('Patient Page - Edit Patient Info Test', () => {
       .get('[name=firstName]')
       .last()
       .click()
-      .type('Rinka')
+      .type(fakeDataProps[fakeDataRandomizer()].firstName)
       .get('[name=lastName]')
       .last()
       .click()
-      .type('Baizhu')
+      .type(fakeDataProps[fakeDataRandomizer()].lastName)
   })
 
   it('should input contact number', () => {
-    cy.get('[name=contactNum]').last().click().type('09273877110')
+    cy.get('[name=contactNum]').last().click().type(fakeDataProps[fakeDataRandomizer()].contactNum)
   })
 
   it('should select gender', () => {
-    cy.get('[value="FEMALE"]').last().click()
+    cy.get('[class="MuiRadio-root MuiRadio-colorPrimary MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root css-vqmohf-MuiButtonBase-root-MuiRadio-root"]')
+    .get('[value='+ genderStringRandomizer() + ']')
+    .last()
+    .click()
   })
 
   it('should input address', () => {
-    cy.get('[name=address]').last().click().type('Qingce, Liyue')
+    cy.get('[name=address]').last().click().type(fakeDataProps[fakeDataRandomizer()].address)
   })
 
   it('should input date of birth', () => {
     cy.get('[name=dateOfBirth]')
       .last()
       .click()
-      .type('10/06/2000')
+      .type(fakeDataProps[fakeDataRandomizer()].dateOfBirth)
       .clear()
-      .type('01/17/2000')
+      .type(fakeDataProps[fakeDataRandomizer()].dateOfBirth)
   })
 
   it('should save changes', () => {
