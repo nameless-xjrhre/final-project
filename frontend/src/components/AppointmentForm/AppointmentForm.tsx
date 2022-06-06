@@ -4,7 +4,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { UseFormRegister, FieldValues, Control } from 'react-hook-form'
 import { useQuery } from 'urql'
-import { AppointmentStatus, VisitType } from '../../graphql/generated'
+import { VisitType } from '../../graphql/generated'
 import { Appointment } from '../CustomFormProps'
 import {
   FormInputText,
@@ -31,12 +31,12 @@ interface AppointmentFormProps {
 }
 
 const visitTypes = [VisitType.Followup, VisitType.Routine, VisitType.Urgent]
-const status = [
-  AppointmentStatus.Pending,
-  AppointmentStatus.Expired,
-  AppointmentStatus.Done,
-  AppointmentStatus.Canceled,
-]
+// const status = [
+//   AppointmentStatus.Pending,
+//   AppointmentStatus.Expired,
+//   AppointmentStatus.Done,
+//   AppointmentStatus.Canceled,
+// ]
 
 export default function AppointmentForm({
   control,
@@ -58,22 +58,7 @@ export default function AppointmentForm({
     <>
       {!isNewAppointment ? (
         toUpdate ? (
-          <Grid>
-            <Typography variant="body2" color="GrayText" mt={2} mb={-1}>
-              Select Status
-            </Typography>
-            <Grid container mt={2}>
-              <FormInputSelect
-                name="status"
-                label="Select Status"
-                data={status}
-                onSavedValue={appointment?.status}
-                control={control}
-                register={register}
-                errors={errors}
-              />
-            </Grid>
-          </Grid>
+          ''
         ) : (
           <Grid>
             <Typography variant="body2" color="GrayText" mt={2} mb={-1}>

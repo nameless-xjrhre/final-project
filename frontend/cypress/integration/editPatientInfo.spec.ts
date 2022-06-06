@@ -1,4 +1,8 @@
-import { fakeDataRandomizer, patientRandomizer, genderStringRandomizer} from "../fixtures/randomizer"
+import {
+  fakeDataRandomizer,
+  patientRandomizer,
+  genderStringRandomizer,
+} from '../fixtures/randomizer'
 const fakeData = require('../fixtures/fakeData.json')
 const fakeDataProps = fakeData.listOfObjects
 
@@ -26,18 +30,26 @@ describe('Patient Page - Edit Patient Info Test', () => {
   })
 
   it('should input contact number', () => {
-    cy.get('[name=contactNum]').last().click().type(fakeDataProps[fakeDataRandomizer()].contactNum)
+    cy.get('[name=contactNum]')
+      .last()
+      .click()
+      .type(fakeDataProps[fakeDataRandomizer()].contactNum)
   })
 
   it('should select gender', () => {
-    cy.get('[class="MuiRadio-root MuiRadio-colorPrimary MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root css-vqmohf-MuiButtonBase-root-MuiRadio-root"]')
-    .get('[value='+ genderStringRandomizer() + ']')
-    .last()
-    .click()
+    cy.get(
+      '[class="MuiRadio-root MuiRadio-colorPrimary MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root css-vqmohf-MuiButtonBase-root-MuiRadio-root"]',
+    )
+      .get('[value=' + genderStringRandomizer() + ']')
+      .last()
+      .click()
   })
 
   it('should input address', () => {
-    cy.get('[name=address]').last().click().type(fakeDataProps[fakeDataRandomizer()].address)
+    cy.get('[name=address]')
+      .last()
+      .click()
+      .type(fakeDataProps[fakeDataRandomizer()].address)
   })
 
   it('should input date of birth', () => {

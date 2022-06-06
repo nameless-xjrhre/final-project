@@ -1,4 +1,8 @@
-import { fakeDataRandomizer, daysRandomizer, medStaffRandomizer} from "../fixtures/randomizer"
+import {
+  fakeDataRandomizer,
+  daysRandomizer,
+  medStaffRandomizer,
+} from '../fixtures/randomizer'
 const fakeData = require('../fixtures/fakeData.json')
 const fakeDataProps = fakeData.listOfObjects
 
@@ -14,7 +18,9 @@ describe('Doctor Page - Create New Schedule Test', () => {
       .click()
       .get('[id=mui-component-select-medicalStaff]')
       .click()
-      .get('[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]')
+      .get(
+        '[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]',
+      )
       .eq(medStaffRandomizer())
       .click()
   })

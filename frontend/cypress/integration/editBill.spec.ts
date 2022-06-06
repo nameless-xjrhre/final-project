@@ -1,7 +1,10 @@
-import { amountRandomizer, paymentTermRandomizer, patientRandomizer } from "../fixtures/randomizer"
+import {
+  amountRandomizer,
+  paymentTermRandomizer,
+  patientRandomizer,
+} from '../fixtures/randomizer'
 const fakeData = require('../fixtures/fakeData.json')
 const fakeDataProps = fakeData.listOfObjects
-
 
 describe('Bills Page - Edit Bills Test', () => {
   before(() => {
@@ -17,7 +20,6 @@ describe('Bills Page - Edit Bills Test', () => {
           .contains('Edit')
           .click({ force: true })
       })
-
   })
 
   describe('update amount and payment term', () => {
@@ -35,11 +37,7 @@ describe('Bills Page - Edit Bills Test', () => {
     })
 
     it('should save changes', () => {
-      cy.get('[type=button]')
-        .last()
-        .contains('Save Changes')
-        .click()
-        .wait(5000)
+      cy.get('[type=button]').last().contains('Save Changes').click().wait(5000)
     })
 
     it('should display confirmation message', () => {
@@ -63,7 +61,6 @@ describe('Bills Page - Edit Bills Test', () => {
             .contains('Edit')
             .click({ force: true })
         })
-
     })
 
     it('should change amount', () => {
@@ -71,11 +68,7 @@ describe('Bills Page - Edit Bills Test', () => {
     })
 
     it('should save changes', () => {
-      cy.get('[type=button]')
-        .last()
-        .contains('Save Changes')
-        .click()
-        .wait(5000)
+      cy.get('[type=button]').last().contains('Save Changes').click().wait(5000)
     })
 
     it('should display confirmation message', () => {
@@ -99,7 +92,6 @@ describe('Bills Page - Edit Bills Test', () => {
             .contains('Edit')
             .click({ force: true })
         })
-
     })
 
     it('should select payment term', () => {
@@ -112,11 +104,7 @@ describe('Bills Page - Edit Bills Test', () => {
     })
 
     it('should save changes', () => {
-      cy.get('[type=button]')
-        .last()
-        .contains('Save Changes')
-        .click()
-        .wait(5000)
+      cy.get('[type=button]').last().contains('Save Changes').click().wait(5000)
     })
 
     it('should display confirmation message', () => {

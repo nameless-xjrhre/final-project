@@ -1,7 +1,11 @@
-import { fakeDataRandomizer, patientRandomizer, medStaffRandomizer, visitTypeRandomizer } from "../fixtures/randomizer"
+import {
+  fakeDataRandomizer,
+  patientRandomizer,
+  medStaffRandomizer,
+  visitTypeRandomizer,
+} from '../fixtures/randomizer'
 const fakeData = require('../fixtures/fakeData.json')
 const fakeDataProps = fakeData.listOfObjects
-
 
 describe('Appointment Page - Create Appointment Test', () => {
   before(() => {
@@ -15,7 +19,9 @@ describe('Appointment Page - Create Appointment Test', () => {
       .click()
       .get('[id=mui-component-select-patient]')
       .click()
-      .get('[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]')
+      .get(
+        '[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]',
+      )
       .eq(patientRandomizer())
       .click()
   })
@@ -31,7 +37,9 @@ describe('Appointment Page - Create Appointment Test', () => {
   it('should select medical staff', () => {
     cy.get('[id=mui-component-select-medicalStaff]')
       .click()
-      .get('[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]')
+      .get(
+        '[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]',
+      )
       .eq(medStaffRandomizer())
       .click()
   })
@@ -45,7 +53,9 @@ describe('Appointment Page - Create Appointment Test', () => {
   })
 
   it('should input time', () => {
-    cy.get('[name=appointmentTime]').click().type(fakeDataProps[fakeDataRandomizer()].startTime)
+    cy.get('[name=appointmentTime]')
+      .click()
+      .type(fakeDataProps[fakeDataRandomizer()].startTime)
   })
 
   it('should input note', () => {

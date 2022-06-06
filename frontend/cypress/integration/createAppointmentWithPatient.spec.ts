@@ -1,7 +1,11 @@
-import { fakeDataRandomizer, medStaffRandomizer, visitTypeRandomizer, genderRandomizer } from "../fixtures/randomizer"
+import {
+  fakeDataRandomizer,
+  medStaffRandomizer,
+  visitTypeRandomizer,
+  genderRandomizer,
+} from '../fixtures/randomizer'
 const fakeData = require('../fixtures/fakeData.json')
 const fakeDataProps = fakeData.listOfObjects
-
 
 describe('Appointment Page - Create Appointment With Patient Test', () => {
   before(() => {
@@ -22,13 +26,17 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
   })
 
   it('should input contact info', () => {
-    cy.get('[name=contactNum]').click().type(fakeDataProps[fakeDataRandomizer()].contactNum)
+    cy.get('[name=contactNum]')
+      .click()
+      .type(fakeDataProps[fakeDataRandomizer()].contactNum)
   })
 
   it('should select gender', () => {
-    cy.get('[class="MuiRadio-root MuiRadio-colorPrimary MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root css-vqmohf-MuiButtonBase-root-MuiRadio-root"]')
-    .eq(genderRandomizer())
-    .click()
+    cy.get(
+      '[class="MuiRadio-root MuiRadio-colorPrimary MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root css-vqmohf-MuiButtonBase-root-MuiRadio-root"]',
+    )
+      .eq(genderRandomizer())
+      .click()
   })
 
   it('should input date of birth', () => {
@@ -40,7 +48,9 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
   })
 
   it('should input address', () => {
-    cy.get('[name=address]').click().type(fakeDataProps[fakeDataRandomizer()].address)
+    cy.get('[name=address]')
+      .click()
+      .type(fakeDataProps[fakeDataRandomizer()].address)
   })
 
   it('should click next button', () => {
@@ -66,7 +76,9 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
   it('should select medical staff', () => {
     cy.get('[id=mui-component-select-medicalStaff]')
       .click()
-      .get('[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]')
+      .get(
+        '[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]',
+      )
       .eq(medStaffRandomizer())
       .click()
   })
@@ -80,7 +92,9 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
   })
 
   it('should input appointment time', () => {
-    cy.get('[name=appointmentTime]').click().type(fakeDataProps[fakeDataRandomizer()].startTime)
+    cy.get('[name=appointmentTime]')
+      .click()
+      .type(fakeDataProps[fakeDataRandomizer()].startTime)
   })
 
   it('should input note', () => {
@@ -98,5 +112,4 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
       .contains('OK')
       .click()
   })
-
 })

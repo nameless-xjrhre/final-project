@@ -7,20 +7,27 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Skeleton from '@mui/material/Skeleton'
-import { Pagination } from '@mui/material'
+import { Menu, MenuItem, Pagination, CircularProgress } from '@mui/material'
 import { useQuery, useMutation, gql } from 'urql'
 import Typography from '@mui/material/Typography'
-import CancelIcon from '@mui/icons-material/Cancel'
-import Button from '@mui/material/Button'
-import Tooltip from '@mui/material/Tooltip'
-
-import { AppointmentStatus } from '../../graphql/generated'
+import {
+  AppointmentStatus,
+  MutationEditAppointmentArgs,
+  VisitType,
+} from '../../graphql/generated'
 import StatusButton from '../Buttons/StatusButton'
 import { showFailAlert, showSuccessAlert } from '../../utils'
 
+const appointmentStatus = [
+  AppointmentStatus.Canceled,
+  AppointmentStatus.Done,
+  AppointmentStatus.Expired,
+  AppointmentStatus.Pending,
+]
+
 interface Appointment {
   id: number
-  visitType: string
+  visitType: VisitType
   date: Date
   status: AppointmentStatus
   patient: {
@@ -58,9 +65,9 @@ const AppointmentsQueryDocument = gql`
   }
 `
 
-const CancelAppointmentMutationDocument = gql`
-  mutation CancelAppointment($id: Int!) {
-    editAppointment(id: $id, data: { status: CANCELED }) {
+const UpdateAppointmentStatus = gql`
+  mutation UpdateAppointmentStatus($id: Int!, $data: EditAppointmentInput!) {
+    editAppointment(id: $id, data: $data) {
       id
       date
       status
@@ -87,34 +94,58 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }))
 
 export default function AppointmentList() {
-  const [, setDropDown] = React.useState<null | HTMLElement>(null)
+  const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
+  const open = Boolean(drop)
+  const [ID, setID] = React.useState<number>()
+  const handleClick = (
+    event: React.MouseEvent<HTMLDivElement>,
+    idNum: number,
+  ) => {
+    setID(idNum)
+    setDropDown(event.currentTarget)
+  }
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const handleSubmitting = () => setIsSubmitting(true)
   const [page, setPage] = React.useState(1)
-  const handleClose = () => {
+  const handleClose = () => setDropDown(null)
+  const [, setComplete] = React.useState(false)
+  const handleComplete = () => {
+    setIsSubmitting(false)
+    setComplete(true)
     setDropDown(null)
   }
-  const [appointment] = useQuery<AppointmentQuery>({
+  const [appointments] = useQuery<AppointmentQuery>({
     query: AppointmentsQueryDocument,
     variables: {
       start: (page - 1) * 10,
       count: 10,
     },
   })
-  const [, cancelAppointment] = useMutation(CancelAppointmentMutationDocument)
+  const [, updateStatus] = useMutation(UpdateAppointmentStatus)
 
-  const handleCancel = (id: number) => () => {
-    cancelAppointment({ id })
-      .then((result) => {
-        if (result.error) {
-          showFailAlert('')
-        } else {
-          showSuccessAlert('')
-        }
-      })
-      .then(handleClose)
-      .catch((err) => console.error(err))
-  }
+  const handleUpdateAppointmentStatus =
+    (id: number, status: AppointmentStatus) => () => {
+      const input: MutationEditAppointmentArgs = {
+        id,
+        data: {
+          status,
+        },
+      }
+      handleSubmitting()
+      updateStatus(input)
+        .then((result) => {
+          if (result.error) {
+            handleComplete()
+            showFailAlert('')
+          } else {
+            handleComplete()
+            showSuccessAlert('')
+          }
+        })
+        .catch((err) => console.error(err))
+    }
 
-  const { data, fetching, error } = appointment
+  const { data, fetching, error } = appointments
   if (fetching)
     return (
       <>
@@ -179,35 +210,53 @@ export default function AppointmentList() {
         </TableHead>
         <TableBody>
           {data &&
-            data.appointmentsRange.map((item) => (
-              <TableRow key={item.id}>
-                <StyledTableCell>{item.patient.fullName}</StyledTableCell>
-                <StyledTableCell>{item.visitType}</StyledTableCell>
+            data.appointmentsRange.map((appointment) => (
+              <TableRow key={appointment.id}>
                 <StyledTableCell>
-                  {new Date(item.date).toLocaleDateString('en-ZA')}
+                  {appointment.patient.fullName}
+                </StyledTableCell>
+                <StyledTableCell>{appointment.visitType}</StyledTableCell>
+                <StyledTableCell>
+                  {new Date(appointment.date).toLocaleDateString('en-ZA')}
                 </StyledTableCell>
                 <StyledTableCell>
-                  {new Date(item.date).toLocaleTimeString('en-US', {
+                  {new Date(appointment.date).toLocaleTimeString('en-US', {
                     hour12: false,
                   })}
                 </StyledTableCell>
-                <StyledTableCell>Dr. {item.medStaff.fullName}</StyledTableCell>
                 <StyledTableCell>
-                  <StatusButton status={item.status} />
+                  Dr. {appointment.medStaff.fullName}
                 </StyledTableCell>
                 <StyledTableCell>
-                  <Button
-                    id="basic-button"
-                    aria-haspopup="true"
-                    style={{ color: '#808080' }}
-                  >
-                    <Tooltip title="Cancel Appointment">
-                      <CancelIcon
-                        color="error"
-                        onClick={handleCancel(item.id)}
+                  <StatusButton
+                    status={appointment.status}
+                    onClick={(
+                      e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+                    ) => handleClick(e, appointment.id)}
+                  />
+                  <Menu anchorEl={drop} open={open} onClose={handleClose}>
+                    {appointmentStatus?.map((status) => (
+                      <MenuItem
+                        value={status}
+                        key={status}
+                        disabled={isSubmitting}
+                        onClick={handleUpdateAppointmentStatus(ID!, status)}
+                      >
+                        {status}
+                      </MenuItem>
+                    ))}
+                    {isSubmitting && (
+                      <CircularProgress
+                        size={25}
+                        sx={{
+                          color: 'blue',
+                          marginLeft: 5,
+                          marginTop: -10,
+                          position: 'absolute',
+                        }}
                       />
-                    </Tooltip>
-                  </Button>{' '}
+                    )}
+                  </Menu>
                 </StyledTableCell>
               </TableRow>
             ))}
