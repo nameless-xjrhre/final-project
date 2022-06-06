@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import * as React from 'react'
 import Button, { ButtonProps } from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
@@ -8,6 +9,7 @@ import './index.css'
 
 interface StatusButtonProps {
   status: AppointmentStatus
+  onClick: any
 }
 
 const statusToColor = {
@@ -63,7 +65,7 @@ const ColorButton = styled(Button)<ColorButtonProps>(({ status }) => {
   }
 })
 
-export default function StatusButton({ status }: StatusButtonProps) {
+export default function StatusButton({ status, onClick }: StatusButtonProps) {
   const icon = statusToIcon[status]
   return (
     <ColorButton
@@ -71,6 +73,7 @@ export default function StatusButton({ status }: StatusButtonProps) {
       status={status}
       variant="contained"
       disableElevation
+      onClick={onClick}
       startIcon={icon}
       sx={{
         justifyContent: 'flex-start',

@@ -8,18 +8,28 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Skeleton from '@mui/material/Skeleton'
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip'
-import { Button, Pagination, Typography } from '@mui/material'
-import { useQuery, gql } from 'urql'
+import { Button, Pagination, Typography, CircularProgress } from '@mui/material'
+import { useQuery, gql, useMutation } from 'urql'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import CreateBillForm from '../BillForm/CreateBillForm'
-// import StatusButton from '../Buttons/StatusButton'
-import { AppointmentStatus, VisitType } from '../../graphql/generated'
 import StatusButton from '../Buttons/StatusButton'
-import { capitalize } from '../../utils'
+import {
+  AppointmentStatus,
+  MutationEditAppointmentArgs,
+  VisitType,
+} from '../../graphql/generated'
+import { capitalize, showFailAlert, showSuccessAlert } from '../../utils'
 import CreateAppointmentForm from '../AppointmentForm/CreateAppointmentForm'
 import DeleteAppointmentDialog from '../AppointmentForm/DeleteAppointmentDialog'
+
+const appointmentStatus = [
+  AppointmentStatus.Canceled,
+  AppointmentStatus.Done,
+  AppointmentStatus.Expired,
+  AppointmentStatus.Pending,
+]
 
 const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -75,6 +85,19 @@ const AppointmentQueryDocument = gql`
   }
 `
 
+const UpdateAppointmentStatus = gql`
+  mutation UpdateAppointmentStatus($id: Int!, $data: EditAppointmentInput!) {
+    editAppointment(id: $id, data: $data) {
+      id
+      date
+      status
+      patient {
+        fullName
+      }
+    }
+  }
+`
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: '#E8E8E8',
@@ -90,11 +113,32 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
 }))
 
+const defaultAppointment: Appointment = {
+  id: 0,
+  date: new Date(),
+  medStaff: {
+    fullName: '',
+    id: 0,
+  },
+  note: '',
+  patient: {
+    fullName: '',
+    id: 0,
+  },
+  status: AppointmentStatus.Pending,
+  visitType: VisitType.Followup,
+}
+
 export default function AppointmentList() {
   const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
+  const [statusDrop, setStatusDropDown] = React.useState<null | HTMLElement>(
+    null,
+  )
   const [page, setPage] = React.useState(1)
   const open = Boolean(drop)
+  const openStatus = Boolean(statusDrop)
   const handleDismissDropdown = () => setDropDown(null)
+  const handleDismissStatusDropdown = () => setStatusDropDown(null)
   const [generateBillBtn, setGenerateBillBtn] = React.useState(false)
   const handleGenerateBillOpenForm = () => setGenerateBillBtn(true)
   const handleGenerateCloseBillForm = () => {
@@ -114,11 +158,25 @@ export default function AppointmentList() {
     handleDismissDropdown()
   }
   const [currentAppointment, setCurrentAppointment] =
-    React.useState<Appointment>()
+    React.useState<Appointment>(defaultAppointment)
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const handleSubmitting = () => setIsSubmitting(true)
+  const [, setComplete] = React.useState(false)
+  const handleComplete = () => {
+    setIsSubmitting(false)
+    setComplete(true)
+    setDropDown(null)
+    setStatusDropDown(null)
+  }
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
     setDropDown(event.currentTarget)
+  }
+
+  const handleStatusClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    setStatusDropDown(event.currentTarget)
   }
 
   const [appointments] = useQuery<AppointmentQuery>({
@@ -129,6 +187,29 @@ export default function AppointmentList() {
     },
   })
 
+  const [, updateStatus] = useMutation(UpdateAppointmentStatus)
+
+  const handleUpdateAppointmentStatus =
+    (id: number, status: AppointmentStatus) => () => {
+      const input: MutationEditAppointmentArgs = {
+        id,
+        data: {
+          status,
+        },
+      }
+      handleSubmitting()
+      updateStatus(input)
+        .then((result) => {
+          if (result.error) {
+            handleComplete()
+            showFailAlert('')
+          } else {
+            handleComplete()
+            showSuccessAlert('')
+          }
+        })
+        .catch((err) => console.error(err))
+    }
   const { data, fetching, error } = appointments
 
   if (fetching)
@@ -199,7 +280,45 @@ export default function AppointmentList() {
                   Dr. {appointment.medStaff.fullName}
                 </StyledTableCell>
                 <StyledTableCell>
-                  <StatusButton status={appointment.status} />
+                  <StatusButton
+                    status={appointment.status}
+                    onClick={(
+                      e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+                    ) => {
+                      handleStatusClick(e)
+                      setCurrentAppointment(appointment)
+                    }}
+                  />
+                  <Menu
+                    anchorEl={statusDrop}
+                    open={openStatus}
+                    onClose={handleDismissStatusDropdown}
+                  >
+                    {appointmentStatus?.map((status) => (
+                      <MenuItem
+                        value={status}
+                        key={status}
+                        disabled={isSubmitting}
+                        onClick={handleUpdateAppointmentStatus(
+                          currentAppointment.id,
+                          status,
+                        )}
+                      >
+                        {status}
+                      </MenuItem>
+                    ))}
+                    {isSubmitting && (
+                      <CircularProgress
+                        size={25}
+                        sx={{
+                          color: 'blue',
+                          marginLeft: 5,
+                          marginTop: -10,
+                          position: 'absolute',
+                        }}
+                      />
+                    )}
+                  </Menu>
                 </StyledTableCell>
                 <StyledTableCell align="right">
                   <Button
