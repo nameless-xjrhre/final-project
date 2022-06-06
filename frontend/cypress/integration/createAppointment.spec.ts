@@ -1,45 +1,51 @@
+import { fakeDataRandomizer, patientRandomizer, medStaffRandomizer, visitTypeRandomizer } from "../fixtures/randomizer"
+const fakeData = require('../fixtures/fakeData.json')
+const fakeDataProps = fakeData.listOfObjects
+
+
 describe('Appointment Page - Create Appointment Test', () => {
   before(() => {
     cy.visit('http://localhost:3000/appointments')
   })
 
   it('should select patient', () => {
-    cy.get('[data-testid=AddIcon]')
-      .last()
-      .trigger('mouseover')
-      .get('[data-testid=CalendarMonthIcon]')
+    cy.get('[aria-label="SpeedDial basic example"]')
+      .click()
+      .get('[aria-label="Create Appointment"]')
       .click()
       .get('[id=mui-component-select-patient]')
       .click()
-      .get('[name=patient]')
-      .last()
+      .get('[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]')
+      .eq(patientRandomizer())
       .click()
   })
 
   it('should select visit type', () => {
     cy.get('[id=mui-component-select-visitType]')
       .click()
-      .get('[data-value=ROUTINE]')
+      .get('[name=visitType]')
+      .contains(visitTypeRandomizer())
       .click()
   })
 
   it('should select medical staff', () => {
     cy.get('[id=mui-component-select-medicalStaff]')
       .click()
-      .get('[data-value=6]')
+      .get('[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]')
+      .eq(medStaffRandomizer())
       .click()
   })
 
   it('should input date', () => {
     cy.get('[name=appointmentDate]')
       .click()
-      .type('10/06/2022')
+      .type(fakeDataProps[fakeDataRandomizer()].appointmentDate)
       .clear()
-      .type('10/01/2022')
+      .type(fakeDataProps[fakeDataRandomizer()].appointmentDate)
   })
 
   it('should input time', () => {
-    cy.get('[name=appointmentTime]').click().type('09:30')
+    cy.get('[name=appointmentTime]').click().type(fakeDataProps[fakeDataRandomizer()].startTime)
   })
 
   it('should input note', () => {
