@@ -156,7 +156,6 @@ export default function CreateAppointmentForm({
               getCompleteDate(data.appointmentDate, data.appointmentTime),
             ) || appointment?.date,
           visitType: data.visitType || appointment!.visitType,
-          status: data.status || appointment!.status,
           note: data.note || appointment!.note,
         },
       }
