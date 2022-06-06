@@ -1,40 +1,46 @@
+import { fakeDataRandomizer, medStaffRandomizer, visitTypeRandomizer, genderRandomizer } from "../fixtures/randomizer"
+const fakeData = require('../fixtures/fakeData.json')
+const fakeDataProps = fakeData.listOfObjects
+
+
 describe('Appointment Page - Create Appointment With Patient Test', () => {
   before(() => {
     cy.visit('http://localhost:3000/appointments')
   })
 
   it('should input patient name', () => {
-    cy.get('[data-testid=AddIcon]')
-      .last()
-      .trigger('mouseover')
-      .get('[data-testid=AddBoxSharpIcon]')
+    cy.get('[aria-label="SpeedDial basic example"]')
+      .click()
+      .get('[aria-label="Create New Appointment"]')
       .click()
       .get('[name=firstName]')
       .click()
-      .type('Rin')
+      .type(fakeDataProps[fakeDataRandomizer()].firstName)
       .get('[name=lastName]')
       .click()
-      .type('Onigawara')
+      .type(fakeDataProps[fakeDataRandomizer()].lastName)
   })
 
   it('should input contact info', () => {
-    cy.get('[name=contactNum]').click().type('09273877110')
+    cy.get('[name=contactNum]').click().type(fakeDataProps[fakeDataRandomizer()].contactNum)
   })
 
   it('should select gender', () => {
-    cy.get('[value=FEMALE]').click()
+    cy.get('[class="MuiRadio-root MuiRadio-colorPrimary MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root css-vqmohf-MuiButtonBase-root-MuiRadio-root"]')
+    .eq(genderRandomizer())
+    .click()
   })
 
   it('should input date of birth', () => {
     cy.get('[name=dateOfBirth]')
       .click()
-      .type('10/06/2000')
+      .type(fakeDataProps[fakeDataRandomizer()].dateOfBirth)
       .clear()
-      .type('09/09/2000')
+      .type(fakeDataProps[fakeDataRandomizer()].dateOfBirth)
   })
 
   it('should input address', () => {
-    cy.get('[name=address]').click().type('Watatsumi, Inazuma')
+    cy.get('[name=address]').click().type(fakeDataProps[fakeDataRandomizer()].address)
   })
 
   it('should click next button', () => {
@@ -52,27 +58,29 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
   it('should select visit type', () => {
     cy.get('[id=mui-component-select-visitType]')
       .click()
-      .get('[data-value=ROUTINE]')
+      .get('[name=visitType]')
+      .contains(visitTypeRandomizer())
       .click()
   })
 
   it('should select medical staff', () => {
     cy.get('[id=mui-component-select-medicalStaff]')
       .click()
-      .get('[data-value=4]')
+      .get('[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]')
+      .eq(medStaffRandomizer())
       .click()
   })
 
   it('should input date', () => {
     cy.get('[name=appointmentDate]')
       .click()
-      .type('10/06/2022')
+      .type(fakeDataProps[fakeDataRandomizer()].appointmentDate)
       .clear()
-      .type('10/30/2022')
+      .type(fakeDataProps[fakeDataRandomizer()].appointmentDate)
   })
 
   it('should input appointment time', () => {
-    cy.get('[name=appointmentTime]').click().type('09:30')
+    cy.get('[name=appointmentTime]').click().type(fakeDataProps[fakeDataRandomizer()].startTime)
   })
 
   it('should input note', () => {
