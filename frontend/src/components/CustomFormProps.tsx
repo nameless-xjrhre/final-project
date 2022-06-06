@@ -55,6 +55,17 @@ export interface Bill {
   }
 }
 
+export interface MedicalRecord {
+  id: number
+  date: Date
+  diagnosis: string
+  prescription: string
+  medStaff: {
+    id: number
+    fullName: string
+  }
+}
+
 export interface FormInputProps {
   id?: string
   name: string
@@ -92,6 +103,14 @@ export interface ScheduleFormProps {
   handleClose: (e: any) => void
   open: boolean
   id: number
+}
+
+export interface MedicalRecordFormProps {
+  handleClose: (e: any) => void
+  open: boolean
+  medicalRecord?: MedicalRecord
+  patientId?: number
+  toUpdate?: boolean
 }
 
 export default interface CustomFormProps {
