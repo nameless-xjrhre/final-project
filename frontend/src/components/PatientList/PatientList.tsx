@@ -11,6 +11,7 @@ import { useQuery, gql } from 'urql'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import { TextField } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import EditPatientForm from '../PatientForm/EditPatientForm'
 import DeletePatientDialog from '../PatientForm/DeletePatientDialog'
@@ -85,6 +86,7 @@ export default function PatientsList() {
   const [editPatientBtn, setEditPatientBtn] = React.useState(false)
   const [deletePatientBtn, setDeletePatientBtn] = React.useState(false)
   const [patientId, setPatientId] = React.useState(0)
+  const [filter, setFilter] = React.useState('')
   const handleDismissDropdown = () => setDropDown(null)
   const handleOpenEditForm = () => setEditPatientBtn(true)
   const handleCloseEditForm = () => {
@@ -112,6 +114,10 @@ export default function PatientsList() {
 
   const clickDetails = (id: number) => () => {
     navigate(`/profile/${id}`)
+  }
+
+  const handleFilter = (filter: any) => {
+    setFilter(filter.target.value)
   }
 
   const { data, fetching, error } = patients
@@ -144,97 +150,115 @@ export default function PatientsList() {
     )
   if (error) return <p>Oh no... {error.message}</p>
   return (
-    <Table size="small">
-      <TableHead>
-        <TableRow>
-          <StyledTableCell>Last Visited</StyledTableCell>
-          <StyledTableCell>Name</StyledTableCell>
-          <StyledTableCell>Gender</StyledTableCell>
-          <StyledTableCell>Contact Number</StyledTableCell>
-          <StyledTableCell>Visit Type</StyledTableCell>
-          <StyledTableCell>Doctor</StyledTableCell>
-          <StyledTableCell align="right" />
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {data &&
-          data.patients.map((patient) => (
-            <TableRow key={patient.id}>
-              <StyledTableCell>
-                {hasNoAppointments(patient)
-                  ? '-----'
-                  : new Date(
-                      patient?.latestAppointment?.date,
-                    ).toLocaleDateString('en-ZA')}
-              </StyledTableCell>
-              <StyledTableCell>{patient.fullName}</StyledTableCell>
-              <StyledTableCell>{patient.sex.toString()}</StyledTableCell>
-              <StyledTableCell>{patient.contactNum}</StyledTableCell>
-              <StyledTableCell>
-                {displayVisitType(
-                  patient.latestAppointment?.visitType
-                    ?.toString()
-                    .toUpperCase(),
-                )}
-              </StyledTableCell>
-              <StyledTableCell>
-                {hasNoAppointments(patient)
-                  ? ''
-                  : `Dr. ${patient?.latestAppointment?.medStaff?.fullName}`}
-              </StyledTableCell>
-              <StyledTableCell>
-                <Button
-                  id="basic-button"
-                  aria-controls={open ? 'basic-menu' : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? 'true' : undefined}
-                  onClick={handleClick(patient.id, patient)}
-                  // onClick={(e) => {
-                  //   handleClick(e)
-                  //   setCurrentPatient(patient)
-                  // }}
-                  style={{ color: '#808080' }}
-                >
-                  <MoreVertIcon />
-                </Button>{' '}
-                <Menu
-                  id="basic-menu"
-                  anchorEl={drop}
-                  open={open}
-                  onClose={handleDismissDropdown}
-                  MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                  }}
-                >
-                  <MenuItem onClick={handleOpenEditForm}>Edit</MenuItem>
-                  {editPatientBtn && (
-                    <EditPatientForm
-                      handleClose={handleCloseEditForm}
-                      open={editPatientBtn}
-                      patient={currenPatient}
-                    />
-                  )}
-                  <MenuItem onClick={clickDetails(patientId)}>
-                    View Details
-                  </MenuItem>
-                  <MenuItem
-                    onClick={handleOpenDeleteForm}
-                    sx={{ color: 'red' }}
-                  >
-                    Delete
-                  </MenuItem>
-                  {deletePatientBtn && (
-                    <DeletePatientDialog
-                      handleClose={handleCloseDeleteForm}
-                      open={deletePatientBtn}
-                      patient={currenPatient}
-                    />
-                  )}
-                </Menu>
-              </StyledTableCell>
-            </TableRow>
-          ))}
-      </TableBody>
-    </Table>
+    <>
+      <TextField
+        onChange={handleFilter}
+        id="searchBar"
+        label="Search Patient"
+        variant="outlined"
+        size="medium"
+      />
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <StyledTableCell>Last Visited</StyledTableCell>
+            <StyledTableCell>Name</StyledTableCell>
+            <StyledTableCell>Gender</StyledTableCell>
+            <StyledTableCell>Contact Number</StyledTableCell>
+            <StyledTableCell>Visit Type</StyledTableCell>
+            <StyledTableCell>Doctor</StyledTableCell>
+            <StyledTableCell align="right" />
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data &&
+            data.patients.map(
+              (patient) =>
+                patient.fullName
+                  .toLowerCase()
+                  .replace(/\s+/g, '')
+                  .trim()
+                  .includes(
+                    filter.toLowerCase().replace(/\s+/g, '').trim(),
+                  ) && (
+                  <TableRow key={patient.id}>
+                    <StyledTableCell>
+                      {hasNoAppointments(patient)
+                        ? '-----'
+                        : new Date(
+                            patient?.latestAppointment?.date,
+                          ).toLocaleDateString('en-ZA')}
+                    </StyledTableCell>
+                    <StyledTableCell>{patient.fullName}</StyledTableCell>
+                    <StyledTableCell>{patient.sex.toString()}</StyledTableCell>
+                    <StyledTableCell>{patient.contactNum}</StyledTableCell>
+                    <StyledTableCell>
+                      {displayVisitType(
+                        patient.latestAppointment?.visitType
+                          ?.toString()
+                          .toUpperCase(),
+                      )}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {hasNoAppointments(patient)
+                        ? ''
+                        : `Dr. ${patient?.latestAppointment?.medStaff?.fullName}`}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <Button
+                        id="basic-button"
+                        aria-controls={open ? 'basic-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={handleClick(patient.id, patient)}
+                        // onClick={(e) => {
+                        //   handleClick(e)
+                        //   setCurrentPatient(patient)
+                        // }}
+                        style={{ color: '#808080' }}
+                      >
+                        <MoreVertIcon />
+                      </Button>{' '}
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={drop}
+                        open={open}
+                        onClose={handleDismissDropdown}
+                        MenuListProps={{
+                          'aria-labelledby': 'basic-button',
+                        }}
+                      >
+                        <MenuItem onClick={handleOpenEditForm}>Edit</MenuItem>
+                        {editPatientBtn && (
+                          <EditPatientForm
+                            handleClose={handleCloseEditForm}
+                            open={editPatientBtn}
+                            patient={currenPatient}
+                          />
+                        )}
+                        <MenuItem onClick={clickDetails(patientId)}>
+                          View Details
+                        </MenuItem>
+                        <MenuItem
+                          onClick={handleOpenDeleteForm}
+                          sx={{ color: 'red' }}
+                        >
+                          Delete
+                        </MenuItem>
+                        {deletePatientBtn && (
+                          <DeletePatientDialog
+                            handleClose={handleCloseDeleteForm}
+                            open={deletePatientBtn}
+                            patient={currenPatient}
+                          />
+                        )}
+                      </Menu>
+                    </StyledTableCell>
+                  </TableRow>
+                ),
+            )}
+        </TableBody>
+      </Table>
+    </>
   )
 }
