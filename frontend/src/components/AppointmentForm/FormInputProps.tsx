@@ -3,16 +3,19 @@ import { UseFormRegister, Control, FieldValues } from 'react-hook-form'
 import { gql } from 'urql'
 import { ScheduleStatus } from '../../graphql/generated'
 
-export interface AvailableStaffsQueryData {
-  availableStaffs: {
+export interface AvailableStaff {
+  id: number
+  lastName: string
+  schedules: {
     id: number
-    lastName: string
-    schedules: {
-      status: ScheduleStatus
-      startTime: string
-      endTime: string
-    }
+    status: ScheduleStatus
+    startTime: string
+    endTime: string
   }[]
+}
+
+export interface AvailableStaffsQueryData {
+  availableStaffs: AvailableStaff[]
 }
 
 export const availableStaffsQueryDocument = gql`
@@ -21,6 +24,7 @@ export const availableStaffsQueryDocument = gql`
       id
       lastName
       schedules {
+        id
         status
         startTime
         endTime
@@ -50,6 +54,8 @@ export interface FormInputProps {
   name: string
   label: string
   placeholder?: string
+  disableNoScheduleDays?: (days: any) => boolean
+  isDisabled?: boolean
   onSavedValue?: string
   control?: Control<FieldValues, any>
   register: UseFormRegister<FieldValues>
