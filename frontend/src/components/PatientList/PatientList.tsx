@@ -116,8 +116,8 @@ export default function PatientsList() {
     navigate(`/profile/${id}`)
   }
 
-  const handleFilter = (filter: any) => {
-    setFilter(filter.target.value)
+  const handleFilter = (filterInput: any) => {
+    setFilter(filterInput.target.value)
   }
 
   const { data, fetching, error } = patients
