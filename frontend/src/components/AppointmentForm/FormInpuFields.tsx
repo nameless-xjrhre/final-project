@@ -78,9 +78,13 @@ export const FormInputSelectMedStaff = ({
             name={name}
           >
             {data &&
-              data.medicalStaff.map((item) => (
-                <MenuItem value={item.id} key={item.id} {...register(name)}>
-                  Dr. {item.lastName}
+              data.availableStaffs.map((availableStaff) => (
+                <MenuItem
+                  value={availableStaff.id}
+                  key={availableStaff.id}
+                  {...register(name)}
+                >
+                  Dr. {availableStaff.lastName}
                 </MenuItem>
               ))}
           </Select>
