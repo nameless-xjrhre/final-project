@@ -3,6 +3,7 @@ import PatientQueries from './Patient.query'
 import AppointmentQueries from './Appointment.query'
 import HospitalBillQueries from './HospitalBill.query'
 import MedicalRecordQueries from './MedicalRecord.query'
+import MedicalStaff from './MedicalStaff.query'
 
 const Query = objectType({
   name: 'Query',
@@ -48,4 +49,5 @@ export default [
   ...AppointmentQueries,
   ...HospitalBillQueries,
   ...MedicalRecordQueries,
+  ...MedicalStaff,
 ]
