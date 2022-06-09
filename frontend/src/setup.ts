@@ -1,6 +1,5 @@
 // src/setupTests.js
-import '@testing-library/jest-dom'
-import { beforeAll, afterEach, afterAll } from 'vitest'
+import 'whatwg-fetch'
 import { server } from './mocks/server'
 // Establish API mocking before all tests.
 beforeAll(() => server.listen())

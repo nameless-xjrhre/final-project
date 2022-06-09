@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import * as React from 'react'
-import { Client, createClient, Provider as UrqlProvider } from 'urql'
+import { Client, createClient, Provider } from 'urql'
 
 export function UrqlClientProvider({
   children,
@@ -21,5 +21,9 @@ export function UrqlClientProvider({
     setupUrql()
   }, [])
 
-  return client ? <UrqlProvider value={client}>{children}</UrqlProvider> : null
+  return client ? <Provider value={client}>{children}</Provider> : null
+}
+
+export function UrqlProvider({ children }: { children: React.ReactNode }) {
+  return <UrqlClientProvider>{children}</UrqlClientProvider>
 }
