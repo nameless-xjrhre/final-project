@@ -11,6 +11,7 @@
     "lint": "eslint --fix --ext .ts,.tsx,.js,.jsx src",
     "db:migrate": "prisma migrate dev",
     "db:reset": "prisma migrate reset",
+    "db:delete": "prisma migrate reset --skip-seed",
     "migrate:test": "dotenv -e .env.test -- npx prisma migrate dev --name postgres-init",
     "studio": "prisma studio",
     "generate": "npm -s run generate:prisma && npm -s run generate:nexus",

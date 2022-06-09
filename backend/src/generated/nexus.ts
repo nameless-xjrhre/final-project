@@ -262,6 +262,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     appointments: NexusGenRootTypes['Appointment'][]; // [Appointment!]!
     appointmentsRange: Array<NexusGenRootTypes['Appointment'] | null> | null; // [Appointment]
+    availableStaffs: Array<NexusGenRootTypes['MedicalStaff'] | null> | null; // [MedicalStaff]
     hospitalBills: NexusGenRootTypes['HospitalBill'][]; // [HospitalBill!]!
     hospitalBillsByPatient: Array<NexusGenRootTypes['HospitalBill'] | null> | null; // [HospitalBill]
     medicalRecords: NexusGenRootTypes['MedicalRecord'][]; // [MedicalRecord!]!
@@ -371,6 +372,7 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     appointments: 'Appointment'
     appointmentsRange: 'Appointment'
+    availableStaffs: 'MedicalStaff'
     hospitalBills: 'HospitalBill'
     hospitalBillsByPatient: 'HospitalBill'
     medicalRecords: 'MedicalRecord'
