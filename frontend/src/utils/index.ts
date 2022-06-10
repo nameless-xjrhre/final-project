@@ -1,4 +1,7 @@
 import swal from 'sweetalert'
+import { AvailableStaff } from '../components/AppointmentForm/FormInputProps'
+import { Schedule } from '../components/CustomFormProps'
+import { ScheduleStatus } from '../graphql/generated'
 
 export function getDateOfLastMonday(currentDate: Date) {
   const today = currentDate
@@ -70,3 +73,27 @@ export const getCompleteDate = (date: Date, time: string) => {
 
   return new Date(date).setHours(hour, min)
 }
+
+export const getDaysWithSchedule = (schedules: Schedule[]) =>
+  schedules
+    .filter(
+      (schedule: Schedule) =>
+        schedule.status === ScheduleStatus.Open ||
+        schedule.status === ScheduleStatus.Closed ||
+        schedule.status === ScheduleStatus.NotAvailable,
+    )
+    .map((sched: Schedule) => new Date(sched.startTime).getDay())
+
+export const getDaysWithNoSchedule = (days: number[], schedules: Schedule[]) =>
+  days.filter((day) => !getDaysWithSchedule(schedules).includes(day))
+
+export const getSelectedStaffSchedules = (
+  id: number,
+  availableStaffs: AvailableStaff[],
+) => availableStaffs.find((staff) => staff.id === id)!.schedules
+
+export const disableNoScheduleDays = (
+  date: Date,
+  schedules: Schedule[],
+  days: number[],
+) => getDaysWithNoSchedule(days, schedules).includes(date.getDay())

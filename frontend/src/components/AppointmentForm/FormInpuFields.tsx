@@ -162,6 +162,8 @@ export const FormInputDate = ({
   onSavedValue,
   register,
   errors,
+  disableNoScheduleDays,
+  isDisabled,
 }: FormInputProps) => (
   <Controller
     name={name}
@@ -170,10 +172,12 @@ export const FormInputDate = ({
       <DatePicker
         disablePast
         label={label}
-        openTo="year"
-        views={['year', 'month', 'day']}
+        openTo="month"
+        views={['month', 'day']}
         value={value || onSavedValue}
         onChange={onChange}
+        shouldDisableDate={disableNoScheduleDays}
+        disabled={isDisabled}
         renderInput={(params) => (
           <TextField
             sx={{ marginTop: -0.3, width: 250 }}
@@ -197,6 +201,7 @@ export const FormInputTime = ({
   onSavedValue,
   register,
   errors,
+  isDisabled,
 }: FormInputProps) => (
   <Controller
     name={name}
@@ -208,6 +213,7 @@ export const FormInputTime = ({
         label={label}
         value={value || onSavedValue}
         onChange={(time) => onChange(time)}
+        disabled={isDisabled}
         renderInput={(params) => (
           <TextField
             sx={{ marginTop: -0.3, width: 250 }}
@@ -216,7 +222,13 @@ export const FormInputTime = ({
             {...params}
             {...register(name)}
             error={!!errors[name]}
-            helperText={errors[name]?.message}
+            helperText={
+              isDisabled ? (
+                <i>Please select doctor first.</i>
+              ) : (
+                '' || errors[name]?.message
+              )
+            }
           />
         )}
       />
