@@ -22,11 +22,6 @@ describe('Doctors Page - Delete A Schedule Test', () => {
           .last()
           .contains('Yes')
           .click()
-          .get('[class="swal-title"]')
-          .should('contain', 'Success')
-          .get('[class="swal-button swal-button--confirm"]')
-          .contains('OK')
-          .click()
       })
   })
 

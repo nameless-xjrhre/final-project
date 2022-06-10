@@ -28,14 +28,12 @@ describe('Doctor Page - Create New Schedule Test', () => {
 
   it('should select doctor', () => {
     cy.get('[id=mui-component-select-medicalStaff]')
-      .click()
-      .get('[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]')
-      .its('length')
-      .then((len) => {
-        cy.get('[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]')
-          .eq(len - 1)
-          .click({ force: true })
-      })
+    .click()
+    .get('ul li')
+    .get('[role="option"]')
+    .last()
+    .should('not.be.empty')
+    .click()
   })
 
   it('should select days', () => {
@@ -65,16 +63,11 @@ describe('Doctor Page - Create New Schedule Test', () => {
     cy.get('[type=submit]')
       .should('contain', 'Create Schedule')
       .click()
-      .get('[class="swal-title"]')
-      .should('contain', 'Success')
-      .get('[class="swal-button swal-button--confirm"]')
-      .contains('OK')
-      .click()
   })
 
   it('should check if a schedule was added', () => {
     cy.visit('http://localhost:3000/doctors')
-      .get('[class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-clickable MuiChip-clickableColorDefault MuiChip-filledDefault css-j4zylg-MuiButtonBase-root-MuiChip-root"]')
+      .get('[class="css-zgbp5c-MuiStack-root"]')
       .should('have.length.greaterThan', totalNumOfScheds)
   })
 })
