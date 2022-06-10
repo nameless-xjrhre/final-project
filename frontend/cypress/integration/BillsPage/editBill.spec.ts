@@ -39,11 +39,6 @@ describe('Bills Page - Edit Bills Test', () => {
       cy.get('[type=button]').last()
         .should('contain', 'Save Changes')
         .click()
-        .get('[class="swal-title"]')
-        .should('contain', 'Success')
-        .get('[class="swal-button swal-button--confirm"]')
-        .contains('OK')
-        .click()
     })
 
     it('should check if bill is edited in the bills page', () => {
@@ -82,11 +77,6 @@ describe('Bills Page - Edit Bills Test', () => {
     it('should save changes', () => {
       cy.get('[type=button]').last()
         .should('contain', 'Save Changes')
-        .click()
-        .get('[class="swal-title"]')
-        .should('contain', 'Success')
-        .get('[class="swal-button swal-button--confirm"]')
-        .contains('OK')
         .click()
     })
 
