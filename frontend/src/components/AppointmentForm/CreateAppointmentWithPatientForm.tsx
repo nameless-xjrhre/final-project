@@ -87,6 +87,7 @@ const CreateAppointmentWithPatient = gql`
 export default function CreateAppointmentWithPatientForm({
   handleClose,
   open,
+  disableNoScheduleDays,
 }: AppointmentFormProps) {
   const [, createAppointmentWithPatient] = useMutation(
     CreateAppointmentWithPatient,
@@ -95,6 +96,7 @@ export default function CreateAppointmentWithPatientForm({
   const isLastStep = activeStep === steps.length - 1
   const [complete, setComplete] = React.useState(false)
   const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const [isDisabled, setIsDisabled] = React.useState(true)
   const handleComplete = () => setComplete(true)
   const handleSubmitting = () => setIsSubmitting(true)
 
@@ -115,10 +117,19 @@ export default function CreateAppointmentWithPatientForm({
     control,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm({
     resolver: isLastStep
       ? yupResolver(appointmentSchema)
       : yupResolver(patientSchema),
+  })
+
+  const selectedStaffValue = watch('medicalStaff')
+
+  React.useEffect(() => {
+    typeof selectedStaffValue === 'number'
+      ? setIsDisabled(false)
+      : setIsDisabled(true)
   })
 
   const handleNext = handleSubmit((data) => {
@@ -193,6 +204,8 @@ export default function CreateAppointmentWithPatientForm({
             errors={errors}
             isNewAppointment
             toUpdate={false}
+            disableNoScheduleDays={disableNoScheduleDays!}
+            isDisabled={isDisabled}
           />
         )
       default:
