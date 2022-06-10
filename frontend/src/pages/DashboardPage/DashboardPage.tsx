@@ -146,7 +146,9 @@ function DashboardPage() {
             </IconButton>
           </Toolbar>
           <Divider />
-          <List component="nav">{Sidebar}</List>
+          <List role="list" component="nav">
+            {Sidebar}
+          </List>
         </Drawer>
         <Box
           component="main"
