@@ -9,11 +9,9 @@ describe('Doctors Page - Open A Schedule Test', () => {
     )
       .last()
       .click()
-      .wait(2000)
       .get('[value="OPEN"]')
       .last()
       .click()
-      .wait(5000)
   })
 
   it('should check change in color', () => {
@@ -22,11 +20,7 @@ describe('Doctors Page - Open A Schedule Test', () => {
       'background-color',
       'rgb(87, 231, 153)',
     )
-  })
-
-  it('should displayed confirmation message', () => {
-    cy.get('[class="swal-title"]')
-      .wait(2000)
+      .get('[class="swal-title"]')
       .should('contain', 'Success')
       .get('[class="swal-button swal-button--confirm"]')
       .contains('OK')

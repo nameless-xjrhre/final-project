@@ -1,28 +1,39 @@
+let totalNumOfPatients;
+
 describe('Patient Page - Delete Patient Test', () => {
   before(() => {
     cy.visit('http://localhost:3000/patients')
+    .get('[id="basic-button"]')
+    .its('length')
+    .then((len)=>{
+      totalNumOfPatients = len
+    })
   })
 
   it('should delete patient', () => {
     cy.get('[id="basic-button"]')
-      .eq(0)
+      .first()
       .click()
       .get('[role="menuitem"]')
       .last()
-      .contains('Delete')
+      .should('contain', 'Delete')
       .click()
       .get('[type=button]')
       .last()
       .contains('Yes')
       .click()
-      .wait(5000)
-  })
-
-  it('should display confirmation message', () => {
-    cy.get('[class="swal-title"]')
+      .get('[class="swal-title"]')
       .should('contain', 'Success')
       .get('[class="swal-button swal-button--confirm"]')
       .contains('OK')
       .click()
+  })
+
+  it('should check if a patient was deleted', ()=>{
+    cy.visit('http://localhost:3000/patients')
+    .get('td button')
+    .get('[id="basic-button"]')
+    .its('length')
+    .should('be.lessThan', totalNumOfPatients)
   })
 })

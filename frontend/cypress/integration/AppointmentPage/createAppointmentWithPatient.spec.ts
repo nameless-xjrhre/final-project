@@ -3,32 +3,45 @@ import {
   medStaffRandomizer,
   visitTypeRandomizer,
   genderRandomizer,
-} from '../fixtures/randomizer'
-const fakeData = require('../fixtures/fakeData.json')
+} from '../../fixtures/randomizer'
+const fakeData = require('../../fixtures/fakeData.json')
 const fakeDataProps = fakeData.listOfObjects
+
+const firstName = fakeDataProps[fakeDataRandomizer()].firstName
+const lastName = fakeDataProps[fakeDataRandomizer()].lastName
+const contactNum = fakeDataProps[fakeDataRandomizer()].contactNum
+const dateOfBirth = fakeDataProps[fakeDataRandomizer()].dateOfBirth
+const appointmentDate = fakeDataProps[fakeDataRandomizer()].appointmentDate
+const appointmentTime = fakeDataProps[fakeDataRandomizer()].startTime
+const address = fakeDataProps[fakeDataRandomizer()].address
 
 describe('Appointment Page - Create Appointment With Patient Test', () => {
   before(() => {
     cy.visit('http://localhost:3000/appointments')
+      .get('[aria-label="SpeedDial basic example"]')
+      .click()
+      .should('be.visible')
+      .get('[aria-label="Create New Appointment"]')
+      .should('be.visible')
+      .click()
   })
 
   it('should input patient name', () => {
-    cy.get('[aria-label="SpeedDial basic example"]')
+    cy.get('[name=firstName]')
       .click()
-      .get('[aria-label="Create New Appointment"]')
-      .click()
-      .get('[name=firstName]')
-      .click()
-      .type(fakeDataProps[fakeDataRandomizer()].firstName)
+      .type(firstName)
+      .should('have.value', firstName)
       .get('[name=lastName]')
       .click()
-      .type(fakeDataProps[fakeDataRandomizer()].lastName)
+      .type(lastName)
+      .should('have.value', lastName)
   })
 
   it('should input contact info', () => {
     cy.get('[name=contactNum]')
       .click()
-      .type(fakeDataProps[fakeDataRandomizer()].contactNum)
+      .type(contactNum)
+      .should('have.value', contactNum)
   })
 
   it('should select gender', () => {
@@ -42,27 +55,21 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
   it('should input date of birth', () => {
     cy.get('[name=dateOfBirth]')
       .click()
-      .type(fakeDataProps[fakeDataRandomizer()].dateOfBirth)
       .clear()
-      .type(fakeDataProps[fakeDataRandomizer()].dateOfBirth)
+      .type(dateOfBirth)
+      .should('have.value', dateOfBirth)
+
   })
 
   it('should input address', () => {
     cy.get('[name=address]')
       .click()
-      .type(fakeDataProps[fakeDataRandomizer()].address)
+      .type(address)
+      .should('have.value', address)
   })
 
   it('should click next button', () => {
-    cy.get('[type=submit]').contains('Next').click()
-  })
-
-  it('should click back button', () => {
-    cy.get('[type=button]').contains('Back').click().wait(5000)
-  })
-
-  it('should click next button again', () => {
-    cy.get('[type=submit]').contains('Next').click()
+    cy.get('[type=submit]').should('contain', 'Next').click()
   })
 
   it('should select visit type', () => {
@@ -76,25 +83,29 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
   it('should select medical staff', () => {
     cy.get('[id=mui-component-select-medicalStaff]')
       .click()
-      .get(
-        '[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]',
-      )
-      .eq(medStaffRandomizer())
-      .click()
+      .get('ul li')
+      .get('[name="medicalStaff"]')
+      .its('length')
+      .then((len) => {
+        cy.get('[name="medicalStaff"]')
+          .eq(len - 1)
+          .should('not.be.empty')
+          .click({ force: true })
+      })
   })
 
   it('should input date', () => {
     cy.get('[name=appointmentDate]')
       .click()
-      .type(fakeDataProps[fakeDataRandomizer()].appointmentDate)
-      .clear()
-      .type(fakeDataProps[fakeDataRandomizer()].appointmentDate)
+      .type(appointmentDate)
+      .should('have.value', appointmentDate)
   })
 
   it('should input appointment time', () => {
     cy.get('[name=appointmentTime]')
       .click()
-      .type(fakeDataProps[fakeDataRandomizer()].startTime)
+      .type(appointmentTime)
+      .should('have.value', appointmentTime)
   })
 
   it('should input note', () => {
@@ -102,14 +113,19 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
   })
 
   it('should book appointment', () => {
-    cy.get('[type=submit]').contains('Book Now').click().wait(5000)
-  })
-
-  it('should display confirmation message', () => {
-    cy.get('[class="swal-title"]')
+    cy.get('[type=submit]').should('contain', 'Book Now')
+      .click()
+      .get('[class="swal-title"]')
       .should('contain', 'Success')
       .get('[class="swal-button swal-button--confirm"]')
       .contains('OK')
       .click()
   })
+
+  it('should check if appointment is in appointment list', ()=>{
+    cy.visit('http://localhost:3000/appointments')
+    .get('tr td')
+    .should('contain', firstName + ' ' + lastName)
+  })
+
 })

@@ -12,7 +12,6 @@ describe('Doctors Page - Nullify A Schedule Test', () => {
       .get('[value="NOT_AVAILABLE"]')
       .last()
       .click()
-      .wait(5000)
   })
 
   it('should check change in color', () => {
@@ -21,13 +20,12 @@ describe('Doctors Page - Nullify A Schedule Test', () => {
       'background-color',
       'rgb(203, 203, 203)',
     )
-  })
-
-  it('should display confirmation message', () => {
-    cy.get('[class="swal-title"]')
+      .get('[class="swal-title"]')
       .should('contain', 'Success')
       .get('[class="swal-button swal-button--confirm"]')
       .contains('OK')
       .click()
   })
+
+
 })
