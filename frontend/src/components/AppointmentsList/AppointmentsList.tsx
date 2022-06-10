@@ -289,6 +289,7 @@ export default function AppointmentList() {
                       handleStatusClick(e)
                       setCurrentAppointment(appointment)
                     }}
+                    data-testid={`status-button-${appointment.id}`}
                   />
                   <Menu
                     anchorEl={statusDrop}
