@@ -3,15 +3,23 @@ import { UseFormRegister, Control, FieldValues } from 'react-hook-form'
 import { gql } from 'urql'
 import { ScheduleStatus } from '../../graphql/generated'
 
+interface Schedule {
+  id: number
+  startTime: string
+  endTime: string
+  status: ScheduleStatus
+  medStaff: {
+    id: number
+  }
+}
+
 export interface AvailableStaff {
   id: number
+  firstName: string
   lastName: string
-  schedules: {
-    id: number
-    status: ScheduleStatus
-    startTime: string
-    endTime: string
-  }[]
+  address: string
+  contactNum: string
+  schedules: Schedule[]
 }
 
 export interface AvailableStaffsQueryData {
@@ -22,12 +30,18 @@ export const availableStaffsQueryDocument = gql`
   query AvailableStaffs {
     availableStaffs {
       id
+      firstName
       lastName
+      address
+      contactNum
       schedules {
         id
-        status
         startTime
         endTime
+        status
+        medStaff {
+          id
+        }
       }
     }
   }

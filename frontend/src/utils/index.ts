@@ -74,8 +74,8 @@ export const getCompleteDate = (date: Date, time: string) => {
   return new Date(date).setHours(hour, min)
 }
 
-export const getDaysWithSchedule = (schedules: any) =>
-  schedules!
+export const getDaysWithSchedule = (schedules: Schedule[]) =>
+  schedules
     .filter(
       (schedule: Schedule) =>
         schedule.status === ScheduleStatus.Open ||
