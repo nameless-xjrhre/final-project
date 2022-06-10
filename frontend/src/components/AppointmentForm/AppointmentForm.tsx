@@ -29,6 +29,8 @@ interface AppointmentFormProps {
   isNewAppointment: boolean
   toUpdate: boolean
   appointment?: Appointment
+  disableNoScheduleDays: (days: any) => boolean
+  isDisabled?: boolean
 }
 
 const visitTypes = [VisitType.Followup, VisitType.Routine, VisitType.Urgent]
@@ -40,6 +42,8 @@ export default function AppointmentForm({
   isNewAppointment,
   toUpdate,
   appointment,
+  disableNoScheduleDays,
+  isDisabled,
 }: AppointmentFormProps) {
   const [availableStaffs] = useQuery<AvailableStaffsQueryData>({
     query: availableStaffsQueryDocument,
@@ -108,6 +112,8 @@ export default function AppointmentForm({
             control={control}
             register={register}
             errors={errors}
+            disableNoScheduleDays={disableNoScheduleDays}
+            isDisabled={isDisabled}
           />
         </LocalizationProvider>
       </Grid>
@@ -135,6 +141,7 @@ export default function AppointmentForm({
             errors={errors}
             register={register}
             control={control}
+            isDisabled={isDisabled}
           />
         </LocalizationProvider>
       </Grid>
