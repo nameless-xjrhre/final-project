@@ -5,6 +5,8 @@ import { createMedicalStaff } from '../MedicalStaff/MedicalStaff.resolver'
 import {
   CreateAppointmentType,
   createAppointment,
+  EditAppointmentType,
+  editAppointment,
 } from '../Appointment/Appointment.resolver'
 
 let mockCtx: MockContext
@@ -60,4 +62,54 @@ test('should create an appointment by linking existing patient and medical staff
   await expect(createAppointment(appointment, 1, 1, ctx)).resolves.toEqual(
     expectedAppointment,
   )
+})
+
+it('should edit an appointment', async () => {
+  const appointment: EditAppointmentType = {
+    date: new Date('2020-01-01'),
+    note: 'Rest More',
+    status: 'PENDING',
+  }
+
+  const expectedAppointment: Appointment = {
+    id: 1,
+    date: new Date('2020-01-01'),
+    note: 'Rest More',
+    visitType: VisitType.ROUTINE,
+    status: AppointmentStatus.PENDING,
+    medStaffId: 1,
+    patientId: 1,
+    hospitalBillId: 1,
+    createdAt: new Date('2020-01-01'),
+    updatedAt: new Date('2020-02-01'),
+  }
+
+  mockCtx.prisma.appointment.update.mockResolvedValue(expectedAppointment)
+
+  await expect(editAppointment(1, appointment, ctx)).resolves.toEqual(
+    expectedAppointment,
+  )
+})
+
+it('should delete an appointment', async () => {
+  const appointment = {
+    id: 1,
+    date: new Date('2020-01-01'),
+    note: 'Rest More',
+    visitType: VisitType.ROUTINE,
+    status: AppointmentStatus.PENDING,
+    medStaffId: 1,
+    patientId: 1,
+    hospitalBillId: 1,
+    createdAt: new Date('2020-01-01'),
+    updatedAt: new Date('2020-02-01'),
+  }
+
+  mockCtx.prisma.appointment.delete.mockResolvedValue(appointment)
+
+  await expect(
+    ctx.prisma.appointment.delete({
+      where: { id: 1 },
+    }),
+  ).resolves.toEqual(appointment)
 })

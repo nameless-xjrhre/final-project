@@ -281,28 +281,29 @@ export default function AppointmentList() {
           {data &&
             data.appointmentsRange.map((appointment) => (
               <TableRow key={appointment.id}>
-                <StyledTableCell>
+                <StyledTableCell data-testid={`name-${appointment.id}`}>
                   {appointment.patient.fullName}
                 </StyledTableCell>
                 <StyledTableCell
                   sx={{
                     fontWeight: '800',
                   }}
+                  data-testid={`visit-type-${appointment.id}`}
                 >
                   {capitalize(appointment.visitType.toLowerCase())}
                 </StyledTableCell>
-                <StyledTableCell>
+                <StyledTableCell data-testid={`date-${appointment.id}`}>
                   {new Date(appointment.date).toLocaleDateString('en-ZA')}
                 </StyledTableCell>
-                <StyledTableCell>
+                <StyledTableCell data-testid={`visit-time-${appointment.id}`}>
                   {new Date(appointment.date).toLocaleTimeString('en-US', {
                     hour12: false,
                   })}
                 </StyledTableCell>
-                <StyledTableCell>
+                <StyledTableCell data-testid={`doctor-${appointment.id}`}>
                   Dr. {appointment.medStaff.fullName}
                 </StyledTableCell>
-                <StyledTableCell>
+                <StyledTableCell data-testid={`status-${appointment.id}`}>
                   <StatusButton
                     status={appointment.status}
                     onClick={(
