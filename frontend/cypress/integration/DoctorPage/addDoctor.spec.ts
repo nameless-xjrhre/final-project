@@ -45,11 +45,6 @@ describe('Doctor Page - Add Doctor Test', () => {
     cy.get('[type=button]').last()
       .should('contain.text', 'Add Doctor')
       .click()
-      .get('[class="swal-title"]')
-      .should('contain', 'Success')
-      .get('[class="swal-button swal-button--confirm"]')
-      .contains('OK')
-      .click()
   })
 
   it('should confirm in the doctors page', () => {

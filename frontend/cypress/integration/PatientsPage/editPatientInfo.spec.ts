@@ -80,11 +80,6 @@ describe('Patient Page - Edit Patient Info Test', () => {
     cy.get('[type=button]').last()
       .should('contain', 'Save Changes')
       .click()
-      .get('[class="swal-title"]')
-      .should('contain', 'Success')
-      .get('[class="swal-button swal-button--confirm"]')
-      .contains('OK')
-      .click()
   })
 
   it('should check if a patient info was indeed edited', ()=>{

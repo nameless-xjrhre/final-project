@@ -13,13 +13,29 @@ describe('Dashboard Page - Pagination Test', () => {
   it('should check if there are multiple pages', () => {
     cy.get('[class="MuiPagination-ul css-wjh20t-MuiPagination-ul"]')
       .get('li')
-      .should('have.length.gte', 4)
+      .its('length')
+      .then((len) => {
+        if (len < 4) {
+          expect(len).to.be.lessThan(4)
+        } else {
+          expect(len).to.be.gte(4)
+        }
+      })
   })
 
   it('should click a page if number of pages is greater than 1', () => {
     cy.get('[class="MuiPagination-ul css-wjh20t-MuiPagination-ul"]')
       .get('li')
-      .eq(2)
-      .click()
+      .its('length')
+      .then((len) => {
+        if (len >= 4) {
+          cy.get('[class="MuiPagination-ul css-wjh20t-MuiPagination-ul"]')
+            .get('li')
+            .eq(len - 1)
+            .click()
+        }else{
+          expect(len).to.be.lessThan(4)
+        }
+      })
   })
 })

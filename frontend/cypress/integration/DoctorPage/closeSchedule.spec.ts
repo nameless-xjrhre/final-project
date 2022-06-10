@@ -15,11 +15,6 @@ describe('Doctors Page - Close A Schedule Test', () => {
     it('should check change in color', () => {
         cy.get('.css-1l5e8fi-MuiButtonBase-root-MuiChip-root')
             .should('have.css', 'background-color', 'rgb(254, 121, 129)')
-            .get('[class="swal-title"]')
-            .should('contain', 'Success')
-            .get('[class="swal-button swal-button--confirm"]')
-            .contains('OK')
-            .click()
     })
 
 

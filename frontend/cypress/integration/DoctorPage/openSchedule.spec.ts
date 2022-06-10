@@ -7,7 +7,7 @@ describe('Doctors Page - Open A Schedule Test', () => {
     cy.get(
       '[class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-clickable MuiChip-clickableColorDefault MuiChip-filledDefault css-1n7jwnc-MuiButtonBase-root-MuiChip-root"]',
     )
-      .last()
+      .first()
       .click()
       .get('[value="OPEN"]')
       .last()
@@ -20,10 +20,5 @@ describe('Doctors Page - Open A Schedule Test', () => {
       'background-color',
       'rgb(87, 231, 153)',
     )
-      .get('[class="swal-title"]')
-      .should('contain', 'Success')
-      .get('[class="swal-button swal-button--confirm"]')
-      .contains('OK')
-      .click()
   })
 })
