@@ -1,4 +1,4 @@
-import { screen, fireEvent } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import { graphql } from 'msw'
 import { testRenderer } from '../../utils/test-util'
 import {
