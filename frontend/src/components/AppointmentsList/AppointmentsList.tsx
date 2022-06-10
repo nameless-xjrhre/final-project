@@ -269,75 +269,60 @@ export default function AppointmentList() {
         </TableHead>
         <TableBody>
           {data &&
-            data.appointmentsRange.map(
-              (appointment) =>
-                appointment.patient.fullName
+            data.appointmentsRange.map((appointment) => (
+             appointment.patient.fullName
                   .toLowerCase()
                   .replace(/\s+/g, '')
                   .trim()
                   .includes(
                     filter.toLowerCase().replace(/\s+/g, '').trim(),
-                  ) && (
-                  <TableRow key={appointment.id}>
-                    <StyledTableCell>
-                      {appointment.patient.fullName}
-                    </StyledTableCell>
-                    <StyledTableCell
-                      sx={{
-                        fontWeight: '800',
-                      }}
-                    >
-                      {capitalize(appointment.visitType.toLowerCase())}
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      {new Date(appointment.date).toLocaleDateString('en-ZA')}
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      {new Date(appointment.date).toLocaleTimeString('en-US', {
-                        hour12: false,
-                      })}
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      Dr. {appointment.medStaff.fullName}
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      <StatusButton
-                        status={appointment.status}
-                        onClick={(
-                          e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-                        ) => {
-                          handleStatusClick(e)
-                          setCurrentAppointment(appointment)
-                        }}
-                      />
-                      <Menu
-                        anchorEl={statusDrop}
-                        open={openStatus}
-                        onClose={handleDismissStatusDropdown}
-                      >
-                        {appointmentStatus?.map((status) => (
-                          <MenuItem
-                            value={status}
-                            key={status}
-                            disabled={isSubmitting}
-                            onClick={handleUpdateAppointmentStatus(
-                              currentAppointment.id,
-                              status,
-                            )}
-                          >
-                            {status}
-                          </MenuItem>
-                        ))}
-                        {isSubmitting && (
-                          <CircularProgress
-                            size={25}
-                            sx={{
-                              color: 'blue',
-                              marginLeft: 5,
-                              marginTop: -10,
-                              position: 'absolute',
-                            }}
-                          />
+                  ) &&
+              <TableRow key={appointment.id}>
+                <StyledTableCell data-testid={`name-${appointment.id}`}>
+                  {appointment.patient.fullName}
+                </StyledTableCell>
+                <StyledTableCell
+                  sx={{
+                    fontWeight: '800',
+                  }}
+                  data-testid={`visit-type-${appointment.id}`}
+                >
+                  {capitalize(appointment.visitType.toLowerCase())}
+                </StyledTableCell>
+                <StyledTableCell data-testid={`date-${appointment.id}`}>
+                  {new Date(appointment.date).toLocaleDateString('en-ZA')}
+                </StyledTableCell>
+                <StyledTableCell data-testid={`visit-time-${appointment.id}`}>
+                  {new Date(appointment.date).toLocaleTimeString('en-US', {
+                    hour12: false,
+                  })}
+                </StyledTableCell>
+                <StyledTableCell data-testid={`doctor-${appointment.id}`}>
+                  Dr. {appointment.medStaff.fullName}
+                </StyledTableCell>
+                <StyledTableCell data-testid={`status-${appointment.id}`}>
+                  <StatusButton
+                    status={appointment.status}
+                    onClick={(
+                      e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+                    ) => {
+                      handleStatusClick(e)
+                      setCurrentAppointment(appointment)
+                    }}
+                  />
+                  <Menu
+                    anchorEl={statusDrop}
+                    open={openStatus}
+                    onClose={handleDismissStatusDropdown}
+                  >
+                    {appointmentStatus?.map((status) => (
+                      <MenuItem
+                        value={status}
+                        key={status}
+                        disabled={isSubmitting}
+                        onClick={handleUpdateAppointmentStatus(
+                          currentAppointment.id,
+                          status,
                         )}
                       </Menu>
                     </StyledTableCell>

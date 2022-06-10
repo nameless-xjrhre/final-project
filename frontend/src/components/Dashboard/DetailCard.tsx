@@ -13,6 +13,7 @@ interface DetailCardProps {
 export default function DetailCard({ logo, title, amount }: DetailCardProps) {
   return (
     <Box
+      data-testid={title}
       sx={{
         display: 'flex',
         flexWrap: 'wrap',
