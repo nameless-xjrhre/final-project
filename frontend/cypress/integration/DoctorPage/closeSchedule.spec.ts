@@ -4,7 +4,7 @@ describe('Doctors Page - Close A Schedule Test', () => {
     })
 
     it('should close a schedule', () => {
-        cy.get('[class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-clickable MuiChip-clickableColorDefault MuiChip-filledDefault css-j4zylg-MuiButtonBase-root-MuiChip-root"]')
+        cy.get('[class="css-zgbp5c-MuiStack-root"]')
             .last()
             .click()
             .get('[value="CLOSED"]').last()

@@ -5,9 +5,9 @@ describe('Doctors Page - Open A Schedule Test', () => {
 
   it('should open a schedule', () => {
     cy.get(
-      '[class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-clickable MuiChip-clickableColorDefault MuiChip-filledDefault css-1n7jwnc-MuiButtonBase-root-MuiChip-root"]',
+      '[class="css-zgbp5c-MuiStack-root"]',
     )
-      .first()
+      .eq(2)
       .click()
       .get('[value="OPEN"]')
       .last()
