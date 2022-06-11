@@ -18,6 +18,7 @@ import StatusButton from '../Buttons/StatusButton'
 import {
   AppointmentStatus,
   MutationEditAppointmentArgs,
+  ScheduleStatus,
   VisitType,
 } from '../../graphql/generated'
 import { capitalize, showFailAlert, showSuccessAlert } from '../../utils'
@@ -43,6 +44,13 @@ const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }))
 
+interface Schedule {
+  id: number
+  status: ScheduleStatus
+  startTime: string
+  endTime: string
+}
+
 interface Appointment {
   id: number
   visitType: VisitType
@@ -56,6 +64,7 @@ interface Appointment {
   medStaff: {
     id: number
     fullName: string
+    schedules: Schedule[]
   }
 }
 
@@ -79,6 +88,12 @@ const AppointmentQueryDocument = gql`
       medStaff {
         id
         fullName
+        schedules {
+          id
+          endTime
+          startTime
+          status
+        }
       }
     }
     totalAppointments
@@ -119,6 +134,14 @@ const defaultAppointment: Appointment = {
   medStaff: {
     fullName: '',
     id: 0,
+    schedules: [
+      {
+        id: 0,
+        startTime: new Date().toISOString(),
+        endTime: new Date().toISOString(),
+        status: ScheduleStatus.Open,
+      },
+    ],
   },
   note: '',
   patient: {
@@ -258,28 +281,29 @@ export default function AppointmentList() {
           {data &&
             data.appointmentsRange.map((appointment) => (
               <TableRow key={appointment.id}>
-                <StyledTableCell>
+                <StyledTableCell data-testid={`name-${appointment.id}`}>
                   {appointment.patient.fullName}
                 </StyledTableCell>
                 <StyledTableCell
                   sx={{
                     fontWeight: '800',
                   }}
+                  data-testid={`visit-type-${appointment.id}`}
                 >
                   {capitalize(appointment.visitType.toLowerCase())}
                 </StyledTableCell>
-                <StyledTableCell>
+                <StyledTableCell data-testid={`date-${appointment.id}`}>
                   {new Date(appointment.date).toLocaleDateString('en-ZA')}
                 </StyledTableCell>
-                <StyledTableCell>
+                <StyledTableCell data-testid={`visit-time-${appointment.id}`}>
                   {new Date(appointment.date).toLocaleTimeString('en-US', {
                     hour12: false,
                   })}
                 </StyledTableCell>
-                <StyledTableCell>
+                <StyledTableCell data-testid={`doctor-${appointment.id}`}>
                   Dr. {appointment.medStaff.fullName}
                 </StyledTableCell>
-                <StyledTableCell>
+                <StyledTableCell data-testid={`status-${appointment.id}`}>
                   <StatusButton
                     status={appointment.status}
                     onClick={(
