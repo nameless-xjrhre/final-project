@@ -39,6 +39,10 @@ describe('Bills Page - Edit Bills Test', () => {
       cy.get('[type=button]').last()
         .should('contain', 'Save Changes')
         .click()
+        .get('[class="swal-modal"]')
+        .get('[class="swal-button swal-button--confirm"]')
+        .should('contain', 'OK')
+        .click()
     })
 
     it('should check if bill is edited in the bills page', () => {
@@ -49,7 +53,8 @@ describe('Bills Page - Edit Bills Test', () => {
       let dueDate = futureDate.toLocaleDateString('en-ZA')
       cy.visit('http://localhost:3000/bills')
         .get('tr td')
-        .should('contain', amount)
+        .should('be.visible')
+        .and('contain', '₱ ' + amount + '.00')
         .and('contain', dueDate)
     })
 
@@ -78,12 +83,17 @@ describe('Bills Page - Edit Bills Test', () => {
       cy.get('[type=button]').last()
         .should('contain', 'Save Changes')
         .click()
+        .get('[class="swal-modal"]')
+        .get('[class="swal-button swal-button--confirm"]')
+        .should('contain', 'OK')
+        .click()
     })
 
-    it('should check if the edited amount exists in the bills page', ()=>{
+    it('should check if the edited amount exists in the bills page', () => {
       cy.visit('http://localhost:3000/bills')
         .get('tr td')
-        .should('contain', amount)
+        .should('be.visible')
+        .and('contain', '₱ ' + amount + '.00')
     })
   })
 
@@ -114,14 +124,13 @@ describe('Bills Page - Edit Bills Test', () => {
       cy.get('[type=button]').last()
         .should('contain', 'Save Changes')
         .click()
-        .get('[class="swal-title"]')
-        .should('contain', 'Success')
+        .get('[class="swal-modal"]')
         .get('[class="swal-button swal-button--confirm"]')
-        .contains('OK')
+        .should('contain', 'OK')
         .click()
     })
 
-    it('should check if the updated payment term was reflected in the bills page', ()=>{
+    it('should check if the updated payment term was reflected in the bills page', () => {
       let termSplitter = paymentTerm.split(' ')
       let termDays = parseInt(termSplitter[0])
       let dateNow = new Date().getTime()
@@ -129,7 +138,8 @@ describe('Bills Page - Edit Bills Test', () => {
       let dueDate = futureDate.toLocaleDateString('en-ZA')
       cy.visit('http://localhost:3000/bills')
         .get('tr td')
-        .should('contain', dueDate)
+        .should('be.visible')
+        .and('contain', dueDate)
     })
   })
 })
