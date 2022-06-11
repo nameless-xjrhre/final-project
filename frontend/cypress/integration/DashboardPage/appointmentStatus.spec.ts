@@ -4,10 +4,10 @@ describe('Dashboard Page - Appointment Status Test', () => {
   })
 
   it('should check if status changed to CANCELED', () => {
-    cy.get('td button', { timeout: 5000 })
+    cy.get('td button')
       .its('length')
       .then((len) => {
-        cy.get('td button', { timeout: 5000 })
+        cy.get('td button')
           .eq(len - 1)
           .click()
           .should('have.attr', 'status')
@@ -15,7 +15,7 @@ describe('Dashboard Page - Appointment Status Test', () => {
           .should('contain', "CANCELED")
           .first()
           .click({ force: true })
-          .get('[class="swal-title"]', { timeout: 5000 })
+          .get('[class="swal-title"]')
           .should('contain', 'Success')
           .get('[class="swal-button swal-button--confirm"]')
           .contains('OK')
@@ -25,10 +25,10 @@ describe('Dashboard Page - Appointment Status Test', () => {
   })
 
   it('should check if status changed to PENDING', () => {
-    cy.get('td button', { timeout: 5000 })
+    cy.get('td button')
       .its('length')
       .then((len) => {
-        cy.get('td button', { timeout: 5000 })
+        cy.get('td button')
           .eq(len - 1)
           .click()
           .should('have.attr', 'status')
@@ -36,7 +36,7 @@ describe('Dashboard Page - Appointment Status Test', () => {
           .should('contain', "PENDING")
           .first()
           .click({ force: true })
-          .get('[class="swal-title"]', { timeout: 5000 })
+          .get('[class="swal-title"]')
           .should('contain', 'Success')
           .get('[class="swal-button swal-button--confirm"]')
           .contains('OK')
@@ -46,10 +46,10 @@ describe('Dashboard Page - Appointment Status Test', () => {
   })
 
   it('should check if status changed to EXPIRED', () => {
-    cy.get('td button', { timeout: 5000 })
+    cy.get('td button')
       .its('length')
       .then((len) => {
-        cy.get('td button', { timeout: 5000 })
+        cy.get('td button')
           .eq(len - 1)
           .click()
           .should('have.attr', 'status')
@@ -57,7 +57,7 @@ describe('Dashboard Page - Appointment Status Test', () => {
           .should('contain', "EXPIRED")
           .first()
           .click({ force: true })
-          .get('[class="swal-title"]', { timeout: 5000 })
+          .get('[class="swal-title"]')
           .should('contain', 'Success')
           .get('[class="swal-button swal-button--confirm"]')
           .contains('OK')
@@ -67,10 +67,10 @@ describe('Dashboard Page - Appointment Status Test', () => {
   })
 
   it('should check if status changed to DONE', () => {
-    cy.get('td button', { timeout: 5000 })
+    cy.get('td button')
       .its('length')
       .then((len) => {
-        cy.get('td button', { timeout: 5000 })
+        cy.get('td button')
           .eq(len - 1)
           .click()
           .should('have.attr', 'status')
