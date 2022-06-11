@@ -112,6 +112,10 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
     cy.get('[type=submit]')
       .should('contain', 'Book Now')
       .click()
+      .get('[class="swal-modal"]')
+      .get('[class="swal-button swal-button--confirm"]')
+      .should('contain', 'OK')
+      .click()
   })
 
   it('should check if appointment is in appointment list', () => {
@@ -125,7 +129,8 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
             .click()
         }
         cy.get('tr td')
-          .should('contain', firstName + ' ' + lastName)
+          .should('be.visible')
+          .and('contain', firstName + ' ' + lastName)
 
       })
 
