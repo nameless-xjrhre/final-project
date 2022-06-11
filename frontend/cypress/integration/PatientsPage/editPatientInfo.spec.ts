@@ -1,7 +1,6 @@
-import { add } from 'cypress/types/lodash'
+
 import {
   fakeDataRandomizer,
-  patientRandomizer,
   genderStringRandomizer,
 } from '../../fixtures/randomizer'
 const fakeData = require('../../fixtures/fakeData.json')
@@ -17,15 +16,12 @@ describe('Patient Page - Edit Patient Info Test', () => {
   before(() => {
     cy.visit('http://localhost:3000/patients')
       .get('[id="basic-button"]')
-      .its('length')
-      .then((len) => {
-        cy.get('[id="basic-button"]')
-          .eq(len - 1)
-          .click()
-          .get('[role="menuitem"]')
-          .contains('Edit')
-          .click({ force: true })
-      })
+      .first()
+      .click()
+      .get('[role="menuitem"]')
+      .contains('Edit')
+      .click({ force: true })
+
 
   })
 
@@ -82,9 +78,9 @@ describe('Patient Page - Edit Patient Info Test', () => {
       .click()
   })
 
-  it('should check if a patient info was indeed edited', ()=>{
+  it('should check if a patient info was indeed edited', () => {
     cy.visit('http://localhost:3000/patients')
-    .get('tr td')
-    .should('not.contain', firstName + ' ' + lastName)
+      .get('tr td')
+      .should('not.contain', firstName + ' ' + lastName)
   })
 })
