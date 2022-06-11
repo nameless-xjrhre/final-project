@@ -12,16 +12,32 @@ describe('Appointment Page - Delete Appointment Test', () => {
             .its('length')
             .then((len) => {
                 totalNumOfAppointments = len
-                cy.get('td button')
-                    .get('[id="basic-button"]')
-                    .first()
-                    .click()
-                    .get('ul li')
-                    .contains('Delete')
-                    .click({ force: true })
-                    .get('[type=button]')
-                    .contains('Yes')
-                    .click({ force: true })
+                cy.get('ul li button')
+                    .its('length')
+                    .then((len) => {
+                        if (len >= 4) {
+                            cy.get('ul li button')
+                                .eq(len - 2)
+                                .click()
+                                .get('td button')
+                                .get('[id="basic-button"]')
+                                .its('length')
+                                .then((len) => {
+                                    totalNumOfAppointments = totalNumOfAppointments + len
+                                })
+                        }
+                        cy.get('td button')
+                            .get('[id="basic-button"]')
+                            .first()
+                            .click()
+                            .get('ul li')
+                            .contains('Delete')
+                            .click({ force: true })
+                            .get('[type=button]')
+                            .contains('Yes')
+                            .click({ force: true })
+                    })
+
             })
 
     })
@@ -40,7 +56,7 @@ describe('Appointment Page - Delete Appointment Test', () => {
                     .get('[id="basic-button"]')
                     .should('be.visible')
                     .its('length')
-                    .should('not.equal', totalNumOfAppointments)
+                    .should('be.lessThan', totalNumOfAppointments)
             })
     })
 })
