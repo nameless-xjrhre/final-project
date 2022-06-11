@@ -1,20 +1,22 @@
 import { queryField, list, nonNull, intArg } from 'nexus'
+import {
+  queryDoneAppointments,
+  queryTotalAppointments,
+  queryPastAppointments,
+  queryUpcomingAppointments,
+  queryAppointmentsRange,
+} from './Appointment.resolver'
 
 // get the total number of appointments
 const QueryAppointmentTotal = queryField('totalAppointments', {
   type: 'Int',
-  resolve: (_parent, _args, context) => context.prisma.appointment.count(),
+  resolve: (_parent, _args, context) => queryTotalAppointments(context),
 })
 
 // get the totoal number of "done" appointments
 const QueryAppointmentDoneTotal = queryField('totalDoneAppointments', {
   type: 'Int',
-  resolve: (_parent, _args, context) =>
-    context.prisma.appointment.count({
-      where: {
-        status: 'DONE',
-      },
-    }),
+  resolve: (_parent, _args, context) => queryDoneAppointments(context),
 })
 
 // get past appointments
@@ -23,15 +25,7 @@ const QueryAppointmentPast = queryField('pastAppointments', {
   args: {
     id: nonNull(intArg()),
   },
-  resolve: (_parent, args, context) =>
-    context.prisma.appointment.findMany({
-      where: {
-        patientId: args.id,
-        date: {
-          lt: new Date(),
-        },
-      },
-    }),
+  resolve: (_parent, args, context) => queryPastAppointments(context, args),
 })
 
 // get upcoming appointments
@@ -40,15 +34,7 @@ const QueryAppointmentUpcoming = queryField('upcomingAppointments', {
   args: {
     id: nonNull(intArg()),
   },
-  resolve: (_parent, args, context) =>
-    context.prisma.appointment.findMany({
-      where: {
-        patientId: args.id,
-        date: {
-          gt: new Date(),
-        },
-      },
-    }),
+  resolve: (_parent, args, context) => queryUpcomingAppointments(context, args),
 })
 
 // get an amount of appointments
@@ -62,13 +48,7 @@ const QueryAppointmentAmount = queryField('appointmentsRange', {
     count: nonNull(intArg()),
   },
   resolve: (_parent, { start, count }, context) =>
-    context.prisma.appointment.findMany({
-      skip: start,
-      take: count,
-      orderBy: {
-        id: 'asc',
-      },
-    }),
+    queryAppointmentsRange(context, { start, count }),
 })
 
 export default [
