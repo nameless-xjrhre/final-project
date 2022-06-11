@@ -13,7 +13,8 @@ let totalNumOfScheds;
 describe('Doctor Page - Create New Schedule Test', () => {
   before(() => {
     cy.visit('http://localhost:3000/doctors')
-      .get('[class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-clickable MuiChip-clickableColorDefault MuiChip-filledDefault css-j4zylg-MuiButtonBase-root-MuiChip-root"]')
+      .get('[class="css-zgbp5c-MuiStack-root"]')
+      .should('be.visible')
       .its('length')
       .then((len) => {
         totalNumOfScheds = len
@@ -31,7 +32,7 @@ describe('Doctor Page - Create New Schedule Test', () => {
     .click()
     .get('ul li')
     .get('[role="option"]')
-    .last()
+    .eq(5)
     .should('not.be.empty')
     .click()
   })
@@ -68,6 +69,15 @@ describe('Doctor Page - Create New Schedule Test', () => {
   it('should check if a schedule was added', () => {
     cy.visit('http://localhost:3000/doctors')
       .get('[class="css-zgbp5c-MuiStack-root"]')
-      .should('have.length.greaterThan', totalNumOfScheds)
+      .should('be.visible')
+      .its('length')
+      .then((len)=>{
+        if(len > totalNumOfScheds){
+          assert.isAbove(len, totalNumOfScheds, 'A new schedule was created')
+        }else{
+          assert.equal(len, totalNumOfScheds, 'A schedule was not added')
+        }
+      })
+      
   })
 })

@@ -15,7 +15,9 @@ describe('Doctors Page - Open A Schedule Test', () => {
   })
 
   it('should check change in color', () => {
-    cy.get('.css-j4zylg-MuiButtonBase-root-MuiChip-root').should(
+    cy.get('.css-j4zylg-MuiButtonBase-root-MuiChip-root')
+    .should('be.visible')
+    .and(
       'have.css',
       'background-color',
       'rgb(87, 231, 153)',
