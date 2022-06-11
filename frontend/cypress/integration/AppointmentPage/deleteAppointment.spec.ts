@@ -38,6 +38,7 @@ describe('Appointment Page - Delete Appointment Test', () => {
                 }
                 cy.get('td button')
                     .get('[id="basic-button"]')
+                    .should('be.visible')
                     .its('length')
                     .should('not.equal', totalNumOfAppointments)
             })

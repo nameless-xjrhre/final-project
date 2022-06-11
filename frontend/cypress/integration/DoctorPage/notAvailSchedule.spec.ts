@@ -15,11 +15,13 @@ describe('Doctors Page - Nullify A Schedule Test', () => {
   })
 
   it('should check change in color', () => {
-    cy.get('.css-1n7jwnc-MuiButtonBase-root-MuiChip-root').should(
-      'have.css',
-      'background-color',
-      'rgb(203, 203, 203)',
-    )
+    cy.get('.css-1n7jwnc-MuiButtonBase-root-MuiChip-root')
+      .should('be.visible')
+      .and(
+        'have.css',
+        'background-color',
+        'rgb(203, 203, 203)',
+      )
   })
 
 
