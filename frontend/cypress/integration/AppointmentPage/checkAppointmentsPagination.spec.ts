@@ -12,6 +12,7 @@ describe('Appointments Page - Pagination Test', () => {
 
   it('should check if there are multiple pages', () => {
     cy.get('[class="MuiPagination-ul css-wjh20t-MuiPagination-ul"]')
+      .should('exist')
       .get('li')
       .its('length')
       .then((len) => {
@@ -33,7 +34,7 @@ describe('Appointments Page - Pagination Test', () => {
             .get('li')
             .eq(len - 1)
             .click()
-        }else{
+        } else {
           expect(len).to.be.lessThan(4)
         }
       })
