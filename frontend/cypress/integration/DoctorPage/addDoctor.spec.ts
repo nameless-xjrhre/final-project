@@ -50,6 +50,7 @@ describe('Doctor Page - Add Doctor Test', () => {
   it('should confirm in the doctors page', () => {
     cy.visit('http://localhost:3000/doctors')
       .get('tr td')
-      .should('contain', 'Dr. ' + firstName + ' ' + lastName)
+      .should('exist')
+      .and('contain', 'Dr. ' + firstName + ' ' + lastName)
   })
 })
