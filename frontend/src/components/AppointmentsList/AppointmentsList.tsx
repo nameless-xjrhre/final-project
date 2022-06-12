@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import * as React from 'react'
+import React, { useState } from 'react'
 import { styled } from '@mui/material/styles'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Skeleton from '@mui/material/Skeleton'
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip'
-import { Button, Pagination, Typography, CircularProgress } from '@mui/material'
+import { Button, Pagination, Typography } from '@mui/material'
 import { useQuery, gql, useMutation } from 'urql'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
@@ -18,11 +18,14 @@ import StatusButton from '../Buttons/StatusButton'
 import {
   AppointmentStatus,
   MutationEditAppointmentArgs,
+  ScheduleStatus,
   VisitType,
 } from '../../graphql/generated'
 import { capitalize, showFailAlert, showSuccessAlert } from '../../utils'
 import CreateAppointmentForm from '../AppointmentForm/CreateAppointmentForm'
 import DeleteAppointmentDialog from '../AppointmentForm/DeleteAppointmentDialog'
+
+import useStore from '../../store'
 
 const appointmentStatus = [
   AppointmentStatus.Canceled,
@@ -43,6 +46,13 @@ const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }))
 
+interface Schedule {
+  id: number
+  status: ScheduleStatus
+  startTime: string
+  endTime: string
+}
+
 interface Appointment {
   id: number
   visitType: VisitType
@@ -56,6 +66,7 @@ interface Appointment {
   medStaff: {
     id: number
     fullName: string
+    schedules: Schedule[]
   }
 }
 
@@ -79,6 +90,12 @@ const AppointmentQueryDocument = gql`
       medStaff {
         id
         fullName
+        schedules {
+          id
+          endTime
+          startTime
+          status
+        }
       }
     }
     totalAppointments
@@ -119,6 +136,14 @@ const defaultAppointment: Appointment = {
   medStaff: {
     fullName: '',
     id: 0,
+    schedules: [
+      {
+        id: 0,
+        startTime: new Date().toISOString(),
+        endTime: new Date().toISOString(),
+        status: ScheduleStatus.Open,
+      },
+    ],
   },
   note: '',
   patient: {
@@ -130,44 +155,44 @@ const defaultAppointment: Appointment = {
 }
 
 export default function AppointmentList() {
-  const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
-  const [statusDrop, setStatusDropDown] = React.useState<null | HTMLElement>(
-    null,
-  )
-  const [page, setPage] = React.useState(1)
+  const [drop, setDropDown] = useState<null | HTMLElement>(null)
+  const [statusDrop, setStatusDropDown] = useState<null | HTMLElement>(null)
+  const [page, setPage] = useState(1)
   const open = Boolean(drop)
   const openStatus = Boolean(statusDrop)
   const handleDismissDropdown = () => setDropDown(null)
   const handleDismissStatusDropdown = () => setStatusDropDown(null)
-  const [generateBillBtn, setGenerateBillBtn] = React.useState(false)
+  const [generateBillBtn, setGenerateBillBtn] = useState(false)
   const handleGenerateBillOpenForm = () => setGenerateBillBtn(true)
   const handleGenerateCloseBillForm = () => {
     setGenerateBillBtn(false)
     handleDismissDropdown()
   }
-  const [editAppointmentBtn, setEditAppointmentBtn] = React.useState(false)
+  const [editAppointmentBtn, setEditAppointmentBtn] = useState(false)
   const handleEditApptOpenForm = () => setEditAppointmentBtn(true)
   const handleEditApptCloseBillForm = () => {
     setEditAppointmentBtn(false)
     handleDismissDropdown()
   }
-  const [deleteAppointmentBtn, setDeleteAppointmentBtn] = React.useState(false)
+  const [deleteAppointmentBtn, setDeleteAppointmentBtn] = useState(false)
   const handleOpenDeleteAppointmentDialog = () => setDeleteAppointmentBtn(true)
   const handleCloseDeleteAppointmentDialog = () => {
     setDeleteAppointmentBtn(false)
     handleDismissDropdown()
   }
   const [currentAppointment, setCurrentAppointment] =
-    React.useState<Appointment>(defaultAppointment)
-  const [isSubmitting, setIsSubmitting] = React.useState(false)
+    useState<Appointment>(defaultAppointment)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const handleSubmitting = () => setIsSubmitting(true)
-  const [, setComplete] = React.useState(false)
+  const [, setComplete] = useState(false)
   const handleComplete = () => {
     setIsSubmitting(false)
     setComplete(true)
     setDropDown(null)
     setStatusDropDown(null)
   }
+
+  const { appointmentSearch } = useStore()
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -256,145 +281,141 @@ export default function AppointmentList() {
         </TableHead>
         <TableBody>
           {data &&
-            data.appointmentsRange.map((appointment) => (
-              <TableRow key={appointment.id}>
-                <StyledTableCell data-testid={`name-${appointment.id}`}>
-                  {appointment.patient.fullName}
-                </StyledTableCell>
-                <StyledTableCell
-                  sx={{
-                    fontWeight: '800',
-                  }}
-                  data-testid={`visit-type-${appointment.id}`}
-                >
-                  {capitalize(appointment.visitType.toLowerCase())}
-                </StyledTableCell>
-                <StyledTableCell data-testid={`date-${appointment.id}`}>
-                  {new Date(appointment.date).toLocaleDateString('en-ZA')}
-                </StyledTableCell>
-                <StyledTableCell data-testid={`visit-time-${appointment.id}`}>
-                  {new Date(appointment.date).toLocaleTimeString('en-US', {
-                    hour12: false,
-                  })}
-                </StyledTableCell>
-                <StyledTableCell data-testid={`doctor-${appointment.id}`}>
-                  Dr. {appointment.medStaff.fullName}
-                </StyledTableCell>
-                <StyledTableCell data-testid={`status-${appointment.id}`}>
-                  <StatusButton
-                    status={appointment.status}
-                    onClick={(
-                      e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-                    ) => {
-                      handleStatusClick(e)
-                      setCurrentAppointment(appointment)
-                    }}
-                  />
-                  <Menu
-                    anchorEl={statusDrop}
-                    open={openStatus}
-                    onClose={handleDismissStatusDropdown}
-                  >
-                    {appointmentStatus?.map((status) => (
-                      <MenuItem
-                        value={status}
-                        key={status}
-                        disabled={isSubmitting}
-                        onClick={handleUpdateAppointmentStatus(
-                          currentAppointment.id,
-                          status,
-                        )}
-                      >
-                        {status}
-                      </MenuItem>
-                    ))}
-                    {isSubmitting && (
-                      <CircularProgress
-                        size={25}
-                        sx={{
-                          color: 'blue',
-                          marginLeft: 5,
-                          marginTop: -10,
-                          position: 'absolute',
+            data.appointmentsRange.map(
+              (appointment) =>
+                appointment.patient.fullName
+                  .toLowerCase()
+                  .includes(appointmentSearch.toLowerCase()) && (
+                  <TableRow key={appointment.id}>
+                    <StyledTableCell data-testid={`name-${appointment.id}`}>
+                      {appointment.patient.fullName}
+                    </StyledTableCell>
+                    <StyledTableCell
+                      sx={{
+                        fontWeight: '800',
+                      }}
+                      data-testid={`visit-type-${appointment.id}`}
+                    >
+                      {capitalize(appointment.visitType.toLowerCase())}
+                    </StyledTableCell>
+                    <StyledTableCell data-testid={`date-${appointment.id}`}>
+                      {new Date(appointment.date).toLocaleDateString('en-ZA')}
+                    </StyledTableCell>
+                    <StyledTableCell
+                      data-testid={`visit-time-${appointment.id}`}
+                    >
+                      {new Date(appointment.date).toLocaleTimeString('en-US', {
+                        hour12: false,
+                      })}
+                    </StyledTableCell>
+                    <StyledTableCell data-testid={`doctor-${appointment.id}`}>
+                      Dr. {appointment.medStaff.fullName}
+                    </StyledTableCell>
+                    <StyledTableCell data-testid={`status-${appointment.id}`}>
+                      <StatusButton
+                        status={appointment.status}
+                        onClick={(
+                          e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+                        ) => {
+                          handleStatusClick(e)
+                          setCurrentAppointment(appointment)
                         }}
                       />
-                    )}
-                  </Menu>
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  <Button
-                    id="basic-button"
-                    aria-controls={open ? 'basic-menu' : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={open ? 'true' : undefined}
-                    onClick={(e) => {
-                      handleClick(e)
-                      setCurrentAppointment(appointment)
-                    }}
-                    style={{ color: '#808080' }}
-                  >
-                    <MoreVertIcon />
-                  </Button>{' '}
-                  <Menu
-                    id="basic-menu"
-                    anchorEl={drop}
-                    open={open}
-                    onClose={handleDismissDropdown}
-                    sx={{ boxShadow: 1 }}
-                    MenuListProps={{
-                      'aria-labelledby': 'basic-button',
-                    }}
-                  >
-                    <MenuItem onClick={handleEditApptOpenForm}>Edit</MenuItem>
-                    {editAppointmentBtn && (
-                      <CreateAppointmentForm
-                        handleClose={handleEditApptCloseBillForm}
-                        open={editAppointmentBtn}
-                        isNewAppointment={false}
-                        toUpdate
-                        appointment={currentAppointment!}
-                      />
-                    )}
-                    <CustomTooltip
-                      placement="left"
-                      title={
-                        <Typography color="inherit" variant="body1">
-                          {currentAppointment?.note}
-                        </Typography>
-                      }
-                    >
-                      <MenuItem onClick={handleDismissDropdown}>
-                        View Note
-                      </MenuItem>
-                    </CustomTooltip>
-                    <MenuItem onClick={handleGenerateBillOpenForm}>
-                      Generate Bill
-                    </MenuItem>
-                    {generateBillBtn && (
-                      <CreateBillForm
-                        handleClose={handleGenerateCloseBillForm}
-                        open={generateBillBtn}
-                        appointment={currentAppointment!}
-                        toUpdate={false}
-                      />
-                    )}
-                    <MenuItem
-                      onClick={handleOpenDeleteAppointmentDialog}
-                      sx={{ color: 'red' }}
-                    >
-                      Delete
-                    </MenuItem>
-                    {deleteAppointmentBtn && (
-                      <DeleteAppointmentDialog
-                        handleClose={handleCloseDeleteAppointmentDialog}
-                        open={deleteAppointmentBtn}
-                        appointment={currentAppointment}
-                      />
-                    )}
-                  </Menu>
-                </StyledTableCell>
-              </TableRow>
-            ))}
+                      <Menu
+                        anchorEl={statusDrop}
+                        open={openStatus}
+                        onClose={handleDismissStatusDropdown}
+                      >
+                        {appointmentStatus?.map((status) => (
+                          <MenuItem
+                            value={status}
+                            key={status}
+                            disabled={isSubmitting}
+                            onClick={handleUpdateAppointmentStatus(
+                              currentAppointment.id,
+                              status,
+                            )}
+                          />
+                        ))}
+                      </Menu>
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      <Button
+                        id="basic-button"
+                        aria-controls={open ? 'basic-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={(e) => {
+                          handleClick(e)
+                          setCurrentAppointment(appointment)
+                        }}
+                        style={{ color: '#808080' }}
+                      >
+                        <MoreVertIcon />
+                      </Button>{' '}
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={drop}
+                        open={open}
+                        onClose={handleDismissDropdown}
+                        sx={{ boxShadow: 1 }}
+                        MenuListProps={{
+                          'aria-labelledby': 'basic-button',
+                        }}
+                      >
+                        <MenuItem onClick={handleEditApptOpenForm}>
+                          Edit
+                        </MenuItem>
+                        {editAppointmentBtn && (
+                          <CreateAppointmentForm
+                            handleClose={handleEditApptCloseBillForm}
+                            open={editAppointmentBtn}
+                            isNewAppointment={false}
+                            toUpdate
+                            appointment={currentAppointment!}
+                          />
+                        )}
+                        <CustomTooltip
+                          placement="left"
+                          title={
+                            <Typography color="inherit" variant="body1">
+                              {currentAppointment?.note}
+                            </Typography>
+                          }
+                        >
+                          <MenuItem onClick={handleDismissDropdown}>
+                            View Note
+                          </MenuItem>
+                        </CustomTooltip>
+                        <MenuItem onClick={handleGenerateBillOpenForm}>
+                          Generate Bill
+                        </MenuItem>
+                        {generateBillBtn && (
+                          <CreateBillForm
+                            handleClose={handleGenerateCloseBillForm}
+                            open={generateBillBtn}
+                            appointment={currentAppointment!}
+                            toUpdate={false}
+                          />
+                        )}
+                        <MenuItem
+                          onClick={handleOpenDeleteAppointmentDialog}
+                          sx={{ color: 'red' }}
+                        >
+                          Delete
+                        </MenuItem>
+                        {deleteAppointmentBtn && (
+                          <DeleteAppointmentDialog
+                            handleClose={handleCloseDeleteAppointmentDialog}
+                            open={deleteAppointmentBtn}
+                            appointment={currentAppointment}
+                          />
+                        )}
+                      </Menu>
+                    </StyledTableCell>
+                  </TableRow>
+                ),
+            )}
         </TableBody>
       </Table>
       <Pagination
