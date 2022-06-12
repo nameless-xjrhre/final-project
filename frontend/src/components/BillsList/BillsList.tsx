@@ -6,7 +6,13 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Skeleton from '@mui/material/Skeleton'
-import { Button } from '@mui/material'
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material'
 import { useQuery, gql, useMutation } from 'urql'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
@@ -81,7 +87,13 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }))
 
 export default function BillsList() {
+  const [sort, setSort] = React.useState('')
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setSort(event.target.value)
+  }
   const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
+  const [status, setStatus] = React.useState<BillStatus | null>(null)
   const [editBilltBtn, setEditBillBtn] = React.useState(false)
   const handleDismissDropdown = () => setDropDown(null)
   const handleOpenEditBillForm = () => setEditBillBtn(true)
@@ -89,6 +101,14 @@ export default function BillsList() {
     setEditBillBtn(false)
     handleDismissDropdown()
   }
+  // eslint-disable-next-line no-shadow
+  const filter = (status: BillStatus, bills: Bill[]) => {
+    if (status == null) {
+      return bills
+    }
+    return bills.filter((bill) => bill.status === status)
+  }
+
   const [currentBill, setCurrentBill] = React.useState<Bill>()
   const open = Boolean(drop)
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) =>
@@ -126,6 +146,7 @@ export default function BillsList() {
             <StyledTableCell>Doctor</StyledTableCell>
             <StyledTableCell>Due Date</StyledTableCell>
             <StyledTableCell>Status</StyledTableCell>
+            <Button>Sort</Button>
             <StyledTableCell align="right" />
           </TableRow>
         </TableHead>
@@ -153,12 +174,44 @@ export default function BillsList() {
           <StyledTableCell>Doctor</StyledTableCell>
           <StyledTableCell>Due Date</StyledTableCell>
           <StyledTableCell>Status</StyledTableCell>
+          <StyledTableCell>
+            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+              <InputLabel id="demo-select-small">Sort By</InputLabel>
+              <Select
+                labelId="demo-select-small"
+                id="demo-select-small"
+                value={sort}
+                label="Sort By"
+                onChange={handleChange}
+              >
+                <MenuItem value="">
+                  <em>
+                    <MenuItem value="All" onClick={() => setStatus(null)}>
+                      All
+                    </MenuItem>
+                  </em>
+                </MenuItem>
+                <MenuItem
+                  value="Unpaid"
+                  onClick={() => setStatus(BillStatus.Unpaid)}
+                >
+                  Unpaid
+                </MenuItem>
+                <MenuItem
+                  value="Paid"
+                  onClick={() => setStatus(BillStatus.Paid)}
+                >
+                  Paid
+                </MenuItem>
+              </Select>
+            </FormControl>
+          </StyledTableCell>
           <StyledTableCell align="right" />
         </TableRow>
       </TableHead>
       <TableBody>
         {data &&
-          data.hospitalBills.map(
+          filter(status!, data.hospitalBills).map(
             (bill) =>
               bill.patient.fullName
                 .toLowerCase()
