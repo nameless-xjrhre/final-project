@@ -16,6 +16,7 @@ import {
 import { useQuery, gql, useMutation } from 'urql'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
+import { TextField } from '@mui/material'
 import MenuItem from '@mui/material/MenuItem'
 import { BillStatus } from '../../graphql/generated'
 import CreateBillForm from '../BillForm/CreateBillForm'
@@ -94,6 +95,7 @@ export default function BillsList() {
   const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
   const [status, setStatus] = React.useState<BillStatus | null>(null)
   const [editBilltBtn, setEditBillBtn] = React.useState(false)
+  const [filter, setFilter] = React.useState('')
   const handleDismissDropdown = () => setDropDown(null)
   const handleOpenEditBillForm = () => setEditBillBtn(true)
   const handleCloseEditBillForm = () => {
@@ -128,6 +130,10 @@ export default function BillsList() {
       })
       .catch((err) => console.error(err))
     handleDismissDropdown()
+  }
+
+  const handleFilter = (filterInput: any) => {
+    setFilter(filterInput.target.value)
   }
 
   const { data, fetching, error } = bills
