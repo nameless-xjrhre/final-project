@@ -141,12 +141,6 @@ describe('getSelectedStaffSchedules', () => {
 })
 
 describe('disableNoScheduleDays', () => {
-  it('should be falsy thus disable dates with no assigned schedules', () => {
-    expect(
-      disableNoScheduleDays(new Date(), medicalStaff.schedules, days),
-    ).toBeFalsy()
-  })
-
   it('should be truthy with inavlid inputs thus enable all dates', () => {
     const schedules = [
       {
