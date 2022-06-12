@@ -7,20 +7,19 @@ const fakeDataProps = fakeData.listOfObjects
 
 const appointmentDate = fakeDataProps[fakeDataRandomizer()].appointmentDate
 const appointmentTime = fakeDataProps[fakeDataRandomizer()].startTime
-let visitType;
-let newVisitType;
-let medicalStaff;
+let visitType
+let newVisitType
+let medicalStaff
 
 describe('Appointment Page - Edit Appointment Test', () => {
   before(() => {
-    cy.visit('http://localhost:3000/appointments')
+    cy.visit('appointments')
       .get('[id="basic-button"]')
       .first()
       .click()
       .get('ul li')
       .contains('Edit')
       .click({ force: true })
-
   })
 
   it('should select visit type', () => {
@@ -45,7 +44,6 @@ describe('Appointment Page - Edit Appointment Test', () => {
               .click()
           })
       })
-
   })
 
   it('should select medical staff', () => {
@@ -61,7 +59,6 @@ describe('Appointment Page - Edit Appointment Test', () => {
           .should('not.be.empty')
           .click({ force: true })
       })
-
   })
 
   it('should input date', () => {
@@ -101,10 +98,15 @@ describe('Appointment Page - Edit Appointment Test', () => {
     newVisitType = newVisitType.toLowerCase()
     newVisitType = newVisitType[0].toUpperCase() + newVisitType.substring(1)
     let appointmentDateSplitter = appointmentDate.split('/')
-    let newAppointmentDate = appointmentDateSplitter[2] + '/' + appointmentDateSplitter[0] + '/' + appointmentDateSplitter[1]
+    let newAppointmentDate =
+      appointmentDateSplitter[2] +
+      '/' +
+      appointmentDateSplitter[0] +
+      '/' +
+      appointmentDateSplitter[1]
     let newAppointmentTime = appointmentTime + ':00'
 
-    cy.visit('http://localhost:3000/appointments')
+    cy.visit('appointments')
       .get('[class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"]')
       .should('be.visible')
       .get('td')
@@ -112,6 +114,5 @@ describe('Appointment Page - Edit Appointment Test', () => {
       .and('contain', newVisitType)
       .and('contain', newAppointmentDate)
       .and('contain', newAppointmentTime)
-
   })
 })

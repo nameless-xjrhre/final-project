@@ -1,6 +1,6 @@
 describe('Patient Page - View Patient Details Test', () => {
   before(() => {
-    cy.visit('http://localhost:3000/patients')
+    cy.visit('patients')
   })
 
   it('should view patient details', () => {
@@ -17,8 +17,7 @@ describe('Patient Page - View Patient Details Test', () => {
       })
   })
 
-  it('should check if a profile after viewing details exists', ()=>{
-    cy.visit('http://localhost:3000/profile/1')
-    .should('exist')
+  it('should check if a profile after viewing details exists', () => {
+    cy.visit('profile/1').should('exist')
   })
 })

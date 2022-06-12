@@ -1,8 +1,8 @@
-let totalNumberOfSchedules;
+let totalNumberOfSchedules
 
 describe('Doctors Page - Delete A Schedule Test', () => {
   before(() => {
-    cy.visit('http://localhost:3000/doctors')
+    cy.visit('doctors')
   })
 
   it('should delete a schedule', () => {
@@ -27,15 +27,19 @@ describe('Doctors Page - Delete A Schedule Test', () => {
   })
 
   it('should check if a schedule was deleted', () => {
-    cy.visit('http://localhost:3000/doctors')
+    cy.visit('doctors')
       .get('[class="css-zgbp5c-MuiStack-root"]')
       .should('be.visible')
       .its('length')
-      .then((len)=>{
-        if(totalNumberOfSchedules > len){
+      .then((len) => {
+        if (totalNumberOfSchedules > len) {
           assert.isAbove(totalNumberOfSchedules, len, 'A schedule was deleted')
-        }else{
-          assert.equal(totalNumberOfSchedules, len, 'A schedule was not deleted')
+        } else {
+          assert.equal(
+            totalNumberOfSchedules,
+            len,
+            'A schedule was not deleted',
+          )
         }
       })
   })

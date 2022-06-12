@@ -9,7 +9,7 @@ let paymentTerm = paymentTermRandomizer()
 describe('Bills Page - Edit Bills Test', () => {
   describe('update amount and payment term', () => {
     before(() => {
-      cy.visit('http://localhost:3000/bills')
+      cy.visit('bills')
         .get('[id="basic-button"]')
         .its('length')
         .then((len) => {
@@ -36,7 +36,8 @@ describe('Bills Page - Edit Bills Test', () => {
     })
 
     it('should save changes', () => {
-      cy.get('[type=button]').last()
+      cy.get('[type=button]')
+        .last()
         .should('contain', 'Save Changes')
         .click()
         .get('[class="swal-modal"]')
@@ -51,14 +52,12 @@ describe('Bills Page - Edit Bills Test', () => {
       let dateNow = new Date().getTime()
       let futureDate = new Date(dateNow + termDays * 24 * 3600 * 1000)
       let dueDate = futureDate.toLocaleDateString('en-ZA')
-      cy.visit('http://localhost:3000/bills')
+      cy.visit('bills')
         .get('tr td')
         .should('be.visible')
         .and('contain', '₱ ' + amount + '.00')
         .and('contain', dueDate)
     })
-
-
   })
 
   describe('update amount only', () => {
@@ -80,7 +79,8 @@ describe('Bills Page - Edit Bills Test', () => {
     })
 
     it('should save changes', () => {
-      cy.get('[type=button]').last()
+      cy.get('[type=button]')
+        .last()
         .should('contain', 'Save Changes')
         .click()
         .get('[class="swal-modal"]')
@@ -90,7 +90,7 @@ describe('Bills Page - Edit Bills Test', () => {
     })
 
     it('should check if the edited amount exists in the bills page', () => {
-      cy.visit('http://localhost:3000/bills')
+      cy.visit('bills')
         .get('tr td')
         .should('be.visible')
         .and('contain', '₱ ' + amount + '.00')
@@ -121,7 +121,8 @@ describe('Bills Page - Edit Bills Test', () => {
     })
 
     it('should save changes', () => {
-      cy.get('[type=button]').last()
+      cy.get('[type=button]')
+        .last()
         .should('contain', 'Save Changes')
         .click()
         .get('[class="swal-modal"]')
@@ -136,7 +137,7 @@ describe('Bills Page - Edit Bills Test', () => {
       let dateNow = new Date().getTime()
       let futureDate = new Date(dateNow + termDays * 24 * 3600 * 1000)
       let dueDate = futureDate.toLocaleDateString('en-ZA')
-      cy.visit('http://localhost:3000/bills')
+      cy.visit('bills')
         .get('tr td')
         .should('be.visible')
         .and('contain', dueDate)

@@ -1,16 +1,17 @@
-import { fakeDataRandomizer, visitTypeRandomizer } from '../../fixtures/randomizer'
+import {
+  fakeDataRandomizer,
+  visitTypeRandomizer,
+} from '../../fixtures/randomizer'
 const fakeData = require('../../fixtures/fakeData.json')
 const fakeDataProps = fakeData.listOfObjects
 
-
-let patientName;
+let patientName
 const appointmentDate = fakeDataProps[fakeDataRandomizer()].appointmentDate
 const appointmentTime = fakeDataProps[fakeDataRandomizer()].startTime
 
-
 describe('Appointment Page - Create Appointment Test', () => {
   before(() => {
-    cy.visit('http://localhost:3000/appointments')
+    cy.visit('appointments')
       .get('[aria-label="SpeedDial basic example"]')
       .click()
       .should('be.visible')
@@ -27,11 +28,8 @@ describe('Appointment Page - Create Appointment Test', () => {
       .last()
       .then((name) => {
         patientName = name.text()
-        cy.get('[role="option"]')
-          .last()
-          .click({ force: true })
+        cy.get('[role="option"]').last().click({ force: true })
       })
-
   })
 
   it('should select visit type', () => {
@@ -81,7 +79,7 @@ describe('Appointment Page - Create Appointment Test', () => {
   })
 
   it('should check if appointment is in appointment list', () => {
-    cy.visit('http://localhost:3000/appointments')
+    cy.visit('appointments')
       .get('ul li button')
       .its('length')
       .then((len) => {
@@ -90,10 +88,7 @@ describe('Appointment Page - Create Appointment Test', () => {
             .eq(len - 2)
             .click()
         }
-        cy.get('tr td')
-          .should('be.visible')
-          .and('contain', patientName)
-
+        cy.get('tr td').should('be.visible').and('contain', patientName)
       })
   })
 })

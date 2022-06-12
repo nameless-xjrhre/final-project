@@ -1,6 +1,6 @@
 describe('Appointments Page - Pagination Test', () => {
   before(() => {
-    cy.visit('http://localhost:3000/appointments')
+    cy.visit('appointments')
   })
 
   it('should check maximum number of rows per page', () => {

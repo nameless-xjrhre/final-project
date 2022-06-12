@@ -17,7 +17,7 @@ const address = fakeDataProps[fakeDataRandomizer()].address
 
 describe('Appointment Page - Create Appointment With Patient Test', () => {
   before(() => {
-    cy.visit('http://localhost:3000/appointments')
+    cy.visit('appointments')
       .get('[aria-label="SpeedDial basic example"]')
       .click()
       .should('be.visible')
@@ -58,14 +58,10 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
       .clear()
       .type(dateOfBirth)
       .should('have.value', dateOfBirth)
-
   })
 
   it('should input address', () => {
-    cy.get('[name=address]')
-      .click()
-      .type(address)
-      .should('have.value', address)
+    cy.get('[name=address]').click().type(address).should('have.value', address)
   })
 
   it('should click next button', () => {
@@ -119,7 +115,7 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
   })
 
   it('should check if appointment is in appointment list', () => {
-    cy.visit('http://localhost:3000/appointments')
+    cy.visit('appointments')
       .get('ul li button')
       .its('length')
       .then((len) => {
@@ -131,9 +127,6 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
         cy.get('tr td')
           .should('be.visible')
           .and('contain', firstName + ' ' + lastName)
-
       })
-
   })
-
 })

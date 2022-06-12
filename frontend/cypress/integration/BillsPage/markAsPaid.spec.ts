@@ -1,6 +1,6 @@
 describe('Bills Page - Mark as Paid Test', () => {
   before(() => {
-    cy.visit('http://localhost:3000/bills')
+    cy.visit('bills')
   })
 
   it('should mark patient as paid', () => {
@@ -17,9 +17,7 @@ describe('Bills Page - Mark as Paid Test', () => {
       })
   })
 
-  it('should check if a bill was marked paid', ()=>{
-    cy.visit('http://localhost:3000/bills')
-    .get('tr td')
-    .should('contain', 'PAID')
+  it('should check if a bill was marked paid', () => {
+    cy.visit('bills').get('tr td').should('contain', 'PAID')
   })
 })

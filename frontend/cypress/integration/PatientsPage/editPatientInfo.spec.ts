@@ -1,4 +1,3 @@
-
 import {
   fakeDataRandomizer,
   genderStringRandomizer,
@@ -14,15 +13,13 @@ const address = fakeDataProps[fakeDataRandomizer()].address
 
 describe('Patient Page - Edit Patient Info Test', () => {
   before(() => {
-    cy.visit('http://localhost:3000/patients')
+    cy.visit('patients')
       .get('[id="basic-button"]')
       .first()
       .click()
       .get('[role="menuitem"]')
       .contains('Edit')
       .click({ force: true })
-
-
   })
 
   it('should edit name of patient', () => {
@@ -73,13 +70,11 @@ describe('Patient Page - Edit Patient Info Test', () => {
   })
 
   it('should save changes', () => {
-    cy.get('[type=button]').last()
-      .should('contain', 'Save Changes')
-      .click()
+    cy.get('[type=button]').last().should('contain', 'Save Changes').click()
   })
 
   it('should check if a patient info was indeed edited', () => {
-    cy.visit('http://localhost:3000/patients')
+    cy.visit('patients')
       .get('tr td')
       .should('not.contain', firstName + ' ' + lastName)
   })

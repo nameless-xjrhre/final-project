@@ -2,7 +2,7 @@ import { patientRandomizer } from '../../fixtures/randomizer'
 
 describe('Appointment Page - View Note Test', () => {
   before(() => {
-    cy.visit('http://localhost:3000/appointments')
+    cy.visit('appointments')
       .get('[id="basic-button"]')
       .its('length')
       .then((len) => {

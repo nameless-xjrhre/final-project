@@ -1,13 +1,13 @@
-let totalNumOfPatients;
+let totalNumOfPatients
 
 describe('Patient Page - Delete Patient Test', () => {
   before(() => {
-    cy.visit('http://localhost:3000/patients')
-    .get('[id="basic-button"]')
-    .its('length')
-    .then((len)=>{
-      totalNumOfPatients = len
-    })
+    cy.visit('patients')
+      .get('[id="basic-button"]')
+      .its('length')
+      .then((len) => {
+        totalNumOfPatients = len
+      })
   })
 
   it('should delete patient', () => {
@@ -29,11 +29,11 @@ describe('Patient Page - Delete Patient Test', () => {
       .click()
   })
 
-  it('should check if a patient was deleted', ()=>{
-    cy.visit('http://localhost:3000/patients')
-    .get('td button')
-    .get('[id="basic-button"]')
-    .its('length')
-    .should('be.lessThan', totalNumOfPatients)
+  it('should check if a patient was deleted', () => {
+    cy.visit('patients')
+      .get('td button')
+      .get('[id="basic-button"]')
+      .its('length')
+      .should('be.lessThan', totalNumOfPatients)
   })
 })

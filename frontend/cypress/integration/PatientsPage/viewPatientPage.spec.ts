@@ -1,6 +1,5 @@
-describe('Patient Page - View Patient Page',()=>{
-    it('should visit patient page',()=>{
-        cy.visit('http://localhost:3000/patients')
-        .url().should('include', '/patients')
-    }) 
+describe('Patient Page - View Patient Page', () => {
+  it('should visit patient page', () => {
+    cy.visit('patients').url().should('include', '/patients')
+  })
 })

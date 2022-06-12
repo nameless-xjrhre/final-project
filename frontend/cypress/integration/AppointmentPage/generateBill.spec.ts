@@ -3,13 +3,12 @@ import {
   paymentTermRandomizer,
 } from '../../fixtures/randomizer'
 
-
 const amount = amountRandomizer().toString()
 const paymentTerm = paymentTermRandomizer()
 
 describe('Appointment Page - Generate Bill Test', () => {
   before(() => {
-    cy.visit('http://localhost:3000/appointments')
+    cy.visit('appointments')
       .get('[id="basic-button"]')
       .its('length')
       .then((len) => {
@@ -20,15 +19,11 @@ describe('Appointment Page - Generate Bill Test', () => {
   })
 
   it('should click generate bill button', () => {
-    cy.get('[role="menuitem"]')
-      .contains('Generate Bill')
-      .click({ force: true })
+    cy.get('[role="menuitem"]').contains('Generate Bill').click({ force: true })
   })
 
   it('should input amount', () => {
-    cy.get('[name=amount]').last()
-      .click()
-      .type(amount)
+    cy.get('[name=amount]').last().click().type(amount)
   })
 
   it('should input payment term', () => {
@@ -53,10 +48,9 @@ describe('Appointment Page - Generate Bill Test', () => {
   })
 
   it('should check if the bill has been generated', () => {
-    cy.visit('http://localhost:3000/bills')
+    cy.visit('bills')
       .get('tr td')
       .should('contain', amount)
       .and('contain', 'UNPAID')
   })
-
 })

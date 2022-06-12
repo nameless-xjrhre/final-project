@@ -1,6 +1,6 @@
 describe('Dashboard Page - Pagination Test', () => {
   before(() => {
-    cy.visit('http://localhost:3000/dashboard')
+    cy.visit('dashboard')
   })
 
   it('should check maximum number of rows per page', () => {

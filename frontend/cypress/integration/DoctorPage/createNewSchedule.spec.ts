@@ -1,18 +1,14 @@
-import {
-  fakeDataRandomizer,
-  daysRandomizer,
-} from '../../fixtures/randomizer'
+import { fakeDataRandomizer, daysRandomizer } from '../../fixtures/randomizer'
 const fakeData = require('../../fixtures/fakeData.json')
 const fakeDataProps = fakeData.listOfObjects
 
-
 const startTime = fakeDataProps[fakeDataRandomizer()].startTime
 const endTime = fakeDataProps[fakeDataRandomizer()].endTime
-let totalNumOfScheds;
+let totalNumOfScheds
 
 describe('Doctor Page - Create New Schedule Test', () => {
   before(() => {
-    cy.visit('http://localhost:3000/doctors')
+    cy.visit('doctors')
       .get('[class="css-zgbp5c-MuiStack-root"]')
       .should('be.visible')
       .its('length')
@@ -29,12 +25,12 @@ describe('Doctor Page - Create New Schedule Test', () => {
 
   it('should select doctor', () => {
     cy.get('[id=mui-component-select-medicalStaff]')
-    .click()
-    .get('ul li')
-    .get('[role="option"]')
-    .eq(5)
-    .should('not.be.empty')
-    .click()
+      .click()
+      .get('ul li')
+      .get('[role="option"]')
+      .eq(5)
+      .should('not.be.empty')
+      .click()
   })
 
   it('should select days', () => {
@@ -61,23 +57,20 @@ describe('Doctor Page - Create New Schedule Test', () => {
   })
 
   it('should press add schedule button', () => {
-    cy.get('[type=submit]')
-      .should('contain', 'Create Schedule')
-      .click()
+    cy.get('[type=submit]').should('contain', 'Create Schedule').click()
   })
 
   it('should check if a schedule was added', () => {
-    cy.visit('http://localhost:3000/doctors')
+    cy.visit('doctors')
       .get('[class="css-zgbp5c-MuiStack-root"]')
       .should('be.visible')
       .its('length')
-      .then((len)=>{
-        if(len > totalNumOfScheds){
+      .then((len) => {
+        if (len > totalNumOfScheds) {
           assert.isAbove(len, totalNumOfScheds, 'A new schedule was created')
-        }else{
+        } else {
           assert.equal(len, totalNumOfScheds, 'A schedule was not added')
         }
       })
-      
   })
 })
