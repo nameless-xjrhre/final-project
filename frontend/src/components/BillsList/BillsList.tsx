@@ -10,11 +10,11 @@ import { Button } from '@mui/material'
 import { useQuery, gql, useMutation } from 'urql'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
-import { TextField } from '@mui/material'
 import MenuItem from '@mui/material/MenuItem'
 import { BillStatus } from '../../graphql/generated'
 import CreateBillForm from '../BillForm/CreateBillForm'
 import { showFailAlert, showSuccessAlert } from '../../utils'
+import useStore from '../../store'
 
 interface Bill {
   id: number
@@ -83,7 +83,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 export default function BillsList() {
   const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
   const [editBilltBtn, setEditBillBtn] = React.useState(false)
-  const [filter, setFilter] = React.useState('')
   const handleDismissDropdown = () => setDropDown(null)
   const handleOpenEditBillForm = () => setEditBillBtn(true)
   const handleCloseEditBillForm = () => {
@@ -98,6 +97,8 @@ export default function BillsList() {
     query: billQueryDocument,
   })
 
+  const { billsSearch } = useStore()
+
   const [, markAsPaid] = useMutation(UpdatStatusBill)
 
   const handleBillStatusUpdate = (id: number | undefined) => () => {
@@ -111,10 +112,6 @@ export default function BillsList() {
       })
       .catch((err) => console.error(err))
     handleDismissDropdown()
-  }
-
-  const handleFilter = (filterInput: any) => {
-    setFilter(filterInput.target.value)
   }
 
   const { data, fetching, error } = bills
@@ -147,98 +144,83 @@ export default function BillsList() {
     )
   if (error) return <p>Oh no... {error.message}</p>
   return (
-    <>
-      <TextField
-        onChange={handleFilter}
-        id="searchBar"
-        label="Search Patient"
-        variant="outlined"
-        size="medium"
-      />
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Name</StyledTableCell>
-            <StyledTableCell>Payment Date</StyledTableCell>
-            <StyledTableCell>Amount</StyledTableCell>
-            <StyledTableCell>Doctor</StyledTableCell>
-            <StyledTableCell>Due Date</StyledTableCell>
-            <StyledTableCell>Status</StyledTableCell>
-            <StyledTableCell align="right" />
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data &&
-            data.hospitalBills.map(
-              (bill) =>
-                bill.patient.fullName
-                  .toLowerCase()
-                  .replace(/\s+/g, '')
-                  .trim()
-                  .includes(
-                    filter.toLowerCase().replace(/\s+/g, '').trim(),
-                  ) && (
-                  <TableRow key={bill.id}>
-                    <StyledTableCell>
-                      {bill.patient !== null ? bill.patient.fullName : ''}
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      {new Date(bill.date).toLocaleDateString('en-ZA')}
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      <strong>₱ {bill.amount.toFixed(2)}</strong>
-                    </StyledTableCell>
-                    <StyledTableCell>{bill.medStaff.fullName}</StyledTableCell>
-                    <StyledTableCell>
-                      {new Date(bill.deadlineDate).toLocaleDateString('en-ZA')}
-                    </StyledTableCell>
-                    <StyledTableCell>{bill.status}</StyledTableCell>
-                    <StyledTableCell align="right">
-                      <Button
-                        id="basic-button"
-                        aria-controls={open ? 'basic-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={(e) => {
-                          handleClick(e)
-                          setCurrentBill(bill)
-                        }}
-                        style={{ color: '#808080' }}
+    <Table size="small">
+      <TableHead>
+        <TableRow>
+          <StyledTableCell>Name</StyledTableCell>
+          <StyledTableCell>Payment Date</StyledTableCell>
+          <StyledTableCell>Amount</StyledTableCell>
+          <StyledTableCell>Doctor</StyledTableCell>
+          <StyledTableCell>Due Date</StyledTableCell>
+          <StyledTableCell>Status</StyledTableCell>
+          <StyledTableCell align="right" />
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {data &&
+          data.hospitalBills.map(
+            (bill) =>
+              bill.patient.fullName
+                .toLowerCase()
+                .includes(billsSearch.toLowerCase()) && (
+                <TableRow key={bill.id}>
+                  <StyledTableCell>
+                    {bill.patient !== null ? bill.patient.fullName : ''}
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    {new Date(bill.date).toLocaleDateString('en-ZA')}
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <strong>₱ {bill.amount.toFixed(2)}</strong>
+                  </StyledTableCell>
+                  <StyledTableCell>{bill.medStaff.fullName}</StyledTableCell>
+                  <StyledTableCell>
+                    {new Date(bill.deadlineDate).toLocaleDateString('en-ZA')}
+                  </StyledTableCell>
+                  <StyledTableCell>{bill.status}</StyledTableCell>
+                  <StyledTableCell align="right">
+                    <Button
+                      id="basic-button"
+                      aria-controls={open ? 'basic-menu' : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={open ? 'true' : undefined}
+                      onClick={(e) => {
+                        handleClick(e)
+                        setCurrentBill(bill)
+                      }}
+                      style={{ color: '#808080' }}
+                    >
+                      <MoreVertIcon />
+                    </Button>{' '}
+                    <Menu
+                      id="basic-menu"
+                      anchorEl={drop}
+                      open={open}
+                      onClose={handleDismissDropdown}
+                      MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                      }}
+                    >
+                      <MenuItem onClick={handleOpenEditBillForm}>Edit</MenuItem>
+                      {editBilltBtn && (
+                        <CreateBillForm
+                          handleClose={handleCloseEditBillForm}
+                          open={editBilltBtn}
+                          bill={currentBill}
+                          toUpdate
+                        />
+                      )}
+                      <MenuItem
+                        onClick={handleBillStatusUpdate(currentBill?.id)}
                       >
-                        <MoreVertIcon />
-                      </Button>{' '}
-                      <Menu
-                        id="basic-menu"
-                        anchorEl={drop}
-                        open={open}
-                        onClose={handleDismissDropdown}
-                        MenuListProps={{
-                          'aria-labelledby': 'basic-button',
-                        }}
-                      >
-                        <MenuItem onClick={handleOpenEditBillForm}>
-                          Edit
-                        </MenuItem>
-                        {editBilltBtn && (
-                          <CreateBillForm
-                            handleClose={handleCloseEditBillForm}
-                            open={editBilltBtn}
-                            bill={currentBill}
-                            toUpdate
-                          />
-                        )}
-                        <MenuItem
-                          onClick={handleBillStatusUpdate(currentBill?.id)}
-                        >
-                          Mark as Paid
-                        </MenuItem>
-                      </Menu>
-                    </StyledTableCell>
-                  </TableRow>
-                ),
-            )}
-        </TableBody>
-      </Table>
-    </>
+                        Mark as Paid
+                      </MenuItem>
+                    </Menu>
+                  </StyledTableCell>
+                </TableRow>
+              ),
+          )}
+      </TableBody>
+    </Table>
   )
 }

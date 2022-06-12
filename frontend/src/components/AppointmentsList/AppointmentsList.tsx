@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import * as React from 'react'
+import React, { useState } from 'react'
 import { styled } from '@mui/material/styles'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -8,12 +8,11 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Skeleton from '@mui/material/Skeleton'
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip'
-import { Button, Pagination, Typography, CircularProgress } from '@mui/material'
+import { Button, Pagination, Typography } from '@mui/material'
 import { useQuery, gql, useMutation } from 'urql'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import { TextField } from '@mui/material'
 import CreateBillForm from '../BillForm/CreateBillForm'
 import StatusButton from '../Buttons/StatusButton'
 import {
@@ -25,6 +24,8 @@ import {
 import { capitalize, showFailAlert, showSuccessAlert } from '../../utils'
 import CreateAppointmentForm from '../AppointmentForm/CreateAppointmentForm'
 import DeleteAppointmentDialog from '../AppointmentForm/DeleteAppointmentDialog'
+
+import useStore from '../../store'
 
 const appointmentStatus = [
   AppointmentStatus.Canceled,
@@ -154,45 +155,44 @@ const defaultAppointment: Appointment = {
 }
 
 export default function AppointmentList() {
-  const [drop, setDropDown] = React.useState<null | HTMLElement>(null)
-  const [statusDrop, setStatusDropDown] = React.useState<null | HTMLElement>(
-    null,
-  )
-  const [page, setPage] = React.useState(1)
+  const [drop, setDropDown] = useState<null | HTMLElement>(null)
+  const [statusDrop, setStatusDropDown] = useState<null | HTMLElement>(null)
+  const [page, setPage] = useState(1)
   const open = Boolean(drop)
   const openStatus = Boolean(statusDrop)
   const handleDismissDropdown = () => setDropDown(null)
   const handleDismissStatusDropdown = () => setStatusDropDown(null)
-  const [generateBillBtn, setGenerateBillBtn] = React.useState(false)
-  const [filter, setFilter] = React.useState('')
+  const [generateBillBtn, setGenerateBillBtn] = useState(false)
   const handleGenerateBillOpenForm = () => setGenerateBillBtn(true)
   const handleGenerateCloseBillForm = () => {
     setGenerateBillBtn(false)
     handleDismissDropdown()
   }
-  const [editAppointmentBtn, setEditAppointmentBtn] = React.useState(false)
+  const [editAppointmentBtn, setEditAppointmentBtn] = useState(false)
   const handleEditApptOpenForm = () => setEditAppointmentBtn(true)
   const handleEditApptCloseBillForm = () => {
     setEditAppointmentBtn(false)
     handleDismissDropdown()
   }
-  const [deleteAppointmentBtn, setDeleteAppointmentBtn] = React.useState(false)
+  const [deleteAppointmentBtn, setDeleteAppointmentBtn] = useState(false)
   const handleOpenDeleteAppointmentDialog = () => setDeleteAppointmentBtn(true)
   const handleCloseDeleteAppointmentDialog = () => {
     setDeleteAppointmentBtn(false)
     handleDismissDropdown()
   }
   const [currentAppointment, setCurrentAppointment] =
-    React.useState<Appointment>(defaultAppointment)
-  const [isSubmitting, setIsSubmitting] = React.useState(false)
+    useState<Appointment>(defaultAppointment)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const handleSubmitting = () => setIsSubmitting(true)
-  const [, setComplete] = React.useState(false)
+  const [, setComplete] = useState(false)
   const handleComplete = () => {
     setIsSubmitting(false)
     setComplete(true)
     setDropDown(null)
     setStatusDropDown(null)
   }
+
+  const { appointmentSearch } = useStore()
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -237,10 +237,6 @@ export default function AppointmentList() {
     }
   const { data, fetching, error } = appointments
 
-  const handleFilter = (filterInput: any) => {
-    setFilter(filterInput.target.value)
-  }
-
   if (fetching)
     return (
       <Table size="small">
@@ -271,13 +267,6 @@ export default function AppointmentList() {
   if (error) return <p>Oh no... {error.message}</p>
   return (
     <>
-      <TextField
-        onChange={handleFilter}
-        id="searchBar"
-        label="Search Patient"
-        variant="outlined"
-        size="medium"
-      />
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -296,11 +285,7 @@ export default function AppointmentList() {
               (appointment) =>
                 appointment.patient.fullName
                   .toLowerCase()
-                  .replace(/\s+/g, '')
-                  .trim()
-                  .includes(
-                    filter.toLowerCase().replace(/\s+/g, '').trim(),
-                  ) && (
+                  .includes(appointmentSearch.toLowerCase()) && (
                   <TableRow key={appointment.id}>
                     <StyledTableCell data-testid={`name-${appointment.id}`}>
                       {appointment.patient.fullName}

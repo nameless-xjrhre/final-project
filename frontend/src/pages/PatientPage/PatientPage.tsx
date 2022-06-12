@@ -16,6 +16,8 @@ import Header from '../../components/Header'
 import PatientsList from '../../components/PatientList'
 import './PatientPage.css'
 
+import { HeaderType } from '../../types/enums'
+
 const drawerWidth: number = 240
 
 const Drawer = styled(MuiDrawer, {
@@ -82,7 +84,7 @@ function DashboardContent() {
           }}
         >
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Header title="Patients" />
+            <Header type={HeaderType.Patient} />
             <Grid container spacing={3}>
               {/* Recent Orders */}
               <Grid item xs={12}>
