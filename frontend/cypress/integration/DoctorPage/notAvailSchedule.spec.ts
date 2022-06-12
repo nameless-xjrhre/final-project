@@ -7,7 +7,7 @@ describe('Doctors Page - Nullify A Schedule Test', () => {
     cy.get(
       '[class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-clickable MuiChip-clickableColorDefault MuiChip-filledDefault css-1l5e8fi-MuiButtonBase-root-MuiChip-root"]',
     )
-      .last()
+      .first()
       .click()
       .get('[value="NOT_AVAILABLE"]')
       .last()
@@ -15,16 +15,13 @@ describe('Doctors Page - Nullify A Schedule Test', () => {
   })
 
   it('should check change in color', () => {
-    cy.get('.css-1n7jwnc-MuiButtonBase-root-MuiChip-root').should(
-      'have.css',
-      'background-color',
-      'rgb(203, 203, 203)',
-    )
-      .get('[class="swal-title"]')
-      .should('contain', 'Success')
-      .get('[class="swal-button swal-button--confirm"]')
-      .contains('OK')
-      .click()
+    cy.get('.css-1n7jwnc-MuiButtonBase-root-MuiChip-root')
+      .should('be.visible')
+      .and(
+        'have.css',
+        'background-color',
+        'rgb(203, 203, 203)',
+      )
   })
 
 

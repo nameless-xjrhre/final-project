@@ -78,11 +78,6 @@ describe('Dashboard Page - Appointment Status Test', () => {
           .should('contain', "DONE")
           .first()
           .click({ force: true })
-          .get('[class="swal-title"]', { timeout: 5000 })
-          .should('contain', 'Success')
-          .get('[class="swal-button swal-button--confirm"]')
-          .contains('OK')
-          .click()
       })
 
   })

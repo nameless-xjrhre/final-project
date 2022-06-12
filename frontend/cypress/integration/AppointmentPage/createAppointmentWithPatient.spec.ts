@@ -84,14 +84,10 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
     cy.get('[id=mui-component-select-medicalStaff]')
       .click()
       .get('ul li')
-      .get('[name="medicalStaff"]')
-      .its('length')
-      .then((len) => {
-        cy.get('[name="medicalStaff"]')
-          .eq(len - 1)
-          .should('not.be.empty')
-          .click({ force: true })
-      })
+      .get('[role="option"]')
+      .last()
+      .should('not.be.empty')
+      .click()
   })
 
   it('should input date', () => {
@@ -113,19 +109,31 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
   })
 
   it('should book appointment', () => {
-    cy.get('[type=submit]').should('contain', 'Book Now')
+    cy.get('[type=submit]')
+      .should('contain', 'Book Now')
       .click()
-      .get('[class="swal-title"]')
-      .should('contain', 'Success')
+      .get('[class="swal-modal"]')
       .get('[class="swal-button swal-button--confirm"]')
-      .contains('OK')
+      .should('contain', 'OK')
       .click()
   })
 
-  it('should check if appointment is in appointment list', ()=>{
+  it('should check if appointment is in appointment list', () => {
     cy.visit('http://localhost:3000/appointments')
-    .get('tr td')
-    .should('contain', firstName + ' ' + lastName)
+      .get('ul li button')
+      .its('length')
+      .then((len) => {
+        if (len >= 4) {
+          cy.get('ul li button')
+            .eq(len - 2)
+            .click()
+        }
+        cy.get('tr td')
+          .should('be.visible')
+          .and('contain', firstName + ' ' + lastName)
+
+      })
+
   })
 
 })
