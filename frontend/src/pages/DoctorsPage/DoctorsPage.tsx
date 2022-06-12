@@ -22,6 +22,7 @@ import Header from '../../components/Header'
 import AddDoctorIcon from './AddDoctorIcon'
 import CreateScheduleForm from '../../components/ScheduleForm/CreateScheduleForm'
 import AddDoctor from '../../components/DoctorForm/AddDoctorForm'
+import { HeaderType } from '../../types/enums'
 
 const drawerWidth: number = 240
 
@@ -105,7 +106,7 @@ function DashboardContent() {
           }}
         >
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Header title="Doctors" />
+            <Header type={HeaderType.Doctors} />
             <Grid container spacing={3}>
               {/* Recent Orders */}
               <Grid item xs={12}>
