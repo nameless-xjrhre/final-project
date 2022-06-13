@@ -1,18 +1,11 @@
 import React, { useState } from 'react'
 import { Button, Grid, IconButton, Typography } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
-import { useMutation, gql } from 'urql'
+import { useMutation } from 'urql'
 import CustomForm from '../CustomForm'
 import { AppointmentFormProps } from '../CustomFormProps'
 import { showFailAlert, showSuccessAlert } from '../../utils'
-
-const DeleteAppointment = gql`
-  mutation DeleteAppointment($id: Int!) {
-    deleteAppointment(id: $id) {
-      id
-    }
-  }
-`
+import { DeleteAppointment } from './AppointmentMutations'
 
 export default function DeleteAppointmentDialog({
   handleClose,

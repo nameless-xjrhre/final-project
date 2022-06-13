@@ -22,7 +22,7 @@ import {
   VisitType,
 } from '../../graphql/generated'
 import { capitalize, showFailAlert, showSuccessAlert } from '../../utils'
-import CreateAppointmentForm from '../AppointmentForm/CreateAppointmentForm'
+import AppointmentForm from '../AppointmentForm/AppointmentForm'
 import DeleteAppointmentDialog from '../AppointmentForm/DeleteAppointmentDialog'
 
 const appointmentStatus = [
@@ -370,7 +370,7 @@ export default function AppointmentList() {
                   >
                     <MenuItem onClick={handleEditApptOpenForm}>Edit</MenuItem>
                     {editAppointmentBtn && (
-                      <CreateAppointmentForm
+                      <AppointmentForm
                         handleClose={handleEditApptCloseBillForm}
                         open={editAppointmentBtn}
                         isNewAppointment={false}

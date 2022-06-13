@@ -92,6 +92,7 @@ export interface AppointmentFormProps {
   toUpdate?: boolean
   appointment?: Appointment
   disableNoScheduleDays?: (days: any) => boolean
+  onSubmit?: (data: { [x: string]: any }) => void
 }
 
 export interface PatientFormProps {

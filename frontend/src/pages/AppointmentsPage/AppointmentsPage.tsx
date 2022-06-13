@@ -17,8 +17,8 @@ import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@mui/material'
 import AppointmentList from '../../components/AppointmentsList'
 import Sidebar from '../../components/Sidebar'
 import Header from '../../components/Header/Header'
-import CreateAppointmentWithPatientForm from '../../components/AppointmentForm/CreateAppointmentWithPatientForm'
-import CreateAppointmentForm from '../../components/AppointmentForm/CreateAppointmentForm'
+import CreateAppointmentWithPatientForm from '../../components/AppointmentForm/AppointmentWithPatientForm'
+import AppointmentForm from '../../components/AppointmentForm/AppointmentForm'
 
 const drawerWidth: number = 240
 
@@ -132,7 +132,7 @@ function DashboardContent() {
                     ))}
                   </SpeedDial>
                   {createAppointmentBtn && (
-                    <CreateAppointmentForm
+                    <AppointmentForm
                       handleClose={handleAppointmentClose}
                       open={createAppointmentBtn}
                       isNewAppointment={false}
