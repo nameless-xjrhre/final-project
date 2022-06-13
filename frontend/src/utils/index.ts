@@ -1,5 +1,5 @@
 import swal from 'sweetalert'
-import { AvailableStaff } from '../components/AppointmentForm/FormInputProps'
+import { AvailableStaff } from '../components/AppointmentForm/AppointmentQueries'
 import { Schedule } from '../components/CustomFormProps'
 import { ScheduleStatus } from '../graphql/generated'
 
