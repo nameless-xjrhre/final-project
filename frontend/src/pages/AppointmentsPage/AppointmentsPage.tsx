@@ -19,6 +19,7 @@ import Sidebar from '../../components/Sidebar'
 import Header from '../../components/Header/Header'
 import CreateAppointmentWithPatientForm from '../../components/AppointmentForm/AppointmentWithPatientForm'
 import AppointmentForm from '../../components/AppointmentForm/AppointmentForm'
+import { HeaderType } from '../../types/enums'
 
 const drawerWidth: number = 240
 
@@ -105,7 +106,7 @@ function DashboardContent() {
           }}
         >
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Header title="Appointments" />
+            <Header type={HeaderType.Appointment} />
             <Grid container spacing={3}>
               {/* Recent Orders */}
               <Grid item xs={12}>

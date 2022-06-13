@@ -11,8 +11,11 @@ describe('Dashboard Page - Appointment Status Test', () => {
           .eq(len - 1)
           .click()
           .should('have.attr', 'status')
-          .get('[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]', { timeout: 5000 })
-          .should('contain', "CANCELED")
+          .get(
+            '[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]',
+            { timeout: 5000 },
+          )
+          .should('contain', 'CANCELED')
           .first()
           .click({ force: true })
           .get('[class="swal-title"]', { timeout: 5000 })
@@ -21,7 +24,6 @@ describe('Dashboard Page - Appointment Status Test', () => {
           .contains('OK')
           .click()
       })
-
   })
 
   it('should check if status changed to PENDING', () => {
@@ -32,8 +34,11 @@ describe('Dashboard Page - Appointment Status Test', () => {
           .eq(len - 1)
           .click()
           .should('have.attr', 'status')
-          .get('[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]', { timeout: 5000 })
-          .should('contain', "PENDING")
+          .get(
+            '[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]',
+            { timeout: 5000 },
+          )
+          .should('contain', 'PENDING')
           .first()
           .click({ force: true })
           .get('[class="swal-title"]', { timeout: 5000 })
@@ -42,7 +47,6 @@ describe('Dashboard Page - Appointment Status Test', () => {
           .contains('OK')
           .click()
       })
-
   })
 
   it('should check if status changed to EXPIRED', () => {
@@ -53,8 +57,11 @@ describe('Dashboard Page - Appointment Status Test', () => {
           .eq(len - 1)
           .click()
           .should('have.attr', 'status')
-          .get('[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]', { timeout: 5000 })
-          .should('contain', "EXPIRED")
+          .get(
+            '[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]',
+            { timeout: 5000 },
+          )
+          .should('contain', 'EXPIRED')
           .first()
           .click({ force: true })
           .get('[class="swal-title"]', { timeout: 5000 })
@@ -63,7 +70,6 @@ describe('Dashboard Page - Appointment Status Test', () => {
           .contains('OK')
           .click()
       })
-
   })
 
   it('should check if status changed to DONE', () => {
@@ -74,16 +80,13 @@ describe('Dashboard Page - Appointment Status Test', () => {
           .eq(len - 1)
           .click()
           .should('have.attr', 'status')
-          .get('[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]', { timeout: 5000 })
-          .should('contain', "DONE")
+          .get(
+            '[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]',
+            { timeout: 5000 },
+          )
+          .should('contain', 'DONE')
           .first()
           .click({ force: true })
-          .get('[class="swal-title"]', { timeout: 5000 })
-          .should('contain', 'Success')
-          .get('[class="swal-button swal-button--confirm"]')
-          .contains('OK')
-          .click()
       })
-
   })
 })

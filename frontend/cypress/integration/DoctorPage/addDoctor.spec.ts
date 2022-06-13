@@ -1,13 +1,11 @@
-import { fakeDataRandomizer } from "../../fixtures/randomizer"
+import { fakeDataRandomizer } from '../../fixtures/randomizer'
 const fakeData = require('../../fixtures/fakeData.json')
 const fakeDataProps = fakeData.listOfObjects
-
 
 const firstName = fakeDataProps[fakeDataRandomizer()].firstName
 const lastName = fakeDataProps[fakeDataRandomizer()].lastName
 const contactNum = fakeDataProps[fakeDataRandomizer()].contactNum
 const address = fakeDataProps[fakeDataRandomizer()].address
-
 
 describe('Doctor Page - Add Doctor Test', () => {
   before(() => {
@@ -27,34 +25,26 @@ describe('Doctor Page - Add Doctor Test', () => {
       .get('[name=lastName]')
       .type(lastName)
       .should('have.value', lastName)
-
-
   })
 
   it('should input contact information', () => {
-    cy.get('[name=contactNum]').type(contactNum)
+    cy.get('[name=contactNum]')
+      .type(contactNum)
       .should('have.value', contactNum)
   })
 
   it('should input address', () => {
-    cy.get('[name=address]').type(address)
-      .should('have.value', address)
+    cy.get('[name=address]').type(address).should('have.value', address)
   })
 
   it('should click add doctor button', () => {
-    cy.get('[type=button]').last()
-      .should('contain.text', 'Add Doctor')
-      .click()
-      .get('[class="swal-title"]')
-      .should('contain', 'Success')
-      .get('[class="swal-button swal-button--confirm"]')
-      .contains('OK')
-      .click()
+    cy.get('[type=button]').last().should('contain.text', 'Add Doctor').click()
   })
 
   it('should confirm in the doctors page', () => {
     cy.visit('http://localhost:3000/doctors')
       .get('tr td')
-      .should('contain', 'Dr. ' + firstName + ' ' + lastName)
+      .should('exist')
+      .and('contain', 'Dr. ' + firstName + ' ' + lastName)
   })
 })

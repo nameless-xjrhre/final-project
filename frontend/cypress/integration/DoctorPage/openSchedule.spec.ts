@@ -7,7 +7,7 @@ describe('Doctors Page - Open A Schedule Test', () => {
     cy.get(
       '[class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-clickable MuiChip-clickableColorDefault MuiChip-filledDefault css-1n7jwnc-MuiButtonBase-root-MuiChip-root"]',
     )
-      .last()
+      .first()
       .click()
       .get('[value="OPEN"]')
       .last()
@@ -15,15 +15,8 @@ describe('Doctors Page - Open A Schedule Test', () => {
   })
 
   it('should check change in color', () => {
-    cy.get('.css-j4zylg-MuiButtonBase-root-MuiChip-root').should(
-      'have.css',
-      'background-color',
-      'rgb(87, 231, 153)',
-    )
-      .get('[class="swal-title"]')
-      .should('contain', 'Success')
-      .get('[class="swal-button swal-button--confirm"]')
-      .contains('OK')
-      .click()
+    cy.get('.css-j4zylg-MuiButtonBase-root-MuiChip-root')
+      .should('be.visible')
+      .and('have.css', 'background-color', 'rgb(87, 231, 153)')
   })
 })

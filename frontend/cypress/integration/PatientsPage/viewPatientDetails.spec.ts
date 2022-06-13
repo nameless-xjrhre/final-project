@@ -17,7 +17,7 @@ describe('Patient Page - View Patient Details Test', () => {
       })
   })
 
-  it('should check if a profile after viewing details exists', ()=>{
-    cy.visit('http://localhost:3000/profile/1')
+  it('should check if a profile after viewing details exists', () => {
+    cy.visit('http://localhost:3000/profile/1').should('exist')
   })
 })

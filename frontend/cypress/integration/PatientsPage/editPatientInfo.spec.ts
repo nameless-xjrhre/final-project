@@ -26,7 +26,6 @@ describe('Patient Page - Edit Patient Info Test', () => {
           .contains('Edit')
           .click({ force: true })
       })
-
   })
 
   it('should edit name of patient', () => {
@@ -77,19 +76,12 @@ describe('Patient Page - Edit Patient Info Test', () => {
   })
 
   it('should save changes', () => {
-    cy.get('[type=button]').last()
-      .should('contain', 'Save Changes')
-      .click()
-      .get('[class="swal-title"]')
-      .should('contain', 'Success')
-      .get('[class="swal-button swal-button--confirm"]')
-      .contains('OK')
-      .click()
+    cy.get('[type=button]').last().should('contain', 'Save Changes').click()
   })
 
-  it('should check if a patient info was indeed edited', ()=>{
+  it('should check if a patient info was indeed edited', () => {
     cy.visit('http://localhost:3000/patients')
-    .get('tr td')
-    .should('not.contain', firstName + ' ' + lastName)
+      .get('tr td')
+      .should('not.contain', firstName + ' ' + lastName)
   })
 })

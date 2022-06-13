@@ -14,17 +14,12 @@ describe('Bills Page - Mark as Paid Test', () => {
           .last()
           .contains('Mark as Paid')
           .click()
-          .get('[class="swal-title"]')
-          .should('contain', 'Success')
-          .get('[class="swal-button swal-button--confirm"]')
-          .contains('OK')
-          .click()
       })
   })
 
-  it('should check if a bill was marked paid', ()=>{
+  it('should check if a bill was marked paid', () => {
     cy.visit('http://localhost:3000/bills')
-    .get('tr td')
-    .should('contain', 'PAID')
+      .get('tr td')
+      .should('contain', 'PAID')
   })
 })
