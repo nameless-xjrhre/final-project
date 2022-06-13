@@ -7,6 +7,7 @@ import {
   EditAppointmentType,
   editAppointment,
   createAppointmentWithPatient,
+  deleteAppointment,
 } from '../Appointment/Appointment.resolver'
 
 let mockCtx: MockContext
@@ -123,6 +124,17 @@ it('should create an appointment by inputing patient information', async () => {
     updatedAt: new Date('2020-02-01'),
   })
 
+  expect(mockCtx.prisma.appointment.create).toHaveBeenCalledWith({
+    data: {
+      visitType: VisitType.ROUTINE,
+      date: new Date(),
+      note: 'Rest More',
+      status: AppointmentStatus.PENDING,
+      medStaffId: 2,
+      patientId: 1,
+    },
+  })
+
   expect(mockCtx.prisma.patient.create).toHaveBeenCalledWith({
     data: {
       firstName: 'Jun',
@@ -203,6 +215,40 @@ it('should delete an appointment', async () => {
       where: { id: 1 },
     }),
   ).resolves.toEqual(appointment)
+
+  expect(mockCtx.prisma.appointment.delete).toHaveBeenCalledTimes(1)
+
+  expect(mockCtx.prisma.appointment.delete).toHaveBeenCalledWith({
+    where: { id: 1 },
+  })
+})
+
+test('shold delete appointments', async () => {
+  mockCtx.prisma.appointment.delete.mockResolvedValue({
+    id: 1,
+    date: new Date(),
+    note: 'Rest More',
+    visitType: VisitType.ROUTINE,
+    status: AppointmentStatus.PENDING,
+    medStaffId: 1,
+    patientId: 1,
+    hospitalBillId: 1,
+    createdAt: new Date(),
+    updatedAt: new Date('2020-02-01'),
+  })
+
+  await expect(deleteAppointment(1, ctx)).resolves.toEqual({
+    id: 1,
+    date: new Date(),
+    note: 'Rest More',
+    visitType: VisitType.ROUTINE,
+    status: AppointmentStatus.PENDING,
+    medStaffId: 1,
+    patientId: 1,
+    hospitalBillId: 1,
+    createdAt: new Date(),
+    updatedAt: new Date('2020-02-01'),
+  })
 
   expect(mockCtx.prisma.appointment.delete).toHaveBeenCalledTimes(1)
 
