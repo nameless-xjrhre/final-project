@@ -4,6 +4,7 @@ import {
   createAppointmentWithPatient,
   editAppointment,
   deleteAppointment,
+  validateDeleteAppointment,
 } from './Appointment.resolver'
 
 export const CreateAppointment = mutationField('createAppointment', {
@@ -107,19 +108,6 @@ export const DeleteAppointment = mutationField('deleteAppointment', {
     id: nonNull(intArg()),
   },
   resolve: (_parent, args, context) => deleteAppointment(args.id, context),
-  validate: async (rules, args, context) => {
-    const { id } = args
-    // check if appointment exists
-    const appointment = await context.prisma.appointment.findFirst({
-      where: {
-        id,
-      },
-    })
-    if (!appointment) {
-      throw new Error(`Appointment with id: ${id} does not exist`)
-    }
-    return {
-      id: rules.number().integer(),
-    }
-  },
+  validate: async (rules, args, context) =>
+    validateDeleteAppointment(rules, args.id, context),
 })

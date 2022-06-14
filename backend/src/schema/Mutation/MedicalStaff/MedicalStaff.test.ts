@@ -35,4 +35,13 @@ it('should create a medical staff', async () => {
     contactNum: '123456789',
     address: 'Janiuay',
   })
+
+  expect(mockCtx.prisma.medicalStaff.create).toHaveBeenCalledWith({
+    data: {
+      firstName: 'George',
+      lastName: 'Abaygar',
+      contactNum: '123456789',
+      address: 'Janiuay',
+    },
+  })
 })
