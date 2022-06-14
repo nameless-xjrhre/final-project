@@ -112,7 +112,7 @@ export default function BasicTabs() {
               <StyledTableCell>Date</StyledTableCell>
               <StyledTableCell>Doctor</StyledTableCell>
               <StyledTableCell>Diagnosis</StyledTableCell>
-              <StyledTableCell>Perscription</StyledTableCell>
+              <StyledTableCell>Prescription</StyledTableCell>
               <StyledTableCell align="right" />
             </TableRow>
           </TableHead>

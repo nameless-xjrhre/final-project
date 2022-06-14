@@ -2,51 +2,14 @@ import '@testing-library/jest-dom'
 import { screen } from '@testing-library/react'
 import { testRenderer } from '../../utils/test-util'
 import user from '@testing-library/user-event'
-import BasicTabs from './TabPanel'
+import BasicTabs from './TabSkeletonPanel'
 import { graphql } from 'msw'
-import {
-  PatientRecordsQuery,
-  PatientRecordsQueryVariables,
-  BillStatus,
-  VisitType,
-} from '../../graphql/generated'
 
-describe('TabPanel', () => {
-  const renderPage = testRenderer(<BasicTabs patientId={1} />)
+describe('TabSkeletonPanel', () => {
+  const renderPage = testRenderer(<BasicTabs />)
 
-  it('TabPanel renders correctly', async () => {
-    renderPage(
-      graphql.query<PatientRecordsQuery, PatientRecordsQueryVariables>(
-        'TabPanel',
-        (req, res, ctx) =>
-          // const { start, count } = req.variables
-          res(
-            ctx.data({
-              patient: {
-                id: 1,
-                medicalRecords: [
-                  {
-                    date: new Date(2022, 1, 2),
-                    diagnosis: 'Has cold lol',
-                    prescription: 'Just chill bro',
-                    medStaff: { fullName: 'Bob Joe' },
-                  },
-                ],
-                hospitalBills: [
-                  {
-                    date: new Date(2022, 1, 2),
-                    deadlineDate: new Date(2022, 2, 2),
-                    amount: 1150,
-                    status: BillStatus.Unpaid,
-                    medStaff: { fullName: 'Bob Joe' },
-                    appointment: { visitType: VisitType.Routine },
-                  },
-                ],
-              },
-            }),
-          ),
-      ),
-    )
+  it('TabSkeletonPanel renders correctly', async () => {
+    renderPage()
 
     const medRecordLabel = screen.getByRole('tab', {
       name: /medical records/i,
