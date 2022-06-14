@@ -12,7 +12,7 @@ import AppointmentForm from './AppointmentForm'
 const appointment = {
   id: 4,
   visitType: VisitType.Followup,
-  date: new Date('2022-06-01T02:30:00.225Z').toISOString(),
+  date: '2022-06-01T02:30:00.225Z',
   status: AppointmentStatus.Pending,
   note: 'stomach ache',
   patient: {
@@ -34,8 +34,8 @@ const appointment = {
       },
       {
         id: 20,
-        startTime: '2022-06-03T10:30:00.904Z',
-        endTime: '2022-06-03T16:30:00.904Z',
+        startTime: '2022-06-03T02:30:00.904Z',
+        endTime: '2022-06-03T10:30:00.904Z',
         status: ScheduleStatus.Open,
         medStaff: {
           id: 7,
@@ -129,12 +129,14 @@ describe('AppointmentForm - Edit Appointment', () => {
       screen.getByRole('combobox', { name: visitType }),
     ).getByRole('button')
     userEvent.click(selectVisitType)
-    const visitTypeList = within(screen.getByRole('presentation')).getByRole(
-      'listbox',
-    )
+    const visitTypeList = await within(
+      screen.getByRole('presentation'),
+    ).findByRole('listbox')
     userEvent.selectOptions(
       visitTypeList,
-      within(visitTypeList).getByRole('option', { name: VisitType.Urgent }),
+      await within(visitTypeList).findByRole('option', {
+        name: VisitType.Urgent,
+      }),
     )
     expect(selectVisitType.textContent).toBe('URGENT')
 

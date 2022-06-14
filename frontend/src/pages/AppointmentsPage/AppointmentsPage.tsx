@@ -17,7 +17,7 @@ import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@mui/material'
 import AppointmentList from '../../components/AppointmentsList'
 import Sidebar from '../../components/Sidebar'
 import Header from '../../components/Header/Header'
-import CreateAppointmentWithPatientForm from '../../components/AppointmentForm/AppointmentWithPatientForm'
+import AppointmentWithPatientForm from '../../components/AppointmentForm/AppointmentWithPatientForm'
 import AppointmentForm from '../../components/AppointmentForm/AppointmentForm'
 import { HeaderType } from '../../types/enums'
 
@@ -141,7 +141,7 @@ function DashboardContent() {
                     />
                   )}
                   {createAppointmentWithPatientBtn && (
-                    <CreateAppointmentWithPatientForm
+                    <AppointmentWithPatientForm
                       handleClose={handleNewAppointmentClose}
                       open={createAppointmentWithPatientBtn}
                       isNewAppointment
