@@ -3,7 +3,6 @@ import { screen } from '@testing-library/react'
 import { testRenderer } from '../../utils/test-util'
 import user from '@testing-library/user-event'
 import BasicTabs from './TabSkeletonPanel'
-import { graphql } from 'msw'
 
 describe('TabSkeletonPanel', () => {
   const renderPage = testRenderer(<BasicTabs />)
