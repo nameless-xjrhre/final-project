@@ -174,6 +174,7 @@ export default function PermanentDrawerRight() {
                       marginBottom: 5,
                       fontSize: '12px',
                     }}
+                    data-testid={`upcoming-date-${appointment.id}`}
                   >
                     <Box
                       sx={{
@@ -194,6 +195,7 @@ export default function PermanentDrawerRight() {
                       marginBottom: 5,
                       fontSize: '12px',
                     }}
+                    data-testid={`upcoming-visit-${appointment.id}`}
                   >
                     {displayVisitType(appointment.visitType)}
                     {',  Dr.' + appointment.medStaff.fullName}
@@ -251,6 +253,7 @@ export default function PermanentDrawerRight() {
                       marginBottom: 5,
                       fontSize: '12px',
                     }}
+                    data-testid={`past-date-${appointment.id}`}
                   >
                     <Box
                       sx={{
@@ -271,6 +274,7 @@ export default function PermanentDrawerRight() {
                       marginBottom: 5,
                       fontSize: '12px',
                     }}
+                    data-testid={`past-date-${appointment.id}`}
                   >
                     {displayVisitType(appointment.visitType)}
                     {',  Dr.' + appointment.medStaff.fullName}
