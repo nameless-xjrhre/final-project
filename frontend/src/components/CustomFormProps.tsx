@@ -17,7 +17,7 @@ export interface Schedule {
 export interface Appointment {
   id: number
   visitType: VisitType
-  date: Date
+  date: string
   status: AppointmentStatus
   note: string
   patient: {

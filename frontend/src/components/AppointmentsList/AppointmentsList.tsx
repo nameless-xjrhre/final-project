@@ -56,7 +56,7 @@ interface Schedule {
 interface Appointment {
   id: number
   visitType: VisitType
-  date: Date
+  date: string
   status: AppointmentStatus
   note: string
   patient: {
@@ -132,7 +132,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const defaultAppointment: Appointment = {
   id: 0,
-  date: new Date(),
+  date: '',
   medStaff: {
     fullName: '',
     id: 0,

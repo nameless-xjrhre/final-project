@@ -12,7 +12,7 @@ import AppointmentForm from './AppointmentForm'
 const appointment = {
   id: 4,
   visitType: VisitType.Followup,
-  date: new Date('2022-06-01T02:30:28.225Z'),
+  date: new Date('2022-06-01T02:30:00.225Z').toISOString(),
   status: AppointmentStatus.Pending,
   note: 'stomach ache',
   patient: {
@@ -25,8 +25,8 @@ const appointment = {
     schedules: [
       {
         id: 15,
-        startTime: '2022-06-01T02:30:28.225Z',
-        endTime: '2022-06-01T04:00:28.226Z',
+        startTime: '2022-06-01T02:30:00.225Z',
+        endTime: '2022-06-01T10:30:00.225Z',
         status: ScheduleStatus.Open,
         medStaff: {
           id: 7,
@@ -34,8 +34,8 @@ const appointment = {
       },
       {
         id: 20,
-        startTime: '2022-06-03T02:30:39.904Z',
-        endTime: '2022-06-03T04:00:39.904Z',
+        startTime: '2022-06-03T10:30:00.904Z',
+        endTime: '2022-06-03T16:30:00.904Z',
         status: ScheduleStatus.Open,
         medStaff: {
           id: 7,
