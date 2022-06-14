@@ -61,10 +61,11 @@ const appointmentSchema = object().shape({
   note: string().required('Provide reason for appointment.'),
 })
 
-export default function CreateAppointmentWithPatientForm({
+export default function AppointmentWithPatientForm({
   handleClose,
   open,
   disableNoScheduleDays,
+  onSubmit = (data) => console.log(data),
 }: AppointmentFormProps) {
   const [activeStep, setActiveStep] = React.useState(0)
   const isLastStep = activeStep === steps.length - 1
@@ -140,14 +141,12 @@ export default function CreateAppointmentWithPatientForm({
       .catch((err) => console.error(err))
 
   const submitMultiStepForm = handleSubmit((data) => {
-    const completeDate = new Date(
-      getCompleteDate(data.appointmentDate, data.appointmentTime),
-    )
-
     if (isLastStep) {
       const input: MutationCreateAppointmentWithPatientArgs = {
         appointment: {
-          date: completeDate,
+          date: new Date(
+            getCompleteDate(data.appointmentDate, data.appointmentTime),
+          ),
           visitType: data.visitType,
           status: AppointmentStatus.Pending,
           note: data.note,
@@ -243,7 +242,10 @@ export default function CreateAppointmentWithPatientForm({
         ) : null}
         <Grid item>
           <Button
-            onClick={(e) => handleSubmitForm(e)}
+            onClick={(e) => {
+              handleSubmit(onSubmit!)(e)
+              handleSubmitForm(e)
+            }}
             disabled={isSubmitting}
             variant="contained"
             color="primary"
