@@ -26,6 +26,13 @@ test('should create a user', async () => {
   }
 
   await expect(createUser(input, ctx)).resolves.toEqual(user)
+
+  expect(mockCtx.prisma.user.create).toHaveBeenCalledWith({
+    data: {
+      username: 'Username1',
+      password: 'Password1',
+    },
+  })
 })
 
 test('should update user type to admin', async () => {
@@ -49,5 +56,15 @@ test('should update user type to admin', async () => {
     username: 'username',
     password: 'password',
     userType: 'ADMIN',
+  })
+
+  expect(mockCtx.prisma.user.update).toHaveBeenCalledWith({
+    where: {
+      id: 1,
+    },
+
+    data: {
+      userType: 'ADMIN',
+    },
   })
 })

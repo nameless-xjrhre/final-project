@@ -1,18 +1,48 @@
+/* eslint-disable no-unused-vars */
 import { UseFormRegister, Control, FieldValues } from 'react-hook-form'
 import { gql } from 'urql'
+import { ScheduleStatus } from '../../graphql/generated'
 
-export interface MedicalStaffQueryData {
-  medicalStaff: {
+interface Schedule {
+  id: number
+  startTime: string
+  endTime: string
+  status: ScheduleStatus
+  medStaff: {
     id: number
-    lastName: string
-  }[]
+  }
 }
 
-export const medicalStaffQueryDocument = gql`
-  query MedicalStaffQuery {
-    medicalStaff {
+export interface AvailableStaff {
+  id: number
+  firstName: string
+  lastName: string
+  address: string
+  contactNum: string
+  schedules: Schedule[]
+}
+
+export interface AvailableStaffsQueryData {
+  availableStaffs: AvailableStaff[]
+}
+
+export const availableStaffsQueryDocument = gql`
+  query AvailableStaffs {
+    availableStaffs {
       id
+      firstName
       lastName
+      address
+      contactNum
+      schedules {
+        id
+        startTime
+        endTime
+        status
+        medStaff {
+          id
+        }
+      }
     }
   }
 `
@@ -38,6 +68,8 @@ export interface FormInputProps {
   name: string
   label: string
   placeholder?: string
+  disableNoScheduleDays?: (days: any) => boolean
+  isDisabled?: boolean
   onSavedValue?: string
   control?: Control<FieldValues, any>
   register: UseFormRegister<FieldValues>
@@ -53,7 +85,7 @@ export interface FormInputSelectMedStaffProps {
   control?: Control<FieldValues, any>
   register: UseFormRegister<FieldValues>
   errors: FieldValues
-  data: MedicalStaffQueryData
+  data: AvailableStaffsQueryData
 }
 
 export interface FormInputSelectPatientProps {

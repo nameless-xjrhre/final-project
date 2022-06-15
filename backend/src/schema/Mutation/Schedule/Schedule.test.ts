@@ -29,4 +29,13 @@ test('should create a schedule', async () => {
   }
 
   await expect(createSchedule(input, ctx)).resolves.toEqual(schedule)
+
+  expect(ctx.prisma.schedule.create).toHaveBeenCalledWith({
+    data: {
+      medStaffId: 1,
+      startTime: new Date('2020-01-01'),
+      endTime: new Date('2020-01-01'),
+      status: 'CLOSED',
+    },
+  })
 })

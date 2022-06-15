@@ -7,7 +7,8 @@
     "dev:concurrently": "concurrently \"vite\" \"npm run generate --watch\"",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "jest",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "generate": "graphql-codegen",
     "generate:watch": "graphql-codegen --watch",
     "lint": "eslint --fix --ext .ts,.tsx,.js,.jsx src",
@@ -33,10 +34,13 @@
     "@mui/material": "^5.6.2",
     "@mui/x-date-pickers": "^5.0.0-alpha.2",
     "@storybook/core-common": "^6.4.3",
+    "enzyme": "^3.11.0",
     "formik": "^2.2.9",
     "formik-material-ui": "^4.0.0-alpha.2",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.12.6",
+    "immer": "^9.0.14",
+    "jsdom": "^19.0.0",
     "lodash": "^4.17.21",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
@@ -45,9 +49,13 @@
     "react-select": "^5.3.2",
     "sweetalert": "^2.1.2",
     "urql": "^2.2.0",
-    "yup": "^0.32.11"
+    "whatwg-fetch": "^3.6.2",
+    "wonka": "^4.0.15",
+    "yup": "^0.32.11",
+    "zustand": "^4.0.0-rc.1"
   },
   "devDependencies": {
+    "@mswjs/data": "^0.10.1",
     "@storybook/addon-actions": "^6.4.22",
     "@storybook/addon-essentials": "^6.4.22",
     "@storybook/addon-interactions": "^6.4.22",
@@ -82,8 +90,10 @@
     "eslint-plugin-react-hooks": "^4.4.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.5.1",
+    "msw": "^0.42.1",
     "ts-jest": "^27.1.4",
     "typescript": "^4.6.3",
-    "vite": "^2.9.2"
+    "vite": "^2.9.2",
+    "vitest": "^0.14.1"
   }
 }
