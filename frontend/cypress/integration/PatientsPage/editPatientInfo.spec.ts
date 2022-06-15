@@ -44,9 +44,7 @@ describe('Patient Page - Edit Patient Info Test', () => {
   })
 
   it('should select gender', () => {
-    cy.get(
-      '[class="MuiRadio-root MuiRadio-colorPrimary MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root css-vqmohf-MuiButtonBase-root-MuiRadio-root"]',
-    )
+    cy.get('label span input')
       .get('[value=' + genderStringRandomizer() + ']')
       .last()
       .click()
@@ -71,11 +69,15 @@ describe('Patient Page - Edit Patient Info Test', () => {
 
   it('should save changes', () => {
     cy.get('[type=button]').last().should('contain', 'Save Changes').click()
+      .get('[class="swal-modal"]')
+      .get('[class="swal-button swal-button--confirm"]')
+      .should('contain', 'OK')
+      .click()
   })
 
   it('should check if a patient info was indeed edited', () => {
     cy.visit('patients')
       .get('tr td')
-      .should('not.contain', firstName + ' ' + lastName)
+      .should('contain', firstName + ' ' + lastName)
   })
 })
