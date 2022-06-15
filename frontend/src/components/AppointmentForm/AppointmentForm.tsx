@@ -60,7 +60,6 @@ export default function AppointmentForm({
   isNewAppointment,
   appointment,
   toUpdate,
-  onSubmit = (data) => console.log(data),
 }: AppointmentFormProps) {
   const [complete, setComplete] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -232,7 +231,6 @@ export default function AppointmentForm({
       <Button
         type="submit"
         onClick={(e) => {
-          handleSubmit(onSubmit!)(e)
           handleSubmitForm(e)
         }}
         disabled={isSubmitting}
