@@ -51,10 +51,10 @@ describe('Appointment Page - Edit Appointment Test', () => {
       .last()
       .click()
       .get('ul li')
-      .get('[name="medicalStaff"]')
+      .get('[role="option"]')
       .its('length')
       .then((len) => {
-        cy.get('[name="medicalStaff"]')
+        cy.get('[role="option"]')
           .eq(len - 1)
           .should('not.be.empty')
           .click({ force: true })
@@ -107,7 +107,7 @@ describe('Appointment Page - Edit Appointment Test', () => {
     let newAppointmentTime = appointmentTime + ':00'
 
     cy.visit('appointments')
-      .get('[class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"]')
+      .get('[class="MuiTableRow-root css-1gqug66"]')
       .should('be.visible')
       .get('td')
       .should('be.visible')
