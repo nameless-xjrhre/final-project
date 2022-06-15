@@ -22,3 +22,11 @@
 //   const testSunday = new Date('2022-06-06T16:00:00.000Z')
 //   expect(sunday).toEqual(new Date(testSunday.setHours(23, 59, 59, 0)))
 // })
+
+import '@testing-library/jest-dom'
+
+describe('utils', () => {
+  it('tests 1 + 1', () => {
+    expect(1 + 1).toBe(2)
+  })
+})
