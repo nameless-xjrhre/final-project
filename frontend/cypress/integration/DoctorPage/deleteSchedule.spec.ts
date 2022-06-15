@@ -6,18 +6,15 @@ describe('Doctors Page - Delete A Schedule Test', () => {
   })
 
   it('should delete a schedule', () => {
-    cy.get('[class="css-zgbp5c-MuiStack-root"]')
+    cy.get('[class="css-1s4yypy"]')
       .its('length')
       .then((len) => {
         totalNumberOfSchedules = len
-        cy.get('[class="css-zgbp5c-MuiStack-root"]')
+        cy.get('[class="css-1s4yypy"]')
           .eq(len - 2)
           .click()
-          .get(
-            '[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-x8xom5-MuiButtonBase-root-MuiMenuItem-root"]',
-          )
-          .should('exist')
-          .and('contain', 'Delete')
+          .get('[role="menuitem"]')
+          .contains('Delete')
           .click()
           .get('[type=button]')
           .last()
@@ -28,7 +25,7 @@ describe('Doctors Page - Delete A Schedule Test', () => {
 
   it('should check if a schedule was deleted', () => {
     cy.visit('doctors')
-      .get('[class="css-zgbp5c-MuiStack-root"]')
+      .get('[class="css-1s4yypy"]')
       .should('be.visible')
       .its('length')
       .then((len) => {

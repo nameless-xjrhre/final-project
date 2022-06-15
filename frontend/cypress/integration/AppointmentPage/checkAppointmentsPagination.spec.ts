@@ -11,31 +11,30 @@ describe('Appointments Page - Pagination Test', () => {
   })
 
   it('should check if there are multiple pages', () => {
-    cy.get('[class="MuiPagination-ul css-wjh20t-MuiPagination-ul"]')
-      .should('exist')
-      .get('li')
+    cy.get('ul li button')
+      .get('[aria-label^="Go to"]')
       .its('length')
       .then((len) => {
-        if (len < 4) {
-          expect(len).to.be.lessThan(4)
+        if (len >= 3) {
+          assert.isAtLeast(len, 3, 'Have multiple pages')
         } else {
-          expect(len).to.be.gte(4)
+          assert.isBelow(len, 3, 'No multiple pages')
         }
       })
   })
 
   it('should click a page if number of pages is greater than 1', () => {
-    cy.get('[class="MuiPagination-ul css-wjh20t-MuiPagination-ul"]')
-      .get('li')
+    cy.get('ul li button')
+      .get('[aria-label^="Go to"]')
       .its('length')
       .then((len) => {
-        if (len >= 4) {
-          cy.get('[class="MuiPagination-ul css-wjh20t-MuiPagination-ul"]')
-            .get('li')
+        if (len >= 3) {
+          cy.get('ul li button')
+            .get('[aria-label^="Go to"]')
             .eq(len - 1)
             .click()
         } else {
-          expect(len).to.be.lessThan(4)
+          assert.isBelow(len, 3, 'Has only one page')
         }
       })
   })
