@@ -334,6 +334,8 @@ describe('AppointFormWithPatient', () => {
     })
     userEvent.click(bookNowButton)
 
-    await waitFor(() => expect(onSubmit).toBeCalledTimes(4))
+    await waitFor(() => expect(onSubmit).toBeCalledTimes(4), {
+      timeout: 15_000,
+    })
   })
 })
