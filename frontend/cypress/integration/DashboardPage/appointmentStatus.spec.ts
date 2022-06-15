@@ -3,90 +3,113 @@ describe('Dashboard Page - Appointment Status Test', () => {
     cy.visit('dashboard')
   })
 
-  it('should check if status changed to CANCELED', () => {
-    cy.get('td button')
-      .its('length')
-      .then((len) => {
-        cy.get('td button')
-          .eq(len - 1)
-          .click()
-          .should('have.attr', 'status')
-          .get(
-            '[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]',
-            { timeout: 5000 },
-          )
-          .should('contain', 'CANCELED')
-          .first()
-          .click({ force: true })
-          .get('[class="swal-title"]')
-          .should('contain', 'Success')
-          .get('[class="swal-button swal-button--confirm"]')
-          .contains('OK')
-          .click()
-      })
+  describe('Canceled Status Test', () => {
+    it('should change status to CANCELED', () => {
+      cy.get('td button')
+        .its('length')
+        .then((len) => {
+          cy.get('td button')
+            .eq(len - 1)
+            .click()
+            .get('ul li')
+            .contains('CANCELED')
+            .first()
+            .click({ force: true })
+            .get('[class="swal-title"]')
+            .should('contain', 'Success')
+            .get('[class="swal-button swal-button--confirm"]')
+            .contains('OK')
+            .click()
+        })
+    })
+
+    it('should check if status changed to CANCELED',()=>{
+      cy.get('td button span svg')
+      .last()
+      .should('have.attr', 'style', "color: rgb(248, 111, 111);")
+    })
   })
 
-  it('should check if status changed to PENDING', () => {
-    cy.get('td button')
-      .its('length')
-      .then((len) => {
-        cy.get('td button')
-          .eq(len - 1)
-          .click()
-          .should('have.attr', 'status')
-          .get(
-            '[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]',
-            { timeout: 5000 },
-          )
-          .should('contain', 'PENDING')
-          .first()
-          .click({ force: true })
-          .get('[class="swal-title"]')
-          .should('contain', 'Success')
-          .get('[class="swal-button swal-button--confirm"]')
-          .contains('OK')
-          .click()
-      })
+  describe('Pending Status Test', () => {
+    it('should change status to PENDING', () => {
+      cy.get('td button')
+        .its('length')
+        .then((len) => {
+          cy.get('td button')
+            .eq(len - 1)
+            .click()
+            .get('ul li')
+            .contains('PENDING')
+            .first()
+            .click({ force: true })
+            .get('[class="swal-title"]')
+            .should('contain', 'Success')
+            .get('[class="swal-button swal-button--confirm"]')
+            .contains('OK')
+            .click()
+        })
+    })
+
+    it('should check if status changed to PENDING',()=>{
+      cy.get('td button span svg')
+      .last()
+      .should('have.attr', 'style', "color: rgb(86, 146, 236);")
+    })
   })
 
-  it('should check if status changed to EXPIRED', () => {
-    cy.get('td button')
-      .its('length')
-      .then((len) => {
-        cy.get('td button')
-          .eq(len - 1)
-          .click()
-          .should('have.attr', 'status')
-          .get(
-            '[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]',
-            { timeout: 5000 },
-          )
-          .should('contain', 'EXPIRED')
-          .first()
-          .click({ force: true })
-          .get('[class="swal-title"]')
-          .should('contain', 'Success')
-          .get('[class="swal-button swal-button--confirm"]')
-          .contains('OK')
-          .click()
-      })
+
+  describe('Expired Status Test', ()=>{
+    it('should change status to EXPIRED', () => {
+      cy.get('td button')
+        .its('length')
+        .then((len) => {
+          cy.get('td button')
+            .eq(len - 1)
+            .click()
+            .get('ul li')
+            .contains('EXPIRED')
+            .first()
+            .click({ force: true })
+            .get('[class="swal-title"]')
+            .should('contain', 'Success')
+            .get('[class="swal-button swal-button--confirm"]')
+            .contains('OK')
+            .click()
+        })
+    })
+
+    it('should check if status changed to EXPIRED',()=>{
+      cy.get('td button span svg')
+      .last()
+      .should('have.attr', 'style', "color: rgb(254, 189, 112);")
+    })
   })
 
-  it('should check if status changed to DONE', () => {
-    cy.get('td button')
-      .its('length')
-      .then((len) => {
-        cy.get('td button')
-          .eq(len - 1)
-          .click()
-          .should('have.attr', 'status')
-          .get(
-            '[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root"]',
-            { timeout: 5000 },
-          )
-          .should('contain', 'DONE')
-          .first()
-          .click({ force: true })
-      })
+
+  describe('Done Status Test', ()=>{
+    it('should change status to DONE', () => {
+      cy.get('td button')
+        .its('length')
+        .then((len) => {
+          cy.get('td button')
+            .eq(len - 1)
+            .click()
+            .get('ul li')
+            .contains('DONE')
+            .first()
+            .click({ force: true })
+            .get('[class="swal-title"]')
+            .should('contain', 'Success')
+            .get('[class="swal-button swal-button--confirm"]')
+            .contains('OK')
+            .click()
+        })
+    })
+
+    it('should check if status changed to DONE',()=>{
+      cy.get('td button span svg')
+      .last()
+      .should('have.attr', 'style', "color: rgb(147, 225, 113);")
+    })
   })
 })
