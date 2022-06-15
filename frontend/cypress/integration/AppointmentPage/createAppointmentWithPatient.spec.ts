@@ -1,8 +1,7 @@
 import {
   fakeDataRandomizer,
-  medStaffRandomizer,
   visitTypeRandomizer,
-  genderRandomizer,
+  genderStringRandomizer,
 } from '../../fixtures/randomizer'
 const fakeData = require('../../fixtures/fakeData.json')
 const fakeDataProps = fakeData.listOfObjects
@@ -45,10 +44,8 @@ describe('Appointment Page - Create Appointment With Patient Test', () => {
   })
 
   it('should select gender', () => {
-    cy.get(
-      '[class="MuiRadio-root MuiRadio-colorPrimary MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root css-vqmohf-MuiButtonBase-root-MuiRadio-root"]',
-    )
-      .eq(genderRandomizer())
+    cy.get('label span input')
+      .get('[value=' + genderStringRandomizer() + ']')
       .click()
   })
 
