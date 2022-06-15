@@ -1,9 +1,7 @@
 import '@testing-library/jest-dom'
 import { screen } from '@testing-library/react'
 import { testRenderer } from '../../utils/test-util'
-import user from '@testing-library/user-event'
 import CreateScheduleForm from './CreateScheduleForm'
-import CustomFormProps from '../CustomFormProps'
 
 describe('CreateScheduleForm', () => {
   const renderForm = testRenderer(
