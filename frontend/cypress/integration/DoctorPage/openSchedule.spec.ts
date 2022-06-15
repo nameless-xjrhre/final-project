@@ -4,17 +4,22 @@ describe('Doctors Page - Open A Schedule Test', () => {
   })
 
   it('should open a schedule', () => {
-    cy.get('[class="css-zgbp5c-MuiStack-root"]')
-      .eq(2)
+    cy.get('[class="css-1s4yypy"]')
+      .last()
       .click()
       .get('[value="OPEN"]')
       .last()
       .click()
+      .get('[class="swal-modal"]')
+      .get('[class="swal-button swal-button--confirm"]')
+      .should('contain', 'OK')
+      .click()
   })
 
   it('should check change in color', () => {
-    cy.get('.css-j4zylg-MuiButtonBase-root-MuiChip-root')
-      .should('be.visible')
-      .and('have.css', 'background-color', 'rgb(87, 231, 153)')
+    cy.get('[class="css-1s4yypy"]')
+      .last()
+      .get('.css-1di7u3v')
+      .should('have.css', 'background-color', 'rgb(87, 231, 153)')
   })
 })
