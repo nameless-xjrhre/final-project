@@ -33,6 +33,17 @@ test('should create a patient', async () => {
   }
 
   await expect(createPatient(input, ctx)).resolves.toEqual(patient)
+
+  expect(ctx.prisma.patient.create).toHaveBeenCalledWith({
+    data: {
+      firstName: 'Larri',
+      lastName: 'Lamanosa',
+      sex: 'MALE',
+      dateOfBirth: new Date('2020-01-01'),
+      contactNum: '1234567890',
+      address: '123 Main St',
+    },
+  })
 })
 
 test('should edit patient', async () => {
@@ -84,5 +95,16 @@ test('should delete a patient', async () => {
 
   mockCtx.prisma.patient.delete.mockResolvedValue(patient)
 
-  await expect(deletePatient(1, ctx)).resolves.toEqual(patient)
+  await expect(deletePatient(2, ctx)).resolves.toEqual(patient)
+
+  expect(ctx.prisma.patient.delete).toHaveBeenCalledWith({
+    where: {
+      id: 2,
+    },
+    include: {
+      appointments: true,
+      hospitalBills: true,
+      medicalRecords: true,
+    },
+  })
 })

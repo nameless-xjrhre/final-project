@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"npm run frontend\" \"npm run backend:prod\"",
+    "start": "concurrently \"npm run frontend:prod\" \"npm run backend:prod\"",
     "frontend": "cd frontend && npm run dev",
     "backend": "cd backend && npm run dev",
     "frontend:build": "cd frontend && npm run build",
@@ -40,6 +40,6 @@
     "husky": "^7.0.4",
     "lint-staged": "^12.4.0",
     "prettier": "^2.6.2",
-    "semantic-release": "^19.0.2"
+    "semantic-release": "^19.0.3"
   }
 }

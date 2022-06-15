@@ -1,10 +1,11 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-nested-ternary */
 import { Typography, Grid } from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { UseFormRegister, FieldValues, Control } from 'react-hook-form'
 import { useQuery } from 'urql'
-import { AppointmentStatus, VisitType } from '../../graphql/generated'
+import { VisitType } from '../../graphql/generated'
 import { Appointment } from '../CustomFormProps'
 import {
   FormInputText,
@@ -15,8 +16,8 @@ import {
   FormInputTime,
 } from './FormInpuFields'
 import {
-  MedicalStaffQueryData,
-  medicalStaffQueryDocument,
+  AvailableStaffsQueryData,
+  availableStaffsQueryDocument,
   PatientQueryData,
   patientQueryNameDocument,
 } from './FormInputProps'
@@ -28,15 +29,11 @@ interface AppointmentFormProps {
   isNewAppointment: boolean
   toUpdate: boolean
   appointment?: Appointment
+  disableNoScheduleDays: (days: any) => boolean
+  isDisabled?: boolean
 }
 
 const visitTypes = [VisitType.Followup, VisitType.Routine, VisitType.Urgent]
-const status = [
-  AppointmentStatus.Pending,
-  AppointmentStatus.Expired,
-  AppointmentStatus.Done,
-  AppointmentStatus.Canceled,
-]
 
 export default function AppointmentForm({
   control,
@@ -45,9 +42,11 @@ export default function AppointmentForm({
   isNewAppointment,
   toUpdate,
   appointment,
+  disableNoScheduleDays,
+  isDisabled,
 }: AppointmentFormProps) {
-  const [medicalStaff] = useQuery<MedicalStaffQueryData>({
-    query: medicalStaffQueryDocument,
+  const [availableStaffs] = useQuery<AvailableStaffsQueryData>({
+    query: availableStaffsQueryDocument,
   })
 
   const [patient] = useQuery<PatientQueryData>({
@@ -58,22 +57,7 @@ export default function AppointmentForm({
     <>
       {!isNewAppointment ? (
         toUpdate ? (
-          <Grid>
-            <Typography variant="body2" color="GrayText" mt={2} mb={-1}>
-              Select Status
-            </Typography>
-            <Grid container mt={2}>
-              <FormInputSelect
-                name="status"
-                label="Select Status"
-                data={status}
-                onSavedValue={appointment?.status}
-                control={control}
-                register={register}
-                errors={errors}
-              />
-            </Grid>
-          </Grid>
+          ''
         ) : (
           <Grid>
             <Typography variant="body2" color="GrayText" mt={2} mb={-1}>
@@ -128,6 +112,8 @@ export default function AppointmentForm({
             control={control}
             register={register}
             errors={errors}
+            disableNoScheduleDays={disableNoScheduleDays}
+            isDisabled={isDisabled}
           />
         </LocalizationProvider>
       </Grid>
@@ -135,7 +121,7 @@ export default function AppointmentForm({
         <FormInputSelectMedStaff
           name="medicalStaff"
           label="Select Doctor"
-          data={medicalStaff.data!}
+          data={availableStaffs.data!}
           onSavedValue={appointment?.medStaff.id.toString()}
           control={control}
           register={register}
@@ -155,6 +141,7 @@ export default function AppointmentForm({
             errors={errors}
             register={register}
             control={control}
+            isDisabled={isDisabled}
           />
         </LocalizationProvider>
       </Grid>

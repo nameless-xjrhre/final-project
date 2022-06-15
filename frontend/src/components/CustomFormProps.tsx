@@ -3,9 +3,16 @@ import { Control, FieldValues, UseFormRegister } from 'react-hook-form'
 import {
   AppointmentStatus,
   BillStatus,
-  Sex,
+  ScheduleStatus,
   VisitType,
 } from '../graphql/generated'
+
+export interface Schedule {
+  id: number
+  status: ScheduleStatus
+  startTime: string
+  endTime: string
+}
 
 export interface Appointment {
   id: number
@@ -20,6 +27,7 @@ export interface Appointment {
   medStaff: {
     id: number
     fullName: string
+    schedules: Schedule[]
   }
 }
 
@@ -55,6 +63,17 @@ export interface Bill {
   }
 }
 
+export interface MedicalRecord {
+  id: number
+  date: Date
+  diagnosis: string
+  prescription: string
+  medStaff: {
+    id: number
+    fullName: string
+  }
+}
+
 export interface FormInputProps {
   id?: string
   name: string
@@ -72,6 +91,7 @@ export interface AppointmentFormProps {
   isNewAppointment?: boolean
   toUpdate?: boolean
   appointment?: Appointment
+  disableNoScheduleDays?: (days: any) => boolean
 }
 
 export interface PatientFormProps {
@@ -92,6 +112,14 @@ export interface ScheduleFormProps {
   handleClose: (e: any) => void
   open: boolean
   id: number
+}
+
+export interface MedicalRecordFormProps {
+  handleClose: (e: any) => void
+  open: boolean
+  medicalRecord?: MedicalRecord
+  patientId?: number
+  toUpdate?: boolean
 }
 
 export default interface CustomFormProps {

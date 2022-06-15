@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Grid,
   Typography,
@@ -12,7 +12,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import { object, string } from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
-import { gql, useMutation } from 'urql'
+import { gql, useMutation, useQuery } from 'urql'
 import CustomForm from '../CustomForm'
 import { AppointmentFormProps } from '../CustomFormProps'
 import AppointmentForm from './AppointmentForm'
@@ -21,7 +21,17 @@ import {
   MutationCreateAppointmentArgs,
   MutationEditAppointmentArgs,
 } from '../../graphql/generated'
-import { getCompleteDate, showFailAlert, showSuccessAlert } from '../../utils'
+import {
+  disableNoScheduleDays,
+  getCompleteDate,
+  getSelectedStaffSchedules,
+  showFailAlert,
+  showSuccessAlert,
+} from '../../utils'
+import {
+  AvailableStaffsQueryData,
+  availableStaffsQueryDocument,
+} from './FormInputProps'
 
 const createAppointmentSchema = object().shape({
   visitType: string().required('Select type of visit.'),
@@ -95,6 +105,7 @@ export default function CreateAppointmentForm({
   const [, updateAppointment] = useMutation(UpdateAppointment)
   const [complete, setComplete] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isDisabled, setIsDisabled] = useState(true)
   const handleComplete = () => setComplete(true)
   const handleSubmitting = () => setIsSubmitting(true)
 
@@ -114,11 +125,26 @@ export default function CreateAppointmentForm({
     register,
     control,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: !toUpdate
       ? yupResolver(createAppointmentSchema)
       : yupResolver(updateAppointmentSchema),
+  })
+
+  const [staffs] = useQuery<AvailableStaffsQueryData>({
+    query: availableStaffsQueryDocument,
+  })
+
+  const days = [0, 1, 2, 3, 4, 5, 6]
+
+  const selectedStaffValue = watch('medicalStaff')
+
+  useEffect(() => {
+    typeof selectedStaffValue === 'number'
+      ? setIsDisabled(false)
+      : setIsDisabled(true)
   })
 
   const handleCreateAppointment = handleSubmit((data) => {
@@ -156,7 +182,6 @@ export default function CreateAppointmentForm({
               getCompleteDate(data.appointmentDate, data.appointmentTime),
             ) || appointment?.date,
           visitType: data.visitType || appointment!.visitType,
-          status: data.status || appointment!.status,
           note: data.note || appointment!.note,
         },
       }
@@ -207,6 +232,9 @@ export default function CreateAppointmentForm({
           isNewAppointment={false}
           toUpdate
           appointment={appointment}
+          disableNoScheduleDays={(date: Date) =>
+            disableNoScheduleDays(date, appointment!.medStaff.schedules, days)
+          }
         />
       ) : (
         <AppointmentForm
@@ -215,6 +243,17 @@ export default function CreateAppointmentForm({
           errors={errors}
           isNewAppointment={false}
           toUpdate={false}
+          disableNoScheduleDays={(date: Date) =>
+            disableNoScheduleDays(
+              date,
+              getSelectedStaffSchedules(
+                selectedStaffValue,
+                staffs.data!.availableStaffs,
+              ),
+              days,
+            )
+          }
+          isDisabled={isDisabled}
         />
       )}
       <Button
