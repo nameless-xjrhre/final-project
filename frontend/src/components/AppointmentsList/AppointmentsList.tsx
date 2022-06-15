@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Skeleton from '@mui/material/Skeleton'
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip'
-import { Button, Pagination, Typography } from '@mui/material'
+import { Button, Pagination, Typography, CircularProgress } from '@mui/material'
 import { useQuery, gql, useMutation } from 'urql'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Menu from '@mui/material/Menu'
@@ -22,10 +22,10 @@ import {
   VisitType,
 } from '../../graphql/generated'
 import { capitalize, showFailAlert, showSuccessAlert } from '../../utils'
-import CreateAppointmentForm from '../AppointmentForm/CreateAppointmentForm'
 import DeleteAppointmentDialog from '../AppointmentForm/DeleteAppointmentDialog'
 
 import useStore from '../../store'
+import AppointmentForm from '../AppointmentForm/AppointmentForm'
 
 const appointmentStatus = [
   AppointmentStatus.Canceled,
@@ -56,7 +56,7 @@ interface Schedule {
 interface Appointment {
   id: number
   visitType: VisitType
-  date: Date
+  date: string
   status: AppointmentStatus
   note: string
   patient: {
@@ -132,7 +132,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const defaultAppointment: Appointment = {
   id: 0,
-  date: new Date(),
+  date: '',
   medStaff: {
     fullName: '',
     id: 0,
@@ -332,11 +332,24 @@ export default function AppointmentList() {
                             key={status}
                             disabled={isSubmitting}
                             onClick={handleUpdateAppointmentStatus(
-                              currentAppointment.id,
+                              currentAppointment.id!,
                               status,
                             )}
-                          />
+                          >
+                            {status}
+                          </MenuItem>
                         ))}
+                        {isSubmitting && (
+                          <CircularProgress
+                            size={25}
+                            sx={{
+                              color: 'blue',
+                              marginLeft: 5,
+                              marginTop: -10,
+                              position: 'absolute',
+                            }}
+                          />
+                        )}
                       </Menu>
                     </StyledTableCell>
                     <StyledTableCell align="right">
@@ -367,7 +380,7 @@ export default function AppointmentList() {
                           Edit
                         </MenuItem>
                         {editAppointmentBtn && (
-                          <CreateAppointmentForm
+                          <AppointmentForm
                             handleClose={handleEditApptCloseBillForm}
                             open={editAppointmentBtn}
                             isNewAppointment={false}

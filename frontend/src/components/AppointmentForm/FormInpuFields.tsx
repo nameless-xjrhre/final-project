@@ -24,14 +24,21 @@ export const FormInputSelectPatient = ({
   register,
   errors,
 }: FormInputSelectPatientProps) => (
-  <FormControl error={!!errors[name]}>
-    <InputLabel>{label}</InputLabel>
+  <FormControl
+    error={!!errors[name]}
+    aria-label="Select Patient"
+    role="combobox"
+  >
+    <InputLabel id="select-patient" htmlFor="patient">
+      {label}
+    </InputLabel>
     <Controller
       name={name}
       control={control}
       render={({ field: { onChange, value } }) => (
         <>
           <Select
+            id="patient"
             defaultValue=""
             label={label}
             value={value || onSavedValue}
@@ -40,7 +47,12 @@ export const FormInputSelectPatient = ({
           >
             {data &&
               data.patients.map((item) => (
-                <MenuItem value={item.id} key={item.id} {...register(name)}>
+                <MenuItem
+                  data-testid={`patient-${item.id}`}
+                  value={item.id}
+                  key={item.id}
+                  {...register(name)}
+                >
                   {item.fullName}
                 </MenuItem>
               ))}
@@ -63,14 +75,21 @@ export const FormInputSelectMedStaff = ({
   register,
   errors,
 }: FormInputSelectMedStaffProps) => (
-  <FormControl error={!!errors[name]}>
-    <InputLabel>{label}</InputLabel>
+  <FormControl
+    error={!!errors[name]}
+    aria-label="Select Doctor"
+    role="combobox"
+  >
+    <InputLabel id="select-doctor" htmlFor="doctor">
+      {label}
+    </InputLabel>
     <Controller
       name={name}
       control={control}
       render={({ field: { onChange, value } }) => (
         <>
           <Select
+            id="doctor"
             defaultValue=""
             label={label}
             value={value || onSavedValue}
@@ -106,14 +125,17 @@ export const FormInputSelect = ({
   register,
   errors,
 }: FormInputProps) => (
-  <FormControl error={!!errors[name]}>
-    <InputLabel>{label}</InputLabel>
+  <FormControl error={!!errors[name]} aria-label="Visit Type" role="combobox">
+    <InputLabel id="select-value" htmlFor="visitType">
+      {label}
+    </InputLabel>
     <Controller
       name={name}
       control={control}
       render={({ field: { onChange, value } }) => (
         <>
           <Select
+            id="visitType"
             defaultValue=""
             label={label}
             value={value || onSavedValue}
@@ -138,20 +160,28 @@ export const FormInputSelect = ({
 export const FormInputText = ({
   name,
   label,
+  control,
   placeholder,
   register,
   errors,
 }: FormInputProps) => (
-  <TextField
-    sx={{ marginTop: -0.3, width: 250 }}
-    label={label}
-    multiline
-    rows={2}
-    {...register(name)}
-    helperText={errors[name]?.message}
-    error={!!errors[name]}
-    placeholder={placeholder}
-    InputProps={{ style: { fontSize: 12 } }}
+  <Controller
+    name={name}
+    control={control}
+    render={({ field: { value } }) => (
+      <TextField
+        value={value}
+        sx={{ marginTop: -0.3, width: 250 }}
+        label={label}
+        multiline
+        rows={2}
+        {...register(name)}
+        helperText={errors[name]?.message}
+        error={!!errors[name]}
+        placeholder={placeholder}
+        InputProps={{ style: { fontSize: 12 } }}
+      />
+    )}
   />
 )
 
@@ -183,6 +213,7 @@ export const FormInputDate = ({
             sx={{ marginTop: -0.3, width: 250 }}
             variant="outlined"
             margin="dense"
+            value={value}
             {...params}
             {...register(name)}
             error={!!errors[name]}

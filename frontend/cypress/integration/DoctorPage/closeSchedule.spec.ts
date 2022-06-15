@@ -1,4 +1,4 @@
-describe('Doctors Page - Close A Schedule Test', () => {
+	describe('Doctors Page - Close A Schedule Test', () => {
   before(() => {
     cy.visit('doctors')
   })

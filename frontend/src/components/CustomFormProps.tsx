@@ -17,7 +17,7 @@ export interface Schedule {
 export interface Appointment {
   id: number
   visitType: VisitType
-  date: Date
+  date: string
   status: AppointmentStatus
   note: string
   patient: {
@@ -92,6 +92,7 @@ export interface AppointmentFormProps {
   toUpdate?: boolean
   appointment?: Appointment
   disableNoScheduleDays?: (days: any) => boolean
+  onSubmit?: (data: { [x: string]: any }) => void
 }
 
 export interface PatientFormProps {

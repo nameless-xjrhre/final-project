@@ -14,16 +14,23 @@ import CloseIcon from '@mui/icons-material/Close'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { string, object } from 'yup'
-import { gql, useMutation } from 'urql'
+import { useMutation, useQuery } from 'urql'
 import AddPatientForm from '../PatientForm'
 import CustomForm from '../CustomForm'
 import { AppointmentFormProps } from '../CustomFormProps'
-import AppointmentForm from './AppointmentForm'
+import Form from './Form'
 import {
   AppointmentStatus,
   MutationCreateAppointmentWithPatientArgs,
 } from '../../graphql/generated'
 import { getCompleteDate, showFailAlert, showSuccessAlert } from '../../utils'
+import { CreateAppointmentWithPatient } from './AppointmentMutations'
+import {
+  AvailableStaffsQueryData,
+  AvailableStaffsQueryDocument,
+  PatientQueryData,
+  PatientQueryDataDocument,
+} from './AppointmentQueries'
 
 const steps = ['Patient Data', 'Create Appointment']
 
@@ -54,44 +61,12 @@ const appointmentSchema = object().shape({
   note: string().required('Provide reason for appointment.'),
 })
 
-const CreateAppointmentWithPatient = gql`
-  mutation CreateAppointmentWithPatient(
-    $appointment: CreateAppointmentInput!
-    $patient: CreatePatientInput!
-    $medStaffId: Int!
-  ) {
-    createAppointmentWithPatient(
-      appointment: $appointment
-      patient: $patient
-      medStaffId: $medStaffId
-    ) {
-      id
-      date
-      visitType
-      status
-      patient {
-        firstName
-        lastName
-        sex
-        dateOfBirth
-        contactNum
-        address
-      }
-      medStaff {
-        id
-      }
-    }
-  }
-`
-
-export default function CreateAppointmentWithPatientForm({
+export default function AppointmentWithPatientForm({
   handleClose,
   open,
   disableNoScheduleDays,
+  onSubmit = (data) => console.log(data),
 }: AppointmentFormProps) {
-  const [, createAppointmentWithPatient] = useMutation(
-    CreateAppointmentWithPatient,
-  )
   const [activeStep, setActiveStep] = React.useState(0)
   const isLastStep = activeStep === steps.length - 1
   const [complete, setComplete] = React.useState(false)
@@ -99,6 +74,17 @@ export default function CreateAppointmentWithPatientForm({
   const [isDisabled, setIsDisabled] = React.useState(true)
   const handleComplete = () => setComplete(true)
   const handleSubmitting = () => setIsSubmitting(true)
+
+  const [availableStaffs] = useQuery<AvailableStaffsQueryData>({
+    query: AvailableStaffsQueryDocument,
+  })
+  const [patients] = useQuery<PatientQueryData>({
+    query: PatientQueryDataDocument,
+  })
+
+  const [, createAppointmentWithPatient] = useMutation(
+    CreateAppointmentWithPatient,
+  )
 
   const buttonSx = {
     ...(complete && {
@@ -141,6 +127,19 @@ export default function CreateAppointmentWithPatientForm({
     setActiveStep((prevActiveStep) => prevActiveStep - 1)
   }
 
+  const handleCreate = (input: MutationCreateAppointmentWithPatientArgs) =>
+    createAppointmentWithPatient(input)
+      .then((result) => {
+        if (result.error) {
+          handleClose(handleComplete)
+          showFailAlert('Data has not been saved.')
+        } else {
+          handleClose(handleComplete)
+          showSuccessAlert('Data has been saved.')
+        }
+      })
+      .catch((err) => console.error(err))
+
   const submitMultiStepForm = handleSubmit((data) => {
     if (isLastStep) {
       const input: MutationCreateAppointmentWithPatientArgs = {
@@ -163,17 +162,7 @@ export default function CreateAppointmentWithPatientForm({
         medStaffId: parseInt(data.medicalStaff, 10),
       }
       handleSubmitting()
-      createAppointmentWithPatient(input)
-        .then((result) => {
-          if (result.error) {
-            handleClose(handleComplete)
-            showFailAlert('Data has not been saved.')
-          } else {
-            handleClose(handleComplete)
-            showSuccessAlert('Data has been saved.')
-          }
-        })
-        .catch((err) => console.error(err))
+      handleCreate(input)
     } else {
       handleNext()
     }
@@ -198,7 +187,7 @@ export default function CreateAppointmentWithPatientForm({
         )
       case 1:
         return (
-          <AppointmentForm
+          <Form
             control={control}
             register={register}
             errors={errors}
@@ -206,6 +195,8 @@ export default function CreateAppointmentWithPatientForm({
             toUpdate={false}
             disableNoScheduleDays={disableNoScheduleDays!}
             isDisabled={isDisabled}
+            patients={patients.data!}
+            availableStaffs={availableStaffs.data!}
           />
         )
       default:
@@ -251,7 +242,10 @@ export default function CreateAppointmentWithPatientForm({
         ) : null}
         <Grid item>
           <Button
-            onClick={(e) => handleSubmitForm(e)}
+            onClick={(e) => {
+              handleSubmit(onSubmit!)(e)
+              handleSubmitForm(e)
+            }}
             disabled={isSubmitting}
             variant="contained"
             color="primary"
