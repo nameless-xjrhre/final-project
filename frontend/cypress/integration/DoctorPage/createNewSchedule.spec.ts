@@ -9,7 +9,7 @@ let totalNumOfScheds
 describe('Doctor Page - Create New Schedule Test', () => {
   before(() => {
     cy.visit('doctors')
-      .get('[class="css-zgbp5c-MuiStack-root"]')
+      .get('[class="css-1s4yypy"]')
       .should('be.visible')
       .its('length')
       .then((len) => {
@@ -34,13 +34,13 @@ describe('Doctor Page - Create New Schedule Test', () => {
   })
 
   it('should select days', () => {
-    cy.get('[class=" css-1kwwvb1-ValueContainer2"]')
+    cy.get('[class=" css-b62m3t-container"]')
       .click()
       .type(daysRandomizer() + '{enter}')
       .click()
       .get('[class="css-xb97g8"]')
       .click()
-      .get('[class=" css-1kwwvb1-ValueContainer2"]')
+      .get('[class=" css-b62m3t-container"]')
       .click()
       .type(daysRandomizer() + '{enter}')
       .type(daysRandomizer() + '{enter}')
@@ -58,11 +58,15 @@ describe('Doctor Page - Create New Schedule Test', () => {
 
   it('should press add schedule button', () => {
     cy.get('[type=submit]').should('contain', 'Create Schedule').click()
+      .get('[class="swal-modal"]')
+      .get('[class="swal-button swal-button--confirm"]')
+      .should('contain', 'OK')
+      .click()
   })
 
   it('should check if a schedule was added', () => {
     cy.visit('doctors')
-      .get('[class="css-zgbp5c-MuiStack-root"]')
+      .get('[class="css-1s4yypy"]')
       .should('be.visible')
       .its('length')
       .then((len) => {

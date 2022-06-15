@@ -83,3 +83,21 @@ export async function deleteAppointment(id: number, ctx: Context) {
     },
   })
 }
+
+export async function validateDeleteAppointment(
+  rules: any,
+  id: number,
+  ctx: Context,
+) {
+  const appointment = await ctx.prisma.appointment.findFirst({
+    where: {
+      id,
+    },
+  })
+  if (!appointment) {
+    throw new Error(`Appointment with id: ${id} does not exist`)
+  }
+  return {
+    id: rules.number().integer(),
+  }
+}
