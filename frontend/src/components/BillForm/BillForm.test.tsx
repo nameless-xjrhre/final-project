@@ -138,8 +138,8 @@ describe('AppointmentForm - Create Bill', () => {
         appointmentId: 1,
         data: {
           amount: 1300,
-          date: '2022-06-15T16:00:00.000Z',
-          deadlineDate: '2022-06-15T16:00:00.000Z',
+          date: '2022-06-16T16:00:00.000Z',
+          deadlineDate: '2022-06-16T16:00:00.000Z',
           medStaffId: 7,
           patientId: 1004,
           status: 'UNPAID',
