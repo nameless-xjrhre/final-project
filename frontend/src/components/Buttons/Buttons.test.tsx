@@ -74,7 +74,7 @@ describe('StatusButton for expired status', () => {
   })
 })
 
-describe('StatusButton for expired status', () => {
+describe('StatusButton for pending status', () => {
   const clickFn = vi.fn()
 
   const renderPage = testRenderer(
