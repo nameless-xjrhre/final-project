@@ -1,21 +1,12 @@
 import '@testing-library/jest-dom'
 import { vi } from 'vitest'
-import {
-  render,
-  screen,
-  within,
-  waitFor,
-  findByText,
-  findByRole,
-} from '@testing-library/react'
+import { render, screen, within, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import CreateBillForm from './CreateBillForm'
 import { testRenderer } from '../../utils/test-util'
 import { graphql } from 'msw'
 import {
   AppointmentStatus,
-  BillStatus,
-  CreateBillMutation,
   ScheduleStatus,
   VisitType,
 } from '../../graphql/generated'
