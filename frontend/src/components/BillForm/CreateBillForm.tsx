@@ -147,8 +147,10 @@ export default function CreateBillForm({
       const input: MutationCreateHospitalBillArgs = {
         data: {
           amount: parseFloat(data.amount),
-          date: new Date(),
-          deadlineDate: getDueDate(data.paymentTerm, new Date()),
+          date: new Date(new Date().setHours(0, 0, 0, 0)),
+          deadlineDate: new Date(
+            getDueDate(data.paymentTerm, new Date()).setHours(0, 0, 0, 0),
+          ),
           patientId: appointment!.patient.id,
           medStaffId: appointment!.medStaff.id,
           status: BillStatus.Unpaid,
@@ -217,6 +219,7 @@ export default function CreateBillForm({
       )}
       <Grid container mt={2}>
         <FormInputText
+          id="amount"
           name="amount"
           label="Amount"
           placeholder={toUpdate ? bill?.amount.toString() : ''}

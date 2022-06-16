@@ -18,7 +18,7 @@ export const FormInputSelect = ({
   errors,
   data,
 }: FormInputProps) => (
-  <FormControl sx={{ marginTop: 2 }}>
+  <FormControl sx={{ marginTop: 2 }} aria-label="payment term" role="combobox">
     <InputLabel>{label}</InputLabel>
     <Controller
       name={name}
