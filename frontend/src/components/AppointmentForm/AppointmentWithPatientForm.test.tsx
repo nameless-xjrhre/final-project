@@ -241,7 +241,7 @@ describe('AppointFormWithPatient', () => {
       name: /first name/i,
     })
     userEvent.type(firstName, 'Renzo')
-    expect(firstName).toHaveValue('Renzo')
+    expect(firstName).toHaveDisplayValue('Renzo')
 
     const gender = screen.getByRole('radio', { name: 'Male' })
     userEvent.click(gender)
@@ -251,13 +251,13 @@ describe('AppointFormWithPatient', () => {
       name: /last name/i,
     })
     userEvent.type(lastName, 'Laporno')
-    expect(lastName).toHaveValue('Laporno')
+    expect(lastName).toHaveDisplayValue('Laporno')
 
     const contactNum = screen.getByRole('textbox', {
       name: /contact number/i,
     })
     userEvent.type(contactNum, '09297557897')
-    expect(contactNum).toHaveValue('09297557897')
+    expect(contactNum).toHaveDisplayValue('09297557897')
 
     const dateOfBirth = screen.getByRole('textbox', {
       name: /date of birth/i,
@@ -270,7 +270,7 @@ describe('AppointFormWithPatient', () => {
       name: /address/i,
     })
     userEvent.type(address, 'Iloilo City')
-    expect(address).toHaveValue('Iloilo City')
+    expect(address).toHaveDisplayValue('Iloilo City')
 
     const nextButton = screen.getByRole('button', { name: /next/i })
     expect(nextButton).toBeInTheDocument()
@@ -283,7 +283,7 @@ describe('AppointFormWithPatient', () => {
     const checkedIcon = screen.getByTestId('CheckCircleIcon')
     expect(checkedIcon).toBeInTheDocument()
 
-    // FILL UP APPOINTMENT FORMS
+    // // FILL UP APPOINTMENT FORMS
     const visitType = /visit type/i
     const selectVisitType = within(
       screen.getByRole('combobox', { name: visitType }),
