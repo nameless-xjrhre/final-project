@@ -27,7 +27,6 @@ export default function PatientForm({
           label="First Name"
           register={register}
           errors={errors}
-          control={control}
         />
         <FormInputRadio
           id="gender"
@@ -44,7 +43,6 @@ export default function PatientForm({
           label="Last Name"
           register={register}
           errors={errors}
-          control={control}
         />
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <FormInputDate
@@ -67,7 +65,6 @@ export default function PatientForm({
           label="Contact Number"
           register={register}
           errors={errors}
-          control={control}
         />
         <FormInputText
           id="address"
@@ -75,7 +72,6 @@ export default function PatientForm({
           label="Address"
           register={register}
           errors={errors}
-          control={control}
         />
       </Grid>
     </>
