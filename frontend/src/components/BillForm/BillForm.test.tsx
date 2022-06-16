@@ -47,7 +47,6 @@ const appointment = {
   },
 }
 beforeEach(() => {
-  vi.useFakeTimers()
   render(<CreateBillForm handleClose={() => false} open toUpdate={false} />)
 })
 
