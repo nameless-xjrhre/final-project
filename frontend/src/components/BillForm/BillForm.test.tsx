@@ -46,7 +46,10 @@ const appointment = {
     ],
   },
 }
-
+beforeEach(() => {
+  // tell vitest we use mocked time
+  vi.useFakeTimers()
+})
 beforeEach(() => {
   render(<CreateBillForm handleClose={() => false} open toUpdate={false} />)
 })
