@@ -13,35 +13,7 @@ import '@testing-library/jest-dom'
 describe('AppointmentsList', () => {
   const renderPage = testRenderer(<AppointmentsList />)
   it('renders a list of 1 appointment', async () => {
-    renderPage(
-      graphql.query<AppointmentsQuery, AppointmentsQueryVariables>(
-        'AppointmentsList',
-        (req, res, ctx) =>
-          // const { start, count } = req.variables
-
-          res(
-            ctx.data({
-              appointmentsRange: [
-                {
-                  id: 1,
-                  visitType: VisitType.Routine,
-                  date: new Date(2020, 1, 1),
-                  status: AppointmentStatus.Canceled,
-                  patient: {
-                    id: 1,
-                    fullName: 'John Doe',
-                  },
-                  medStaff: {
-                    id: 1,
-                    fullName: 'Joseph Doe',
-                  },
-                },
-              ],
-              totalAppointments: 1,
-            }),
-          ),
-      ),
-    )
+    renderPage()
     // get id called "name-1"
     const nameCell = await screen.findByTestId('name-1')
     expect(nameCell).toHaveTextContent('John Doe')
