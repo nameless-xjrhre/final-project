@@ -1,9 +1,9 @@
 import '@testing-library/jest-dom'
 import { screen } from '@testing-library/react'
-import { testRenderer } from '../../utils/test-util'
 import user from '@testing-library/user-event'
-import BasicTabs from './TabPanel'
 import { graphql } from 'msw'
+import { testRenderer } from '../../utils/test-util'
+import BasicTabs from './TabPanel'
 import {
   PatientRecordsQuery,
   PatientRecordsQueryVariables,
@@ -29,7 +29,7 @@ describe('TabPanel', () => {
                     date: new Date(2022, 1, 2),
                     diagnosis: 'Has cold lol',
                     prescription: 'Just chill bro',
-                    medStaff: { fullName: 'Bob Joe' },
+                    medStaff: { id: 10, fullName: 'Bob Joe' },
                   },
                 ],
                 hospitalBills: [

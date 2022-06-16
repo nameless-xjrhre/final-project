@@ -16,16 +16,24 @@ export const FormInputText = ({
   name,
   label,
   placeholder,
+  control,
   register,
   errors,
 }: FormInputProps) => (
-  <TextField
-    label={label}
-    placeholder={placeholder}
-    {...register(name)}
-    helperText={errors[name]?.message}
-    error={!!errors[name]}
-    InputProps={{ style: { fontSize: 12 } }}
+  <Controller
+    name={name}
+    control={control}
+    render={({ field: { value } }) => (
+      <TextField
+        value={value}
+        label={label}
+        placeholder={placeholder}
+        {...register(name)}
+        helperText={errors[name]?.message}
+        error={!!errors[name]}
+        InputProps={{ style: { fontSize: 12 } }}
+      />
+    )}
   />
 )
 
