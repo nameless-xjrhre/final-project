@@ -38,7 +38,6 @@ export const FormInputSelectPatient = ({
       render={({ field: { onChange, value } }) => (
         <>
           <Select
-            id="patient"
             defaultValue=""
             label={label}
             value={value || onSavedValue}
@@ -89,7 +88,6 @@ export const FormInputSelectMedStaff = ({
       render={({ field: { onChange, value } }) => (
         <>
           <Select
-            id="doctor"
             defaultValue=""
             label={label}
             value={value || onSavedValue}
@@ -135,7 +133,6 @@ export const FormInputSelect = ({
       render={({ field: { onChange, value } }) => (
         <>
           <Select
-            id="visitType"
             defaultValue=""
             label={label}
             value={value || onSavedValue}
