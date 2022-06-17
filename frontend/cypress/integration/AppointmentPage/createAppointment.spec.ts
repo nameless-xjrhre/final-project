@@ -21,7 +21,7 @@ describe('Appointment Page - Create Appointment Test', () => {
   })
 
   it('should select patient', () => {
-    cy.get('[id=mui-component-select-patient]')
+    cy.get('[id="mui-component-select-patient"]')
       .click()
       .get('ul li')
       .get('[role="option"]')
@@ -33,7 +33,7 @@ describe('Appointment Page - Create Appointment Test', () => {
   })
 
   it('should select visit type', () => {
-    cy.get('[id=mui-component-select-visitType]')
+    cy.get('[id="mui-component-select-visitType"]')
       .click()
       .get('[name=visitType]')
       .contains(visitTypeRandomizer())
@@ -41,7 +41,7 @@ describe('Appointment Page - Create Appointment Test', () => {
   })
 
   it('should select medical staff', () => {
-    cy.get('[id=mui-component-select-medicalStaff]')
+    cy.get('[id="mui-component-select-medicalStaff"]')
       .click()
       .get('ul li')
       .get('[role="option"]')

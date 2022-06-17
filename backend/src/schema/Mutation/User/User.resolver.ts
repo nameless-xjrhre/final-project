@@ -29,3 +29,21 @@ export function updateUserType(
     },
   })
 }
+
+export async function validateCreateUser(user: CreateUser, ctx: Context) {
+  // Password must have capital letter, a number, and be at least 8 characters long
+  if (!/^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(user.password)) {
+    throw new Error(
+      'Password must have capital letter, a number, and be at least 8 characters long',
+    )
+  }
+  // throw error if username is already taken
+  const searchedUser = await ctx.prisma.user.findFirst({
+    where: {
+      username: user.username,
+    },
+  })
+  if (searchedUser) {
+    throw new Error('Username is already taken')
+  }
+}

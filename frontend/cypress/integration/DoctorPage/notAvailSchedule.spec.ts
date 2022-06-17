@@ -5,6 +5,7 @@ describe('Doctors Page - Nullify A Schedule Test', () => {
 
   it('should nullify a schedule', () => {
     cy.get('[class="css-1s4yypy"]')
+      .get('[class="MuiChip-label MuiChip-labelMedium css-9iedg7"]')
       .first()
       .click()
       .get('[value="NOT_AVAILABLE"]')
@@ -18,6 +19,7 @@ describe('Doctors Page - Nullify A Schedule Test', () => {
 
   it('should check change in color', () => {
     cy.get('[class="css-1s4yypy"]')
+      .get('[class="MuiChip-label MuiChip-labelMedium css-9iedg7"]')
       .first()
       .get('.css-pepnum')
       .should('have.css', 'background-color', 'rgb(203, 203, 203)')
