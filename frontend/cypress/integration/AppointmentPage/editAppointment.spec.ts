@@ -23,11 +23,11 @@ describe('Appointment Page - Edit Appointment Test', () => {
   })
 
   it('should select visit type', () => {
-    cy.get('[id=visitType]')
+    cy.get('[id="mui-component-select-visitType"]')
       .last()
       .then((type) => {
         visitType = type.text()
-        cy.get('[id=visitType]')
+        cy.get('[id="mui-component-select-visitType"]')
           .last()
           .click()
           .get('ul li')
@@ -47,7 +47,7 @@ describe('Appointment Page - Edit Appointment Test', () => {
   })
 
   it('should select medical staff', () => {
-    cy.get('[id=doctor')
+    cy.get('[id="mui-component-select-medicalStaff"')
       .last()
       .click()
       .get('ul li')
