@@ -1,10 +1,11 @@
-	describe('Doctors Page - Close A Schedule Test', () => {
+describe('Doctors Page - Close A Schedule Test', () => {
   before(() => {
     cy.visit('doctors')
   })
 
   it('should close a schedule', () => {
     cy.get('[class="css-1s4yypy"]')
+      .get('[class="MuiChip-label MuiChip-labelMedium css-9iedg7"]')
       .last()
       .click()
       .get('[value="CLOSED"]')
@@ -18,6 +19,7 @@
 
   it('should check change in color', () => {
     cy.get('[class="css-1s4yypy"]')
+      .get('[class="MuiChip-label MuiChip-labelMedium css-9iedg7"]')
       .last()
       .get('.css-14hta07')
       .should('have.css', 'background-color', 'rgb(254, 121, 129)')
