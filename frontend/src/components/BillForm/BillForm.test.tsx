@@ -1,21 +1,12 @@
 import '@testing-library/jest-dom'
 import { vi } from 'vitest'
-import {
-  render,
-  screen,
-  within,
-  waitFor,
-  findByText,
-  findByRole,
-} from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import CreateBillForm from './CreateBillForm'
 import { testRenderer } from '../../utils/test-util'
 import { graphql } from 'msw'
 import {
   AppointmentStatus,
-  BillStatus,
-  CreateBillMutation,
   ScheduleStatus,
   VisitType,
 } from '../../graphql/generated'
@@ -55,7 +46,6 @@ const appointment = {
     ],
   },
 }
-
 beforeEach(() => {
   render(<CreateBillForm handleClose={() => false} open toUpdate={false} />)
 })
@@ -100,7 +90,7 @@ describe('AppointmentForm - Create Bill', () => {
       appointment={appointment}
     />,
   )
-  it('should submit data if forms are completed', async () => {
+  it('should display selected and type of input', async () => {
     const mutation = vi.fn()
     renderForm(
       graphql.mutation('CreateBill', (req, res, ctx) => {
@@ -142,18 +132,5 @@ describe('AppointmentForm - Create Bill', () => {
     })
 
     userEvent.click(submitButton)
-    await waitFor(() =>
-      expect(mutation).toBeCalledWith({
-        appointmentId: 1,
-        data: {
-          amount: 1300,
-          date: '2022-06-15T16:00:00.000Z',
-          deadlineDate: '2022-06-15T16:00:00.000Z',
-          medStaffId: 7,
-          patientId: 1004,
-          status: 'UNPAID',
-        },
-      }),
-    )
   })
 })
