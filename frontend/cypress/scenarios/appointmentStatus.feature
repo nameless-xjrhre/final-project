@@ -1,4 +1,4 @@
-Feature: Cancel Appointment
+Feature: Appointment Status
 
     Scenario: A patient wants to cancel their appointment and as a staff, i want to change the status of the appointment as canceled
 
