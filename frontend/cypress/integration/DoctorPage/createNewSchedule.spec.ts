@@ -57,7 +57,9 @@ describe('Doctor Page - Create New Schedule Test', () => {
   })
 
   it('should press add schedule button', () => {
-    cy.get('[type=submit]').should('contain', 'Create Schedule').click()
+    cy.get('[type=submit]')
+      .should('contain', 'Create Schedule')
+      .click()
       .get('[class="swal-modal"]')
       .get('[class="swal-button swal-button--confirm"]')
       .should('contain', 'OK')

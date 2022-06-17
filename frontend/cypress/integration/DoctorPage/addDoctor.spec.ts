@@ -38,7 +38,10 @@ describe('Doctor Page - Add Doctor Test', () => {
   })
 
   it('should click add doctor button', () => {
-    cy.get('[type=button]').last().should('contain.text', 'Add Doctor').click()
+    cy.get('[type=button]')
+      .last()
+      .should('contain.text', 'Add Doctor')
+      .click()
       .get('[class="swal-modal"]')
       .get('[class="swal-button swal-button--confirm"]')
       .should('contain', 'OK')

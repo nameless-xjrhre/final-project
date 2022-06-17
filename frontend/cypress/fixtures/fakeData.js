@@ -10,35 +10,27 @@ for (var i = 0; i < 100; i++) {
     firstName: faker_1.faker.name.firstName(),
     lastName: faker_1.faker.name.lastName(),
     contactNum: faker_1.faker.phone.phoneNumber('09#########'),
-    dateOfBirth: faker_1.faker.date
-      .birthdate()
-      .toLocaleDateString('en-US', {
-        month: '2-digit',
-        day: '2-digit',
-        year: '2-digit',
-      }),
+    dateOfBirth: faker_1.faker.date.birthdate().toLocaleDateString('en-US', {
+      month: '2-digit',
+      day: '2-digit',
+      year: '2-digit',
+    }),
     address: faker_1.faker.address.city(),
-    appointmentDate: faker_1.faker.date
-      .future()
-      .toLocaleDateString('en-US', {
-        month: '2-digit',
-        day: '2-digit',
-        year: 'numeric',
-      }),
-    startTime: faker_1.faker.date
-      .future()
-      .toLocaleTimeString('nl', {
-        hour: '2-digit',
-        hourCycle: 'h24',
-        minute: '2-digit',
-      }),
-    endTime: faker_1.faker.date
-      .future()
-      .toLocaleTimeString('nl', {
-        hour: '2-digit',
-        hourCycle: 'h24',
-        minute: '2-digit',
-      }),
+    appointmentDate: faker_1.faker.date.future().toLocaleDateString('en-US', {
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric',
+    }),
+    startTime: faker_1.faker.date.future().toLocaleTimeString('nl', {
+      hour: '2-digit',
+      hourCycle: 'h24',
+      minute: '2-digit',
+    }),
+    endTime: faker_1.faker.date.future().toLocaleTimeString('nl', {
+      hour: '2-digit',
+      hourCycle: 'h24',
+      minute: '2-digit',
+    }),
   }
   jsonObject.listOfObjects.push(object)
 }

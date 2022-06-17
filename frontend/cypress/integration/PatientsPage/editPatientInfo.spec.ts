@@ -68,7 +68,10 @@ describe('Patient Page - Edit Patient Info Test', () => {
   })
 
   it('should save changes', () => {
-    cy.get('[type=button]').last().should('contain', 'Save Changes').click()
+    cy.get('[type=button]')
+      .last()
+      .should('contain', 'Save Changes')
+      .click()
       .get('[class="swal-modal"]')
       .get('[class="swal-button swal-button--confirm"]')
       .should('contain', 'OK')
